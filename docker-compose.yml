@@ -1,0 +1,13 @@
+version: "2"
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_DEBUG=1
+      - PYTHONPATH=/project/src
+    volumes:
+      - ~/Projects/testing-server/src:/project/src
