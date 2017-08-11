@@ -7,4 +7,6 @@ Capabilities
 
 ## Usage
   1. Install ```docker``` and ```docker-compose```
-  2. docker-compose up
+  2. Set up configuration: ```cp config.env.example config.env```
+  3. ```docker-compose pull```
+  4. ```docker-compose up```
