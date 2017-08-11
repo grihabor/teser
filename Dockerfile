@@ -1,4 +1,4 @@
-FROM library/python:3.5
+FROM library/python:3.5-alpine
 MAINTAINER Borodin Gregory <grihabor@mail.ru>
 
 WORKDIR /project
