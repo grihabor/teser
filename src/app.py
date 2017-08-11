@@ -18,7 +18,7 @@ security = Security(app, user_datastore)
 @app.before_first_request
 def create_user():
     init_db()
-    user_datastore.create_user(email='matt@nobien.net',
+    user_datastore.create_user(email='griabor@mail.ru',
                                password='password')
     db_session.commit()
 
@@ -26,7 +26,7 @@ def create_user():
 @app.route('/')
 @login_required
 def home():
-    return render('Here you go!')
+    return 'Here you go!'
 
 if __name__ == '__main__':
     app.run()

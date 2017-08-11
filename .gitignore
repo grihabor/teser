@@ -6,3 +6,6 @@ __pycache__
 
 # Swap files
 *.swp
+
+# Config files
+*.env

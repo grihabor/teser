@@ -11,3 +11,15 @@ services:
       - PYTHONPATH=/project/src
     volumes:
       - ~/Projects/testing-server/src:/project/src
+    depends_on:
+      - postgres
+
+  postgres:
+    image: library/postgres:9.6-alpine
+    env_file:
+      - ./database.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data/pgdata
+
+volumes:
+  pgdata:
