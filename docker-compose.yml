@@ -1,6 +1,7 @@
 version: "2"
 services:
   web:
+    image: grihabor/testing-server
     build: 
       context: .
       dockerfile: Dockerfile
@@ -17,8 +18,8 @@ services:
   postgres:
     image: library/postgres:9.6-alpine
     env_file:
-      - ./config/postgres.env
       - ./config/flask.env
+      - ./config/postgres.env
     volumes:
       - pgdata:/var/lib/postgresql/data/pgdata
 
