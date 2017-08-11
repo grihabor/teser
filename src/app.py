@@ -22,6 +22,7 @@ app.config['SECURITY_PASSWORD_SALT'] = 'somesalthere'
 user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
 
+
 # Create a user to test with
 @app.before_first_request
 def create_user():
@@ -50,4 +51,4 @@ if __name__ == '__main__':
     logger.info('Flask config: {}'.format(kwargs))
     app.run(**kwargs)
 
-    app.run(host=host, port=port, debug=debug)
+    app.run(host=host, port=port)
