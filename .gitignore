@@ -1,0 +1,8 @@
+# Pycharm files
+.idea
+
+# Python cache
+__pycache__
+
+# Swap files
+*.swp
