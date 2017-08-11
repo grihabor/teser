@@ -12,11 +12,11 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-
 # Create app
 app = Flask(__name__)
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = 'super-secret'
+app.config['SECURITY_PASSWORD_SALT'] = 'somesalthere'
 
 # Setup Flask-Security
 user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
@@ -26,9 +26,15 @@ security = Security(app, user_datastore)
 @app.before_first_request
 def create_user():
     init_db()
-    user_datastore.create_user(email='griabor@mail.ru',
-                               password='password')
-    db_session.commit()
+
+    kwargs = dict(
+        email='example@gmail.com',
+        password='password',
+    )
+
+    if not user_datastore.find_user(**kwargs):
+        user_datastore.create_user(**kwargs)
+        db_session.commit()
 
 # Views
 @app.route('/')

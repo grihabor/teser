@@ -13,20 +13,18 @@ services:
       - FLASK_PORT=5000
       - FLASK_DEBUG=1
     env_file:
-      - ./config/postgres.env
+      - ./config.env
     volumes:
       - ~/Projects/testing-server/src:/project/src
     depends_on:
       - postgres
-    entrypoint:
-      - python3
-      - /project/src/app.py
-      - memory_limit=800m
 
   postgres:
     image: library/postgres:9.6-alpine
     env_file:
-      - ./config/postgres.env
+      - ./config.env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - pgdata:/var/lib/postgresql/data/pgdata
 
