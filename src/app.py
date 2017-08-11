@@ -8,6 +8,7 @@ from database import db_session, init_db
 from models import User, Role
 
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -36,12 +37,11 @@ def home():
     return 'Here you go!'
 
 if __name__ == '__main__':
-
     host = os.getenv('FLASK_HOST', '127.0.0.1')
-    port = os.getenv('FLASK_PORT', 5000)
-    debug = os.getenv('FLASK_DEBUG', 0)
+    port = int(os.getenv('FLASK_PORT', 5000))
 
-    kwargs = dict(host=host, port=port, debug=debug)
-    logger.info('Flask condig: {}'.format(kwargs))
+    kwargs = dict(host=host, port=port)
+    logger.info('Flask config: {}'.format(kwargs))
     app.run(**kwargs)
 
+    app.run(host=host, port=port, debug=debug)

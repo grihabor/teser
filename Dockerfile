@@ -10,4 +10,4 @@ ADD src ./src
 
 EXPOSE 5000
 
-CMD ls && python3 -u /project/src/app.py
+CMD python3 -u /project/src/app.py

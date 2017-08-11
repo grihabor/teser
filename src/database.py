@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 POSTGRES_PASSWORD = 'POSTGRES_PASSWORD'
 POSTGRES_USER = 'POSTGRES_USER'
 POSTGRES_DB = 'POSTGRES_DB'
-POSTGRES_HOST = 'postgres'
+POSTGRES_HOST = 'POSTGRES_HOST'
 
 engine = create_engine(
     'postgresql://{user}:{password}@{host}/{db_name}'.format(
