@@ -16,8 +16,11 @@ RUN apk update \
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
 
+RUN pip3 install gunicorn
+
 ADD src ./src
 
 EXPOSE 5000
+WORKDIR /project/src
 
-CMD python3 -u /project/src/run.py
+CMD gunicorn --config gunicorn_config.py app:app
