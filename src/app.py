@@ -1,6 +1,7 @@
 import logging
 import os
 from flask import Flask
+from flask_mail import Mail
 from flask_security import (
     Security, login_required, SQLAlchemySessionUserDatastore
 )
@@ -18,6 +19,14 @@ app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = 'super-secret'
 app.config['SECURITY_PASSWORD_SALT'] = 'somesalthere'
 app.config['SECURITY_REGISTERABLE'] = True
+
+# Setup Flask-Mail
+app.config['MAIL_SERVER'] = 'grihabor.tk'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'username'
+app.config['MAIL_PASSWORD'] = 'password'
+mail = Mail(app)
 
 # Setup Flask-Security
 user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
