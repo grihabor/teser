@@ -18,19 +18,26 @@
 
 You are ready to run ```make dev```!
 
-### Advanced   
- - postgres - [Postgresql](https://hub.docker.com/_/postgres/)
-```
-POSTGRES_PASSWORD=password
-POSTGRES_USER=postgres
-POSTGRES_DB=postgres
-POSTGRES_HOST=postgres:5432
-```  
- - mail - [Flask-Mail](https://pythonhosted.org/Flask-Mail/)
-```
-MAIL_USERNAME=user@gmail.com
-MAIL_PASSWORD=user_password
-MAIL_SERVER=smtp.gmail.com
-MAIL_PORT=465
-MAIL_USE_SSL=1
-```  
+### Advanced  
+  1. Setup test/config.env file
+    - postgres config - [Postgresql](https://hub.docker.com/_/postgres/)  
+        ```
+        POSTGRES_PASSWORD=password
+        POSTGRES_USER=postgres
+        POSTGRES_DB=postgres
+        POSTGRES_HOST=postgres:5432
+        ```    
+    - mail config - [Flask-Mail](https://pythonhosted.org/Flask-Mail/)  
+      ```
+      MAIL_USERNAME=user@gmail.com
+      MAIL_PASSWORD=user_password
+      MAIL_SERVER=smtp.gmail.com
+      MAIL_PORT=465
+      MAIL_USE_SSL=1
+      ```
+  2. Get sertificate for your domain ([Certbot](https://certbot.eff.org/))
+  3. Place **cert.key** and **cert.crt** into **test/nginx/**
+  4. Modify **test/nginx/nginx.cong** to use your own domain (replace *grihabor.tk*)
+
+Now you are ready to run ```make test```!
+
