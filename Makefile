@@ -1,7 +1,9 @@
 all: dev
 
 dev:
-    cd dev; docker-compose up --build
+	cd dev; docker-compose up --build
 
 test:
-    cd test; docker-compose up --build
+	cd test; docker-compose up --build
+
+.PHONY: dev test
