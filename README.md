@@ -7,7 +7,7 @@
 
 ## Usage
   1. Install ```docker``` and ```docker-compose```
-  2. Setup configuration (see section Config)
+  2. Setup configuration (see section [Config](#config))
   3. ```make dev```
 
 ## Config  
