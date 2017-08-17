@@ -21,6 +21,6 @@ RUN pip3 install gunicorn
 ADD src ./src
 
 EXPOSE 5000
-WORKDIR /project/src
+WORKDIR /project/src/app
 
 CMD gunicorn --config gunicorn_config.py app:app
