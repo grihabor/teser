@@ -46,13 +46,19 @@ security = Security(app, user_datastore)
 
 
 # Views
-@app.route('/')
+@app.route('/home')
 @login_required
 def home():
     logger.info('Current user: {}'.format(current_user))
+    return render_template('home.html')
+
+
+@app.route('/')
+def index():
     return render_template('index.html')
 
-def maybe_create_base():
+
+def maybe_create_base_html():
     if not os.path.exists(FILE_BASE_HTML):
         shutil.copy(FILE_BASE_HTML_EXAMPLE, FILE_BASE_HTML)
 
@@ -64,7 +70,7 @@ def main():
     kwargs = dict(host=host, port=port)
     logger.info('Flask config: {}'.format(kwargs))
 
-    maybe_create_base()
+    maybe_create_base_html()
     app.run(**kwargs)
 
 
