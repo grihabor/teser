@@ -10,7 +10,7 @@ from flask_security import (
 )
 
 from app_config import setup_config
-from database import db_session
+from database import db_session, init_db
 from models import User, Role, Repository
 
 DIR_APP = os.path.split(os.path.abspath(__file__))[0]
@@ -47,6 +47,11 @@ def home():
 def index():
     return render_template('index.html')
 
+
+@app.before_first_request
+def app_init():
+    init_db()
+    
 
 def maybe_create_base_html():
     if not os.path.exists(FILE_BASE_HTML):
