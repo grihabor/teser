@@ -51,7 +51,7 @@ def index():
 @app.before_first_request
 def app_init():
     init_db()
-    
+
 
 def maybe_create_base_html():
     if not os.path.exists(FILE_BASE_HTML):
