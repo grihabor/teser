@@ -1,4 +1,3 @@
-import importlib
 import shutil
 import logging
 import os
@@ -9,6 +8,8 @@ from flask_security import (
     Security, login_required, SQLAlchemySessionUserDatastore,
     current_user
 )
+
+from app_config import setup_config
 from database import db_session
 from models import User, Role
 
@@ -24,7 +25,7 @@ logger.setLevel(logging.INFO)
 
 # Create app
 app = Flask(__name__)
-importlib.import_module('app_config')
+setup_config(app)
 
 # Setup Flask-Mail
 mail = Mail(app)
