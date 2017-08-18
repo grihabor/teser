@@ -11,8 +11,7 @@ from flask_security import (
 
 from app_config import setup_config
 from database import db_session
-from models import User, Role
-
+from models import User, Role, Repository
 
 DIR_APP = os.path.split(os.path.abspath(__file__))[0]
 DIR_TEMPLATES = os.path.join(DIR_APP, 'templates')
@@ -40,7 +39,8 @@ security = Security(app, user_datastore)
 @login_required
 def home():
     logger.info('Current user: {}'.format(current_user))
-    return render_template('home.html')
+    return render_template('home.html',
+                           repositories=current_user.repositories)
 
 
 @app.route('/')
