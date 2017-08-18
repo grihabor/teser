@@ -51,6 +51,7 @@ def index():
 @app.before_first_request
 def app_init():
     init_db()
+    #pass
 
 
 def maybe_create_base_html():

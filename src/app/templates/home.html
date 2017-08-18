@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
-{% block content %}
-    <h1>Home</h1>
-    <h2>Your repositories</h2>
+{% macro render_repositories(repositories) %}
     <table>
         <thead>
         <tr>
@@ -18,8 +16,15 @@
             </tr>
         {% endfor %}
         </tbody>
-    <tbody>
-
-    </tbody>
     </table>
+{% endmacro %}
+
+{% block content %}
+    <h1>Home</h1>
+    <h2>Your repositories</h2>
+    {% if repositories %}
+        {{ render_repositories(repositories) }}
+    {% else %}
+        <p>You have no repositories yet</p>
+    {% endif %}
 {% endblock %}
