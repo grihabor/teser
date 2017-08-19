@@ -3,8 +3,8 @@ services:
   web:
     image: grihabor/testing-server
     build: 
-      context: ..
-      dockerfile: dev/Dockerfile
+      context: ../..
+      dockerfile: docker/dev/Dockerfile
     ports:
       - "5000:5000"
     environment:
