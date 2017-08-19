@@ -1,0 +1,6 @@
+version: "2"
+services:
+  bash:
+    extends:
+      file: ../dev/docker-compose.yml
+      service: flask

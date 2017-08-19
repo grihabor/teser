@@ -4,7 +4,6 @@ TEST=$(ROOT)/test
 
 CMD=docker-compose
 UP_BUILD=up --build
-DOWN=down
 
 all: dev
 
@@ -15,11 +14,14 @@ test:
 	cd $(TEST); $(CMD) $(UP_BUILD)
 
 dev-down:
-	cd $(DEV); $(CMD) $(DOWN)
+	cd $(DEV); $(CMD) down
 
 test-down:
-	cd $(TEST); $(CMD) $(DOWN)
+	cd $(TEST); $(CMD) down
 
 down: dev-down test-down
+
+alembic:
+	cd $(ALEMBIC); $(CMD) run bash
 
 .PHONY: dev test down dev-down test-down
