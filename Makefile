@@ -1,16 +1,24 @@
+ROOT=docker
+DEV=$(ROOT)/dev
+TEST=$(ROOT)/test
+
+CMD=docker-compose
+UP_BUILD=up --build
+DOWN=down
+
 all: dev
 
 dev:
-	cd dev; docker-compose up --build
+	cd $(DEV); $(CMD) $(UP_BUILD)
 
 test:
-	cd test; docker-compose up --build
+	cd $(TEST); $(CMD) $(UP_BUILD)
 
 dev-down:
-	cd dev; docker-compose down
+	cd $(DEV); $(CMD) $(DOWN)
 
 test-down:
-	cd test; docker-compose down
+	cd $(TEST); $(CMD) $(DOWN)
 
 down: dev-down test-down
 

@@ -1,6 +1,15 @@
+# web wsgi
 flask==0.12
+# web security
 flask-security==3.0
+# mailing (mainly for flask-security)
 flask-mail==0.9
+
+# database orm
 sqlalchemy==1.1
 psycopg2==2.7
+# database migrations
+alembic==0.9.5
+
+# secure storage
 bcrypt==3.1
