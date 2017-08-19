@@ -2,5 +2,6 @@ version: "2"
 services:
   bash:
     extends:
-      file: ../dev/docker-compose.yml
+      file: ../base/docker-compose.yml
       service: flask
+    command: /bin/sh

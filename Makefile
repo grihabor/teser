@@ -1,6 +1,7 @@
 ROOT=docker
 DEV=$(ROOT)/dev
 TEST=$(ROOT)/test
+ALEMBIC=$(ROOT)/alembic
 
 CMD=docker-compose
 UP_BUILD=up --build
