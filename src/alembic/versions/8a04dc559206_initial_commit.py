@@ -45,7 +45,6 @@ def upgrade():
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('user_id', sa.Integer(), nullable=False),
         sa.Column('url', sa.String(length=2000), nullable=False),
-        sa.Column('branch', sa.String(length=255), nullable=False),
         sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
         sa.PrimaryKeyConstraint('id')
     )
