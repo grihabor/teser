@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% import "bootstrap/wtf.html" as wtf %}
 {% macro render_repositories(repositories) %}
     <table>
         <thead>
@@ -22,9 +22,17 @@
 {% block content %}
     <h1>Home</h1>
     <h2>Your repositories</h2>
+
+    {{ wtf.quick_form(form, id='add_repository') }}
+
     {% if repositories %}
         {{ render_repositories(repositories) }}
     {% else %}
         <p>You have no repositories yet</p>
     {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static', filename='home.js') }}"></script>
 {% endblock %}

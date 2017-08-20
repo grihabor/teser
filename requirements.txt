@@ -1,9 +1,8 @@
 # web wsgi
 flask==0.12
-# web security
 flask-security==3.0
-# mailing (mainly for flask-security)
 flask-mail==0.9
+flask-bootstrap
 
 # database orm
 sqlalchemy==1.1
