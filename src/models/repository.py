@@ -10,4 +10,3 @@ class Repository(Base):
     user_id = Column(Integer, ForeignKey('user.id'))
     url = Column(String(2000), nullable=False)  # https://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers
     branch = Column(String(255), nullable=False)
-    created = Column(DateTime())
