@@ -2,6 +2,13 @@ version: "2"
 services:
   bash:
     extends:
-      file: ../base/docker-compose.yml
+      file: ../dev/base.yml
       service: flask
     command: /bin/sh
+    networks:
+      - default
+
+networks:
+  default:
+    external:
+      name: dev_default

@@ -7,6 +7,16 @@ services:
       dockerfile: docker/dev/Dockerfile
     environment:
       - PYTHONPATH=/project/src
+    env_file:
+      - ./config.env
     volumes:
       - ~/Projects/testing-server/src:/project/src
 
+  postgres:
+    image: library/postgres:9.6-alpine
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./config.env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
