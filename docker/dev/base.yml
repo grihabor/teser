@@ -7,8 +7,6 @@ services:
       dockerfile: docker/dev/Dockerfile
     environment:
       - PYTHONPATH=/project/src
-    env_file:
-      - ./config.env
     volumes:
       - ~/Projects/testing-server/src:/project/src
 

@@ -6,12 +6,12 @@ ALEMBIC=$(ROOT)/alembic
 CMD=docker-compose
 UP_BUILD=up --build
 
-all: dev
+all: dev-up
 
-dev:
+dev-up:
 	cd $(DEV); $(CMD) $(UP_BUILD)
 
-test:
+test-up:
 	cd $(TEST); $(CMD) $(UP_BUILD)
 
 dev-down:
@@ -22,7 +22,11 @@ test-down:
 
 down: dev-down test-down
 
-alembic:
-	cd $(ALEMBIC); $(CMD) run bash
+alembic-dev:
+	cd $(ALEMBIC); make dev
 
-.PHONY: dev test down dev-down test-down
+alembic-test:
+	cd $(ALEMBIC); make test
+
+
+.PHONY: dev-up test-up down dev-down test-down

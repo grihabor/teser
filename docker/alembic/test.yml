@@ -5,10 +5,12 @@ services:
       file: ../dev/base.yml
       service: flask
     command: /bin/sh
+    env_file:
+      - ../test/config.env
     networks:
       - default
 
 networks:
   default:
     external:
-      name: dev_default
+      name: test_default
