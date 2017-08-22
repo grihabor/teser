@@ -1,6 +1,7 @@
-import shutil
+import subprocess
 import logging
 import os
+import uuid
 
 from flask import Flask, render_template, request, jsonify
 from flask_mail import Mail
@@ -35,6 +36,8 @@ user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
 
 
+DIR_KEYS = '/keys'
+
 def validate_repository(url):
     return True
 
@@ -63,10 +66,21 @@ def add_repository():
     ))
 
 
-@app.route('/generate_deploy_key')
+@app.route('/generate_deploy_key', methods=['GET'])
 @login_required
 def generate_deploy_key():
-    return jsonify(dict(deploy_key='bwrgtbnwrtg'))
+    identity_file = str(uuid.uuid4())
+    path = os.path.join(DIR_KEYS, '{}'.format(identity_file))
+    subprocess.run(['ssh-keygen',
+                    '-q',
+                    '-t', 'rsa',
+                    '-b', '2048',
+                    '-N', identity_file,
+                    '-f', path])
+    logger.info('{}: {}'.format(DIR_KEYS, os.listdir(DIR_KEYS)))
+    with open(path + '.pub', 'r') as f:
+        public_key = f.read()
+    return jsonify(dict(deploy_key=public_key))
 
 
 class RepositoryForm(FlaskForm):
