@@ -1,6 +1,7 @@
 
 $(function () {
-    $('#add_repository').submit(function () {
+    $('#add_repository').submit(function (e) {
+        e.preventDefault();
         console.log('Add repo');
         $.get("/add_repository", {
             url: $('#url').val(),
