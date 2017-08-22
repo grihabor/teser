@@ -10,7 +10,7 @@ from flask_security import (
     current_user
 )
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators, SubmitField
+from wtforms import StringField, validators, SubmitField, TextAreaField
 
 from app_config import setup_config
 from database import db_session
@@ -63,9 +63,18 @@ def add_repository():
     ))
 
 
+@app.route('/generate_deploy_key')
+@login_required
+def generate_deploy_key():
+    return jsonify(dict(deploy_key='bwrgtbnwrtg'))
+
+
 class RepositoryForm(FlaskForm):
-    url = StringField(label='URL', validators=[validators.DataRequired()])
-    submit = SubmitField(label='Add')
+    url = StringField(label='URL',
+                      validators=[validators.DataRequired()])
+    deploy_key = TextAreaField(label='Public key',
+                               description='Add this key to your project "Deploy keys"')
+    submit_button = SubmitField(label='Add')
 
 
 # Views
