@@ -14,7 +14,7 @@ from wtforms import StringField, validators, SubmitField
 
 from app_config import setup_config
 from database import db_session
-from init import maybe_create_base_html, maybe_create_alembic_ini
+import init
 from models import User, Role, Repository
 
 
@@ -91,8 +91,7 @@ def main():
     kwargs = dict(host=host, port=port)
     logger.info('Flask config: {}'.format(kwargs))
 
-    maybe_create_base_html()
-    maybe_create_alembic_ini()
+    init.init()
     app.run(**kwargs)
 
 
