@@ -6,12 +6,14 @@
         <thead>
         <tr>
             <td>URL</td>
+            <td>Identity File</td>
         </tr>
         </thead>
         <tbody>
         {% for repository in repositories %}
             <tr>
                 <td>{{ repository.url }}</td>
+                <td>{{ repository.identity_file }}</td>
             </tr>
         {% endfor %}
         </tbody>

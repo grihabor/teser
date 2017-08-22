@@ -1,10 +1,39 @@
+function add_repository(url, deploy_key_container) {
+    var request = $.get("/add_repository", {"url": url.val()});
 
-function add_repository(url) {
+    request.success(function (response) {
+        console.log('Add repo');
+        console.log(response);
+        url.val("");
+        deploy_key_container.hide();
+    });
 
+    request.error(function (jqXHR, textStatus, errorThrown) {
+        if (textStatus == 'timeout')
+            console.log('The server is not responding');
+
+        if (textStatus == 'error')
+            console.log(errorThrown);
+    })
 }
 
-function show_deploy_key() {
+function show_deploy_key(deploy_key, deploy_key_container) {
+    var request = $.get("/generate_deploy_key");
 
+    request.success(function (response) {
+        console.log('Show key');
+        console.log(response);
+        deploy_key_container.show();
+        deploy_key.val(response.deploy_key);
+    });
+
+    request.error(function (jqXHR, textStatus, errorThrown) {
+        if (textStatus == 'timeout')
+            console.log('The server is not responding');
+
+        if (textStatus == 'error')
+            console.log(errorThrown);
+    })
 }
 
 $(function () {
@@ -22,25 +51,9 @@ $(function () {
         e.preventDefault();
 
         if (state === 0) {
-
-            $.getJSON("/generate_deploy_key", {}, function (response) {
-                console.log('Show key');
-                console.log(response);
-                deploy_key_container.show();
-                deploy_key.val(response.deploy_key);
-            });
-
+            show_deploy_key(deploy_key, deploy_key_container);
         } else if (state === 1) {
-
-            $.getJSON("/add_repository", {
-                url: url.val(),
-                deploy_key: deploy_key.val()
-            }, function (response) {
-                console.log('Add repo');
-                console.log(response);
-                url.val("");
-                deploy_key_container.hide();
-            });
+            add_repository(url, deploy_key_container);
         }
         state = 1 - state;
 

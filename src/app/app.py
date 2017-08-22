@@ -46,10 +46,18 @@ def validate_repository(url):
 @login_required
 def add_repository():
     url = request.args['url']
+    identity_file = current_user.generated_identity_file
+
+    if identity_file is None:
+        return "", 500
+
     if validate_repository(url):
-        repo = Repository(user_id=current_user.id, url=url)
+        repo = Repository(user_id=current_user.id,
+                          url=url,
+                          identity_file=identity_file)
         try:
             db_session.add(repo)
+            current_user.generated_identity_file = None
             db_session.commit()
             result = 'ok'
         except Exception as e:
@@ -69,15 +77,30 @@ def add_repository():
 @app.route('/generate_deploy_key', methods=['GET'])
 @login_required
 def generate_deploy_key():
-    identity_file = str(uuid.uuid4())
-    path = os.path.join(DIR_KEYS, '{}'.format(identity_file))
-    subprocess.run(['ssh-keygen',
-                    '-q',
-                    '-t', 'rsa',
-                    '-b', '2048',
-                    '-N', identity_file,
-                    '-f', path])
-    logger.info('{}: {}'.format(DIR_KEYS, os.listdir(DIR_KEYS)))
+    identity_file = current_user.generated_identity_file
+
+    if identity_file is None:
+        identity_file = str(uuid.uuid4())
+        path = os.path.join(DIR_KEYS, '{}'.format(identity_file))
+        subprocess.run(['ssh-keygen',
+                        '-q',
+                        '-t', 'rsa',
+                        '-b', '2048',
+                        '-N', identity_file,
+                        '-f', path])
+        logger.info('Generated: {}'.format(identity_file))
+
+        try:
+            current_user.generated_identity_file = identity_file
+            db_session.commit()
+        except Exception as e:
+            logger.warning(e)
+            db_session.rollback()
+            return "", 500
+    else:
+        path = os.path.join(DIR_KEYS, '{}'.format(identity_file))
+        logger.info('Use saved one: {}'.format(identity_file))
+
     with open(path + '.pub', 'r') as f:
         public_key = f.read()
     return jsonify(dict(deploy_key=public_key))

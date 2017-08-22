@@ -17,7 +17,7 @@ depends_on = None
 
 
 def upgrade():
-    op.add_column('repository', sa.Column('identity_file', sa.String(length=255), nullable=True))
+    op.add_column('repository', sa.Column('identity_file', sa.String(length=255), nullable=False))
 
 
 def downgrade():
