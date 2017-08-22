@@ -1,18 +1,8 @@
-<head>
-{% block head %}
-<meta charset="UTF-8">
-{% block analytics %}
+{% extends "bootstrap/base.html" %}
+
+
+{% block metas %}
+    {{ super() }}
+    {% block analytics %}
+    {% endblock %}
 {% endblock %}
-<title>
-{% block title %}
-Base page
-{% endblock %}
-</title>
-{% endblock %}
-</head>
-<body>
-{% block body %}
-{% block content %}
-{% endblock %}
-{% endblock %}
-</body>

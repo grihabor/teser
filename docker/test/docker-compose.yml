@@ -3,8 +3,8 @@ services:
   gunicorn:
     image: grihabor/testing-server:test
     build: 
-      context: ..
-      dockerfile: test/Dockerfile
+      context: ../..
+      dockerfile: docker/test/Dockerfile
     environment:
       - PYTHONPATH=/project/src
       - FLASK_HOST=0.0.0.0

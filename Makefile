@@ -1,17 +1,32 @@
-all: dev
+ROOT=docker
+DEV=$(ROOT)/dev
+TEST=$(ROOT)/test
+ALEMBIC=$(ROOT)/alembic
 
-dev:
-	cd dev; docker-compose up --build
+CMD=docker-compose
+UP_BUILD=up --build
 
-test:
-	cd test; docker-compose up --build
+all: dev-up
+
+dev-up:
+	cd $(DEV); $(CMD) $(UP_BUILD)
+
+test-up:
+	cd $(TEST); $(CMD) $(UP_BUILD)
 
 dev-down:
-	cd dev; docker-compose down
+	cd $(DEV); $(CMD) down
 
 test-down:
-	cd test; docker-compose down
+	cd $(TEST); $(CMD) down
 
 down: dev-down test-down
 
-.PHONY: dev test down dev-down test-down
+alembic-dev:
+	cd $(ALEMBIC); make dev
+
+alembic-test:
+	cd $(ALEMBIC); make test
+
+
+.PHONY: dev-up test-up down dev-down test-down
