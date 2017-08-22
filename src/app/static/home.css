@@ -1,8 +1,20 @@
 div.repository-container {
+    grid-template-columns: 1fr;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-gap: 40px;
+    padding-left: 40px;
+    padding-right: 40px;
+    width: auto;
 }
 
-div.repository-container < .box {
-    background-color: #eee;
+@media only screen
+and (min-device-width: 600px)
+and (min-width: 600px) {
+    div.repository-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+h1, h2 {
+    text-align: center;
 }

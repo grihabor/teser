@@ -2,7 +2,7 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% macro render_repositories(repositories) %}
-    <table>
+    <table class="table table-striped">
         <thead>
         <tr>
             <td>URL</td>
@@ -19,28 +19,32 @@
 {% endmacro %}
 
 {% block styles %}
+    {{ super() }}
     <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="home.css") }}>
 {% endblock %}
 
 {% block content %}
     <h1>Home</h1>
     <div class="repository-container">
-    <div class="repository-list">
-    <h2>Your repositories</h2>
+        <div class="repository-list">
+            <h2>Your repositories</h2>
 
-    {% if repositories %}
-        {{ render_repositories(repositories) }}
-    {% else %}
-        <p>You have no repositories yet</p>
-    {% endif %}
-    </div>
+            {% if repositories %}
+                {{ render_repositories(repositories) }}
+            {% else %}
+                <p>You have no repositories yet</p>
+            {% endif %}
+        </div>
 
-    <div class="repository-add">
-    <h2>Add repository</h2>
+        <div class="repository-add">
+            <h2>Add repository</h2>
 
-    {{ wtf.quick_form(form, id='add_repository') }}
+            <form id="add_repository">
+                {{ wtf.form_field(form.url) }}
+                {{ wtf.form_field(form.submit) }}
+            </form>
 
-    </div>
+        </div>
     </div>
 {% endblock %}
 
