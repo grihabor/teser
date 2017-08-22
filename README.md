@@ -8,7 +8,7 @@
 ## Usage
   1. Install `docker` and `docker-compose`
   2. Setup configuration (see section [Config](#config))
-  3. `make dev`
+  3. `make dev-up`
 
 ## Config  
 ### Minimum  
@@ -16,7 +16,7 @@
   2. Create gmail account (or use your own) for email bot  
   3. Set variables `MAIL_USERNAME` and `MAIL_PASSWORD`  
 
-You are ready to run `make dev`!
+You are ready to run `make dev-up`!
 
 ### Advanced  
 
@@ -44,5 +44,5 @@ MAIL_USE_SSL=1
   3. Place **cert.key** and **cert.crt** into **test/nginx/**
   4. Modify **test/nginx/nginx.cong** to use your own domain (replace *grihabor.tk*)
 
-Now you are ready to run `make test`!
+Now you are ready to run `make test-up`!
 
