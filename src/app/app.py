@@ -35,7 +35,7 @@ user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
 
 
-def validate_repository(url, branch):
+def validate_repository(url):
     return True
 
 
@@ -43,10 +43,8 @@ def validate_repository(url, branch):
 @login_required
 def add_repository():
     url = request.args['url']
-    branch = request.args['branch']
-    if validate_repository(url, branch):
-        repo = Repository(user_id=current_user.id, url=url, branch=branch)
-        print(current_user.username)
+    if validate_repository(url):
+        repo = Repository(user_id=current_user.id, url=url)
         try:
             db_session.add(repo)
             db_session.commit()
@@ -60,14 +58,13 @@ def add_repository():
 
     return jsonify(dict(
         result=result,
-        repositories=[dict(url=repo.url,
-                           branch=repo.branch) for repo in current_user.repositories]
+        repositories=[dict(url=repo.url)
+                      for repo in current_user.repositories]
     ))
 
 
 class RepositoryForm(FlaskForm):
     url = StringField(label='URL', validators=[validators.DataRequired()])
-    branch = StringField(label='Branch', validators=[validators.DataRequired()])
     submit = SubmitField(label='Add')
 
 

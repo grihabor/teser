@@ -5,14 +5,12 @@
         <thead>
         <tr>
             <td>URL</td>
-            <td>Branch</td>
         </tr>
         </thead>
         <tbody>
         {% for repository in repositories %}
             <tr>
                 <td>{{ repository.url }}</td>
-                <td>{{ repository.branch }}</td>
             </tr>
         {% endfor %}
         </tbody>
