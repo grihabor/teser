@@ -12,6 +12,3 @@ alembic==0.9.5
 
 # secure storage
 bcrypt==3.1
-
-# gitlab repositories
-python-gitlab==0.21
