@@ -53,13 +53,12 @@ def clone_repo():
     identity_file_path = os.path.join('/keys', ARG_IDENTITY_FILE)
 
     command = ['ssh-agent',
-               'bash',
+               'sh',
                '-c',
-               '"{}"'.format('ssh-add {}'.format(identity_file_path)),
-               ';',
-               'git',
-               'clone',
-               '{user}@{host}:{path}'.format(**parsed)]
+               '"{}"'.format('ssh-add {identity_file}; git clone {user}@{host}:{path}'.format(
+                   identity_file=identity_file_path,
+                   **parsed
+               ))]
 
     print('Command: {}'.format(' '.join(command)))
 
@@ -68,7 +67,7 @@ def clone_repo():
 
     with tempfile.NamedTemporaryFile('w+') as f:
         completed = subprocess.run(command, cwd=WORKDIR, stdout=f.file, stderr=f.file)
-        
+
         with open(f.name) as fr:
             out = fr.read()  # TODO Warning: maybe too large
 
