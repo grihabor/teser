@@ -19,9 +19,21 @@ def index():
 
 def parse_repo_url(url):
     o = urlparse(url)  # type: ParseResult
-    return dict(username=o.username if o.username else 'git',
-                hostname=o.hostname,
-                path=o.path)
+
+    attrs = [
+        'scheme',
+        'netloc',
+        'path',
+        'params',
+        'query',
+        'fragment',
+        'username',
+        'password',
+        'hostname',
+        'port',
+    ]
+
+    return {attr: getattr(o, attr, None) for attr in attrs}
 
 
 @app.route('/clone_repo')
@@ -33,7 +45,7 @@ def clone_repo():
     parsed = parse_repo_url(url)
 
     if parsed['hostname'] is None:
-        return jsonify(dict(ok=0, details='missing_hostname'))
+        return jsonify(dict(ok=0, details='missing_hostname', parsed=parsed))
 
     command = ['git',
                'clone',
