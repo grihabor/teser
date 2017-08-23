@@ -1,4 +1,4 @@
-FROM library/python:3.5-alpine
+FROM library/python:3.6-alpine3.6
 MAINTAINER Borodin Gregory <grihabor@mail.ru>
 
 WORKDIR /project
@@ -30,9 +30,9 @@ RUN apk --update add --virtual build-dependencies \
         bcrypt==3.1 \
  && apk del build-dependencies
 
-ADD src ./src
-
 EXPOSE 5000
 VOLUME /keys
+
+ADD src ./src
 
 CMD python3 -u /project/src/app/app.py
