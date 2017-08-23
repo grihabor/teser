@@ -2,4 +2,4 @@
 
 eval `ssh-agent`
 ssh-add {identity_file}
-git clone {user}@{host}:{path}
+echo {identity_file} | git clone {user}@{host}:{path}
