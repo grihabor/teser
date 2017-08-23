@@ -5,11 +5,14 @@ WORKDIR /project
 
 RUN echo "ipv6" >> /etc/modules
 
-# service dependencies
+# install service dependencies
 RUN apk --update --no-cache add \
+        libpq \
         openssh-client \
         git
 
+# install build dependencies, python packages
+# then remove build dependencies
 RUN apk --update add --virtual build-dependencies \
         libffi-dev \
         python3-dev \
