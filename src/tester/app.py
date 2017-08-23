@@ -52,6 +52,9 @@ def clone_repo():
 
     print('Command: {}'.format(' '.join(command)))
 
+    if not os.path.exists(WORKDIR):
+        os.mkdir(WORKDIR)
+        
     completed = subprocess.run(command, cwd=WORKDIR)
     return jsonify(dict(ok=(completed.returncode == 0),
                         returncode=completed.returncode))
