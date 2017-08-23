@@ -67,7 +67,7 @@ def clone_repo():
     err_path = os.path.join(WORKDIR, 'out.txt')
 
     with open(err_path, 'w') as out:
-        completed = subprocess.run(command, cwd=WORKDIR, stderr=out)
+        completed = subprocess.run(command, cwd=WORKDIR, stdout=out, stderr=out)
 
     with open(err_path, 'r') as f:
         out = f.read()  # TODO Warning: maybe too large
