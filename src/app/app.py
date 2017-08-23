@@ -98,7 +98,7 @@ def generate_deploy_key():
             db_session.rollback()
             return "", 500
     else:
-        path = os.path.join(DIR_KEYS, '{}'.format(identity_file))
+        path = os.path.join(DIR_KEYS, identity_file)
         logger.info('Use saved one: {}'.format(identity_file))
 
     with open(path + '.pub', 'r') as f:
