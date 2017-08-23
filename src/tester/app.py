@@ -60,7 +60,7 @@ def clone_repo():
                    **parsed
                ))]
 
-    command = 'eval "{}"'.format(' '.join(command))
+    command = ['eval', "{}".format(' '.join(command))]
 
     print('Command: {}'.format(' '.join(command)))
 
