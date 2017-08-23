@@ -51,7 +51,7 @@ def clone_repo():
     if parsed is None:
         return jsonify(dict(ok=0, details='url_parsing_error'))
 
-    identity_file_path = os.path.join('/keys', ARG_IDENTITY_FILE)
+    identity_file_path = os.path.join('/keys', request.args[ARG_IDENTITY_FILE])
 
     with open(FILE_CLONE_SH, 'r') as template, \
             tempfile.NamedTemporaryFile('w') as f:
