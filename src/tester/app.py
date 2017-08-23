@@ -70,6 +70,8 @@ def clone_repo():
             os.mkdir(WORKDIR)
 
         with tempfile.NamedTemporaryFile('w') as f:
+            subprocess.run(['ssh -o StrictHostKeyChecking=no git@gitlab.com'
+
             process = subprocess.Popen(command, cwd=WORKDIR, stdout=f.file, stderr=f.file)
             try:
                 process.communicate(input='{}\n'.format(identity_file),
@@ -77,6 +79,8 @@ def clone_repo():
             except subprocess.TimeoutExpired:
                 process.kill()
                 process.communicate()
+
+
 
             with open(f.name) as fr:
                 out = fr.read()  # TODO Warning: maybe too large
