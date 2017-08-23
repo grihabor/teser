@@ -80,13 +80,11 @@ def generate_deploy_key():
     if identity_file is None:
         identity_file = str(uuid.uuid4())
         path = os.path.join(DIR_KEYS, identity_file)
-        subprocess.run(['cat',
-                        '/dev/zero',
-                        '|'
-                        'ssh-keygen',
+        subprocess.run(['ssh-keygen',
                         '-q',
                         '-t', 'rsa',
                         '-b', '2048',
+                        '-N', identity_file,
                         '-f', path])
         logger.info('Generated: {}'.format(identity_file))
 
