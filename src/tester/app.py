@@ -1,5 +1,6 @@
 import os
 import subprocess
+import tempfile
 from urllib.parse import urlparse, ParseResult
 
 from flask import Flask, request, jsonify
@@ -64,12 +65,9 @@ def clone_repo():
 
     if not os.path.exists(WORKDIR):
         os.mkdir(WORKDIR)
-    err_path = os.path.join(WORKDIR, 'out.txt')
-
-    with open(err_path, 'w') as out:
-        completed = subprocess.run(command, cwd=WORKDIR, stdout=out, stderr=out)
-
-    with open(err_path, 'r') as f:
+        
+    with tempfile.NamedTemporaryFile('w+') as f:
+        completed = subprocess.run(command, cwd=WORKDIR, stdout=f, stderr=f)
         out = f.read()  # TODO Warning: maybe too large
 
     return jsonify(dict(ok=(completed.returncode == 0),
