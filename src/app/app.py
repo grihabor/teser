@@ -36,8 +36,6 @@ user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
 
 
-DIR_KEYS = '/keys'
-
 def validate_repository(url):
     return True
 

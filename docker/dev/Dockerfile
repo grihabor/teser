@@ -31,7 +31,7 @@ RUN apk --update add --virtual build-dependencies \
  && apk del build-dependencies
 
 EXPOSE 5000
-VOLUME /keys
+VOLUME /project/keys
 
 ADD src ./src
 
