@@ -72,7 +72,7 @@ def clone_repo():
         with tempfile.NamedTemporaryFile('w') as f:
             process = subprocess.Popen(command, cwd=WORKDIR, stdout=f.file, stderr=f.file)
             try:
-                process.communicate(timeout=1)
+                process.communicate(timeout=10)
             except subprocess.TimeoutExpired:
                 process.kill()
                 process.communicate()
