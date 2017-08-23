@@ -47,11 +47,12 @@ def clone_repo():
 
     url = request.args[ARG_URL]
     parsed = parse_repo_url(url)
+    identity_file = request.args[ARG_IDENTITY_FILE]
 
     if parsed is None:
         return jsonify(dict(ok=0, details='url_parsing_error'))
 
-    identity_file_path = os.path.join(DIR_KEYS, request.args[ARG_IDENTITY_FILE])
+    identity_file_path = os.path.join(DIR_KEYS, identity_file)
 
     with open(FILE_CLONE_SH, 'r') as template, \
             tempfile.NamedTemporaryFile('w') as f:
@@ -69,13 +70,19 @@ def clone_repo():
             os.mkdir(WORKDIR)
 
         with tempfile.NamedTemporaryFile('w') as f:
-            completed = subprocess.run(command, cwd=WORKDIR, stdout=f.file, stderr=f.file)
+            process = subprocess.Popen(command, cwd=WORKDIR, stdout=f.file, stderr=f.file)
+            try:
+                process.communicate(input='{}\n'.format(identity_file),
+                                    timeout=1)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.communicate()
 
             with open(f.name) as fr:
                 out = fr.read()  # TODO Warning: maybe too large
 
-    return jsonify(dict(ok=(completed.returncode == 0),
-                        returncode=completed.returncode,
+    return jsonify(dict(ok=(process.returncode == 0),
+                        returncode=process.returncode,
                         output=out))
 
 
