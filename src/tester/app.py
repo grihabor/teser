@@ -60,6 +60,8 @@ def clone_repo():
                    **parsed
                ))]
 
+    command = 'eval "{}"'.format(' '.join(command))
+
     print('Command: {}'.format(' '.join(command)))
 
     if not os.path.exists(WORKDIR):
