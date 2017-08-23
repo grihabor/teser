@@ -5,7 +5,7 @@ from urllib.parse import urlparse, ParseResult
 
 from flask import Flask, request, jsonify
 
-from util import DIR_ROOT, DIR_SRC
+from util import DIR_ROOT, DIR_SRC, DIR_KEYS
 
 app = Flask(__name__)
 
@@ -51,7 +51,7 @@ def clone_repo():
     if parsed is None:
         return jsonify(dict(ok=0, details='url_parsing_error'))
 
-    identity_file_path = os.path.join('/keys', request.args[ARG_IDENTITY_FILE])
+    identity_file_path = os.path.join(DIR_KEYS, request.args[ARG_IDENTITY_FILE])
 
     with open(FILE_CLONE_SH, 'r') as template, \
             tempfile.NamedTemporaryFile('w') as f:

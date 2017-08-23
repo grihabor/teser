@@ -17,7 +17,7 @@ from app_config import setup_config
 from database import db_session
 import init
 from models import User, Role, Repository
-
+from util import DIR_KEYS
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -79,7 +79,7 @@ def generate_deploy_key():
 
     if identity_file is None:
         identity_file = str(uuid.uuid4())
-        path = os.path.join(DIR_KEYS, '{}'.format(identity_file))
+        path = os.path.join(DIR_KEYS, identity_file)
         subprocess.run(['ssh-keygen',
                         '-q',
                         '-t', 'rsa',
