@@ -13,8 +13,7 @@ RUN apk update \
         postgresql-dev \
         musl-dev \
         openssh-client \
-        git \
-        build-deps        
+        git
 
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
