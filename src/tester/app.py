@@ -65,10 +65,12 @@ def clone_repo():
 
     if not os.path.exists(WORKDIR):
         os.mkdir(WORKDIR)
-        
+
     with tempfile.NamedTemporaryFile('w+') as f:
-        completed = subprocess.run(command, cwd=WORKDIR, stdout=f, stderr=f)
-        out = f.read()  # TODO Warning: maybe too large
+        completed = subprocess.run(command, cwd=WORKDIR, stdout=f.file, stderr=f.file)
+        
+        with open(f.name) as fr:
+            out = fr.read()  # TODO Warning: maybe too large
 
     return jsonify(dict(ok=(completed.returncode == 0),
                         returncode=completed.returncode,
