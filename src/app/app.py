@@ -130,20 +130,16 @@ def index():
     return render_template('index.html')
 
 
-def init_context():
+def main():
     host = os.getenv('FLASK_HOST', '127.0.0.1')
     port = int(os.getenv('FLASK_PORT', 5000))
 
     kwargs = dict(host=host, port=port)
     logger.info('Flask config: {}'.format(kwargs))
 
-    init.init()
-
-
-def main():
     app.run(**kwargs)
 
 
-init_context()
+init.init()
 if __name__ == '__main__':
     main()
