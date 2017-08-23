@@ -14,7 +14,7 @@ RUN apk update \
         musl-dev \
         openssh-client \
         git \
-        libpq
+        build-deps        
 
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
