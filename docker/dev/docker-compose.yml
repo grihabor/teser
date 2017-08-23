@@ -31,6 +31,8 @@ services:
     command: "python3 /project/src/tester/app.py"
     ports:
       - "5001:6000"
+    volumes:
+      - keys:/keys
 
 volumes:
   pgdata:

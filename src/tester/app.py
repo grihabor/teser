@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 WORKDIR = os.path.join(DIR_ROOT, 'workdir')
 ARG_URL = 'url'
+ARG_IDENTITY_FILE = 'identity_file'
 
 
 @app.route('/')
@@ -39,6 +40,8 @@ def parse_repo_url(url):
 def clone_repo():
     if ARG_URL not in request.args:
         return jsonify(dict(details='url_missing_error', ok=0))
+    if ARG_IDENTITY_FILE not in request.args:
+        return jsonify(dict(details='identity_file_missing_error', ok=0))
 
     url = request.args[ARG_URL]
     parsed = parse_repo_url(url)
@@ -46,7 +49,14 @@ def clone_repo():
     if parsed is None:
         return jsonify(dict(ok=0, details='url_parsing_error'))
 
-    command = ['git',
+    identity_file_path = os.path.join('/keys', ARG_IDENTITY_FILE)
+
+    command = ['ssh-agent',
+               'bash',
+               '-c',
+               '"{}"'.format('ssh-add {}'.format(identity_file_path)),
+               ';',
+               'git',
                'clone',
                '{user}@{host}:{path}'.format(**parsed)]
 
@@ -64,7 +74,7 @@ def clone_repo():
 
     return jsonify(dict(ok=(completed.returncode == 0),
                         returncode=completed.returncode,
-                        out=out))
+                        output=out))
 
 
 def main():
