@@ -54,10 +54,17 @@ def clone_repo():
 
     if not os.path.exists(WORKDIR):
         os.mkdir(WORKDIR)
+    err_path = os.path.join(WORKDIR, 'out.txt')
 
-    completed = subprocess.run(command, cwd=WORKDIR)
+    with open(err_path, 'w') as out:
+        completed = subprocess.run(command, cwd=WORKDIR, stderr=out)
+
+    with open(err_path, 'r') as f:
+        out = f.read()  # TODO Warning: maybe too large
+
     return jsonify(dict(ok=(completed.returncode == 0),
-                        returncode=completed.returncode))
+                        returncode=completed.returncode,
+                        out=out))
 
 
 def main():
