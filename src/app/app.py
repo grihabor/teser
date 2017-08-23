@@ -84,7 +84,7 @@ def generate_deploy_key():
                         '-q',
                         '-t', 'rsa',
                         '-b', '2048',
-                        '-N', identity_file,
+                        '-N', '""',
                         '-f', path])
         logger.info('Generated: {}'.format(identity_file))
 
