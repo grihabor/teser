@@ -5,14 +5,15 @@ from urllib.parse import urlparse, ParseResult
 
 from flask import Flask, request, jsonify
 
-from util import DIR_ROOT
+from util import DIR_ROOT, DIR_SRC
 
 app = Flask(__name__)
 
 WORKDIR = os.path.join(DIR_ROOT, 'workdir')
 ARG_URL = 'url'
 ARG_IDENTITY_FILE = 'identity_file'
-
+DIR_TESTER = os.path.join(DIR_SRC, 'clone.sh')
+FILE_CLONE_SH = os.path.join(DIR_TESTER, 'clone.sh')
 
 @app.route('/')
 def index():
@@ -52,26 +53,26 @@ def clone_repo():
 
     identity_file_path = os.path.join('/keys', ARG_IDENTITY_FILE)
 
-    command = ['ssh-agent',
-               'sh',
-               '-c',
-               '"{}"'.format('ssh-add {identity_file}; git clone {user}@{host}:{path}'.format(
-                   identity_file=identity_file_path,
-                   **parsed
-               ))]
+    with open(FILE_CLONE_SH, 'r') as template, \
+            tempfile.NamedTemporaryFile('w') as f:
+        content = template.read()
+        content = content.format(identity_file=identity_file_path,
+                                 **parsed)
+        f.write(content)
+        f.flush()
 
-    command = ['eval', "{}".format(' '.join(command))]
+        command = ['sh', f.name]
 
-    print('Command: {}'.format(' '.join(command)))
+        print('Command: {}'.format(' '.join(command)))
 
-    if not os.path.exists(WORKDIR):
-        os.mkdir(WORKDIR)
+        if not os.path.exists(WORKDIR):
+            os.mkdir(WORKDIR)
 
-    with tempfile.NamedTemporaryFile('w+') as f:
-        completed = subprocess.run(command, cwd=WORKDIR, stdout=f.file, stderr=f.file)
+        with tempfile.NamedTemporaryFile('w') as f:
+            completed = subprocess.run(command, cwd=WORKDIR, stdout=f.file, stderr=f.file)
 
-        with open(f.name) as fr:
-            out = fr.read()  # TODO Warning: maybe too large
+            with open(f.name) as fr:
+                out = fr.read()  # TODO Warning: maybe too large
 
     return jsonify(dict(ok=(completed.returncode == 0),
                         returncode=completed.returncode,
