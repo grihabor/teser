@@ -12,7 +12,7 @@ app = Flask(__name__)
 WORKDIR = os.path.join(DIR_ROOT, 'workdir')
 ARG_URL = 'url'
 ARG_IDENTITY_FILE = 'identity_file'
-DIR_TESTER = os.path.join(DIR_SRC, 'clone.sh')
+DIR_TESTER = os.path.join(DIR_SRC, 'tester')
 FILE_CLONE_SH = os.path.join(DIR_TESTER, 'clone.sh')
 
 @app.route('/')
