@@ -1,25 +1,38 @@
-FROM library/python:3.5-alpine
+FROM library/python:3.6-alpine3.6
 MAINTAINER Borodin Gregory <grihabor@mail.ru>
 
 WORKDIR /project
 
 RUN echo "ipv6" >> /etc/modules
 
-RUN apk update \
- && apk add \
+# install service dependencies
+RUN apk --update --no-cache add \
+        libpq \
+        openssh-client \
+        git
+
+# install build dependencies, python packages
+# then remove build dependencies
+RUN apk --update add --virtual build-dependencies \
         libffi-dev \
         python3-dev \
         gcc \
         postgresql-dev \
         musl-dev \
-        openssh-client
-
-COPY requirements.txt .
-RUN pip3 install --no-cache-dir -r requirements.txt
-
-ADD src ./src
+ && pip3 install --no-cache-dir \
+        flask==0.12 \
+        flask-security==3.0 \
+        flask-mail==0.9 \
+        flask-bootstrap==3.3.7.1 \
+        sqlalchemy==1.1 \
+        psycopg2==2.7 \
+        alembic==0.9.5 \
+        bcrypt==3.1 \
+ && apk del build-dependencies
 
 EXPOSE 5000
-VOLUME /keys
+VOLUME /project/keys
+
+ADD src ./src
 
 CMD python3 -u /project/src/app/app.py

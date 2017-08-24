@@ -15,7 +15,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - keys:/keys
+      - keys:/project/keys
 
   postgres:
     extends:
@@ -23,6 +23,18 @@ services:
       service: postgres
     volumes:
       - pgdata:/var/lib/postgresql/data/pgdata
+
+  tester:
+    extends:
+      file: ./base.yml
+      service: flask
+    command: "python3 /project/src/tester/app.py"
+    ports:
+      - "5001:6000"
+    volumes_from:
+      - flask
+    depends_on:
+      - postgres
 
 volumes:
   pgdata:
