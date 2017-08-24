@@ -1,15 +1,12 @@
 import logging
 import os
 
-from flask import Flask, render_template
+from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_security import (
-    Security, login_required, SQLAlchemySessionUserDatastore,
-    current_user
+    Security, SQLAlchemySessionUserDatastore
 )
-from flask_wtf import FlaskForm
-from wtforms import StringField, validators, SubmitField, TextAreaField
 
 import init
 import views
@@ -34,30 +31,6 @@ user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
 
 views.import_views(app)
-
-
-class RepositoryForm(FlaskForm):
-    url = StringField(label='URL',
-                      validators=[validators.DataRequired()])
-    deploy_key = TextAreaField(label='Public key',
-                               description='Add this key to your project "Deploy keys"')
-    submit_button = SubmitField(label='Add')
-
-
-# Views
-@app.route('/home', methods=['GET', 'POST'])
-@login_required
-def home():
-    logger.info('Current user: {}'.format(current_user))
-    form = RepositoryForm()
-    return render_template('home.html',
-                           form=form,
-                           repositories=current_user.repositories)
-
-
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 
 def main():

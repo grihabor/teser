@@ -23,34 +23,38 @@ def validate_repository(url, identity_file):
     return obj.ok
 
 
+def _add_repository(url):
+    identity_file = current_user.generated_identity_file
+
+    if identity_file is None:
+        return "", 500
+
+    if validate_repository(url, identity_file):
+        repo = Repository(user_id=current_user.id,
+                          url=url,
+                          identity_file=identity_file)
+        try:
+            db_session.add(repo)
+            current_user.generated_identity_file = None
+            db_session.commit()
+            result = 'ok'
+        except Exception as e:
+            logger.warning(e)
+            db_session.rollback()
+            result = 'invalid repository'
+    else:
+        result = 'invalid repository'
+
+    return jsonify(dict(
+        result=result,
+        repositories=[dict(url=repo.url)
+                      for repo in current_user.repositories]
+    ))
+
+
 def import_add_repository(app):
     @app.route('/add_repository')
     @login_required
     def add_repository():
         url = request.args['url']
-        identity_file = current_user.generated_identity_file
-
-        if identity_file is None:
-            return "", 500
-
-        if validate_repository(url, identity_file):
-            repo = Repository(user_id=current_user.id,
-                              url=url,
-                              identity_file=identity_file)
-            try:
-                db_session.add(repo)
-                current_user.generated_identity_file = None
-                db_session.commit()
-                result = 'ok'
-            except Exception as e:
-                logger.warning(e)
-                db_session.rollback()
-                result = 'invalid repository'
-        else:
-            result = 'invalid repository'
-
-        return jsonify(dict(
-            result=result,
-            repositories=[dict(url=repo.url)
-                          for repo in current_user.repositories]
-        ))
+        return _add_repository(url)
