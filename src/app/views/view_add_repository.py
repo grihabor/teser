@@ -9,18 +9,19 @@ from database import db_session
 from models import Repository
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 def validate_repository(url, identity_file):
-    path = 'http://tester/clone_repo?url={}&identity_file={}'.format(
+    path = 'http://tester:6000/clone_repo?url={}&identity_file={}'.format(
         url, identity_file
     )
 
     with urllib.request.urlopen(path) as r:
-        content = r.read()
-        logger.info(content)
-        obj = json.loads(content)
-    return obj.ok
+        data = json.load(r)
+
+    logger.info(data)
+    return bool(data['ok'])
 
 
 def _add_repository(url):
@@ -47,7 +48,8 @@ def _add_repository(url):
 
     return jsonify(dict(
         result=result,
-        repositories=[dict(url=repo.url)
+        repositories=[dict(url=repo.url,
+                           identity_file=repo.identity_file)
                       for repo in current_user.repositories]
     ))
 
