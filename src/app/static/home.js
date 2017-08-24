@@ -1,11 +1,17 @@
-function add_repository(url, deploy_key_container) {
+function add_repository(url, deploy_key_container, on_success) {
     var request = $.get("/add_repository", {"url": url.val()});
 
     request.success(function (response) {
         console.log('Add repo');
         console.log(response);
-        url.val("");
-        deploy_key_container.hide();
+
+        if(response.result == 'invalid repository') {
+
+        } else {
+            url.val("");
+            deploy_key_container.hide();
+            on_success();
+        }
     });
 
     request.error(function (jqXHR, textStatus, errorThrown) {
@@ -17,7 +23,7 @@ function add_repository(url, deploy_key_container) {
     })
 }
 
-function show_deploy_key(deploy_key, deploy_key_container) {
+function show_deploy_key(deploy_key, deploy_key_container, on_success) {
     var request = $.get("/generate_deploy_key");
 
     request.success(function (response) {
@@ -25,6 +31,7 @@ function show_deploy_key(deploy_key, deploy_key_container) {
         console.log(response);
         deploy_key_container.show();
         deploy_key.val(response.deploy_key);
+        on_success();
     });
 
     request.error(function (jqXHR, textStatus, errorThrown) {
@@ -47,15 +54,17 @@ $(function () {
     deploy_key.attr('readonly', 'readonly');
     deploy_key_container.hide();
 
+    function toggle_state() {state = 1 - state;}
+
+
     $('#add_repository').submit(function (e) {
         e.preventDefault();
 
         if (state === 0) {
-            show_deploy_key(deploy_key, deploy_key_container);
+            show_deploy_key(deploy_key, deploy_key_container, toggle_state);
         } else if (state === 1) {
-            add_repository(url, deploy_key_container);
+            add_repository(url, deploy_key_container, toggle_state);
         }
-        state = 1 - state;
 
         return false;
     });

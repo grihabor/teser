@@ -35,11 +35,11 @@ def import_generate_deploy_key(app):
             except Exception as e:
                 logger.warning(e)
                 db_session.rollback()
-                return "", 500
         else:
             path = os.path.join(DIR_KEYS, identity_file)
             logger.info('Use saved one: {}'.format(identity_file))
 
         with open(path + '.pub', 'r') as f:
             public_key = f.read()
-        return jsonify(dict(deploy_key=public_key))
+
+        return jsonify(dict(result='ok', deploy_key=public_key))
