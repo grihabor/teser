@@ -10,7 +10,8 @@ logger = logging.getLogger(__name__)
 
 class RepositoryForm(FlaskForm):
     url = StringField(label='URL',
-                      validators=[validators.DataRequired()])
+                      validators=[validators.DataRequired()],
+                      description='Example: user@gitlab.com:/user/project')
     deploy_key = TextAreaField(label='Public key',
                                description='Add this key to your project "Deploy keys"')
     submit_button = SubmitField(label='Add')

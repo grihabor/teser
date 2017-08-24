@@ -6,7 +6,8 @@ function add_repository(url, deploy_key_container, on_success) {
         console.log(response);
 
         if(response.result == 'invalid repository') {
-
+            var url_container = url.parent();
+            url_container.addClass('has-error');
         } else {
             url.val("");
             deploy_key_container.hide();
