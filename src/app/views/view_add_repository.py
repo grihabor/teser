@@ -21,7 +21,7 @@ def validate_repository(url, identity_file):
         data = json.load(r)
 
     logger.info(data)
-    return bool(data['ok'])
+    return data
 
 
 def _add_repository(url):
@@ -30,7 +30,9 @@ def _add_repository(url):
     if identity_file is None:
         return "", 500
 
-    if validate_repository(url, identity_file):
+    validation = validate_repository(url, identity_file)
+    details = ''
+    if validation['ok']:
         repo = Repository(user_id=current_user.id,
                           url=url,
                           identity_file=identity_file)
@@ -42,12 +44,17 @@ def _add_repository(url):
         except Exception as e:
             logger.warning(e)
             db_session.rollback()
-            result = 'invalid repository'
+            result = 'fail'
+            details = 'Failed to save the repository into database'
     else:
-        result = 'invalid repository'
+        result = 'fail'
+        details = 'Failed to validate the url:<br> > {}'.format(
+            validation['details'].replace('\n', '<br> > ')
+        )
 
     return jsonify(dict(
         result=result,
+        details=details,
         repositories=[dict(url=repo.url,
                            identity_file=repo.identity_file)
                       for repo in current_user.repositories]

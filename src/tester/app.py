@@ -82,7 +82,7 @@ def clone_repo():
 
     return jsonify(dict(ok=(process.returncode == 0),
                         returncode=process.returncode,
-                        output=out))
+                        details=out))
 
 
 def main():
