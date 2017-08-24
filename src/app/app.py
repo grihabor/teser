@@ -36,8 +36,16 @@ user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
 
 
-def validate_repository(url):
-    return True
+def validate_repository(url, identity_file):
+    path = 'http://tester/clone_repo?url={}&identity_file={}'.format(
+        url, identity_file
+    )
+
+    with urllib.request.urlopen(path) as r:
+        content = r.read()
+        logger.info(content)
+        obj = json.loads(content)
+    return obj.ok
 
 
 @app.route('/add_repository')
@@ -49,7 +57,7 @@ def add_repository():
     if identity_file is None:
         return "", 500
 
-    if validate_repository(url):
+    if validate_repository(url, identity_file):
         repo = Repository(user_id=current_user.id,
                           url=url,
                           identity_file=identity_file)
