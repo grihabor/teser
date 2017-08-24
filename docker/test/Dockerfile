@@ -11,7 +11,8 @@ RUN apk update \
         python3-dev \
         gcc \
         postgresql-dev \
-        musl-dev
+        musl-dev \
+        openssh-client
 
 COPY requirements.txt .
 RUN pip3 install --no-cache-dir -r requirements.txt
@@ -21,6 +22,8 @@ RUN pip3 install gunicorn
 ADD src ./src
 
 EXPOSE 5000
+VOLUME /keys
+
 WORKDIR /project/src/app
 
 CMD gunicorn --config gunicorn_config.py app:app

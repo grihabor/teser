@@ -1,22 +1,18 @@
-import shutil
 import logging
 import os
 
-from flask import Flask, render_template, request, jsonify
-from flask_mail import Mail
+from flask import Flask
 from flask_bootstrap import Bootstrap
+from flask_mail import Mail
 from flask_security import (
-    Security, login_required, SQLAlchemySessionUserDatastore,
-    current_user
+    Security, SQLAlchemySessionUserDatastore
 )
-from flask_wtf import FlaskForm
-from wtforms import StringField, validators, SubmitField
 
+import init
+import views
 from app_config import setup_config
 from database import db_session
-import init
-from models import User, Role, Repository
-
+from models import User, Role
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -34,54 +30,7 @@ mail = Mail(app)
 user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
 
-
-def validate_repository(url):
-    return True
-
-
-@app.route('/add_repository')
-@login_required
-def add_repository():
-    url = request.args['url']
-    if validate_repository(url):
-        repo = Repository(user_id=current_user.id, url=url)
-        try:
-            db_session.add(repo)
-            db_session.commit()
-            result = 'ok'
-        except Exception as e:
-            logger.warning(e)
-            db_session.rollback()
-            result = 'invalid repository'
-    else:
-        result = 'invalid repository'
-
-    return jsonify(dict(
-        result=result,
-        repositories=[dict(url=repo.url)
-                      for repo in current_user.repositories]
-    ))
-
-
-class RepositoryForm(FlaskForm):
-    url = StringField(label='URL', validators=[validators.DataRequired()])
-    submit = SubmitField(label='Add')
-
-
-# Views
-@app.route('/home', methods=['GET', 'POST'])
-@login_required
-def home():
-    logger.info('Current user: {}'.format(current_user))
-    form = RepositoryForm()
-    return render_template('home.html',
-                           form=form,
-                           repositories=current_user.repositories)
-
-
-@app.route('/')
-def index():
-    return render_template('index.html')
+views.import_views(app)
 
 
 def main():
@@ -91,9 +40,9 @@ def main():
     kwargs = dict(host=host, port=port)
     logger.info('Flask config: {}'.format(kwargs))
 
-    init.init()
     app.run(**kwargs)
 
 
+init.init()
 if __name__ == '__main__':
     main()

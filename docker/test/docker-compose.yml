@@ -14,6 +14,8 @@ services:
       - ./config.env
     depends_on:
       - postgres
+    volumes:
+      - keys:/keys
 
   postgres:
     image: library/postgres:9.6-alpine
@@ -24,7 +26,7 @@ services:
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-      - pgdata_test:/var/lib/postgresql/data/pgdata
+      - pgdata:/var/lib/postgresql/data/pgdata
 
   nginx:
     build:
@@ -37,4 +39,5 @@ services:
       - gunicorn
 
 volumes:
-  pgdata_test:
+  pgdata:
+  keys:

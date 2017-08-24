@@ -15,6 +15,7 @@ class User(Base, UserMixin):
     password = Column(String(255))
 
     repositories = relationship('Repository')
+    generated_identity_file = Column(String(255), nullable=True)
 
     last_login_at = Column(DateTime())
     current_login_at = Column(DateTime())

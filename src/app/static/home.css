@@ -1,0 +1,29 @@
+div.repository-container {
+    grid-template-columns: 1fr;
+    display: grid;
+    grid-gap: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 50px;
+    width: auto;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+#deploy_key {
+    height: 150px;
+}
+
+form#add_repository > div:nth-child(2) {
+    display: none;
+}
+
+@media only screen
+and (min-device-width: 600px)
+and (min-width: 600px) {
+    div.repository-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
