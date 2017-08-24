@@ -1,11 +1,9 @@
-import subprocess
 import logging
 import os
-import uuid
 
-from flask import Flask, render_template, request, jsonify
-from flask_mail import Mail
+from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
+from flask_mail import Mail
 from flask_security import (
     Security, login_required, SQLAlchemySessionUserDatastore,
     current_user
@@ -13,11 +11,11 @@ from flask_security import (
 from flask_wtf import FlaskForm
 from wtforms import StringField, validators, SubmitField, TextAreaField
 
+import init
+import views
 from app_config import setup_config
 from database import db_session
-import init
-from models import User, Role, Repository
-from util import DIR_KEYS
+from models import User, Role
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -35,81 +33,7 @@ mail = Mail(app)
 user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
 
-
-def validate_repository(url, identity_file):
-    path = 'http://tester/clone_repo?url={}&identity_file={}'.format(
-        url, identity_file
-    )
-
-    with urllib.request.urlopen(path) as r:
-        content = r.read()
-        logger.info(content)
-        obj = json.loads(content)
-    return obj.ok
-
-
-@app.route('/add_repository')
-@login_required
-def add_repository():
-    url = request.args['url']
-    identity_file = current_user.generated_identity_file
-
-    if identity_file is None:
-        return "", 500
-
-    if validate_repository(url, identity_file):
-        repo = Repository(user_id=current_user.id,
-                          url=url,
-                          identity_file=identity_file)
-        try:
-            db_session.add(repo)
-            current_user.generated_identity_file = None
-            db_session.commit()
-            result = 'ok'
-        except Exception as e:
-            logger.warning(e)
-            db_session.rollback()
-            result = 'invalid repository'
-    else:
-        result = 'invalid repository'
-
-    return jsonify(dict(
-        result=result,
-        repositories=[dict(url=repo.url)
-                      for repo in current_user.repositories]
-    ))
-
-
-@app.route('/generate_deploy_key', methods=['GET'])
-@login_required
-def generate_deploy_key():
-    identity_file = current_user.generated_identity_file
-
-    if identity_file is None:
-        identity_file = str(uuid.uuid4())
-        path = os.path.join(DIR_KEYS, identity_file)
-        subprocess.run(['ssh-keygen',
-                        '-q',
-                        '-t', 'rsa',
-                        '-b', '2048',
-                        '-f', path,
-                        '-N', '',])
-        logger.info('Generated: {}'.format(identity_file))
-
-        try:
-            current_user.generated_identity_file = identity_file
-            db_session.commit()
-        except Exception as e:
-            logger.warning(e)
-            db_session.rollback()
-            return "", 500
-    else:
-        path = os.path.join(DIR_KEYS, identity_file)
-        logger.info('Use saved one: {}'.format(identity_file))
-
-    with open(path + '.pub', 'r') as f:
-        public_key = f.read()
-    return jsonify(dict(deploy_key=public_key))
+views.import_views(app)
 
 
 class RepositoryForm(FlaskForm):
