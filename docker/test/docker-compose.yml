@@ -1,21 +1,27 @@
 version: "2"
 services:
   gunicorn:
-    image: grihabor/testing-server:test
-    build: 
-      context: ../..
-      dockerfile: docker/test/Dockerfile
+    extends:
+      file: ./base.yml
+      service: gunicorn
     environment:
-      - PYTHONPATH=/project/src
       - FLASK_HOST=0.0.0.0
       - FLASK_PORT=5000
       - FLASK_DEBUG=0
-    env_file:
-      - ./config.env
     depends_on:
       - postgres
     volumes:
-      - keys:/keys
+      - keys:/project/keys
+
+  tester:
+    extends:
+      file: ./base.yml
+      service: gunicorn
+    environment:
+      - FLASK_HOST=127.0.0.1
+      - FLASK_PORT=6000
+    volumes:
+      - keys:/project/keys
 
   postgres:
     image: library/postgres:9.6-alpine
