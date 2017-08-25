@@ -100,7 +100,7 @@ def clone_repo():
 
 
 def main():
-    logger.info('Registered routes: {}'.format(routes()))
+    logger.info('Starting tester...')
     app.run('0.0.0.0', 6000, debug=True)
 
 

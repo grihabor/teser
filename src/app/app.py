@@ -40,6 +40,7 @@ def main():
     kwargs = dict(host=host, port=port)
     logger.info('Flask config: {}'.format(kwargs))
 
+    logger.info('Starting flask...')
     app.run(**kwargs)
 
 
