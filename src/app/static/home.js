@@ -14,6 +14,23 @@ $(function () {
         state = 1 - state;
     }
 
+    function update_repository_list(repositories) {
+        var repo,
+            table_body = $('#repo_table > tbody'),
+            new_body = $('<tbody></tbody>'),
+            row,
+            item;
+
+        for(repo in repositories) {
+            row = $('<tr></tr>');
+            row.append('<td>' + repo.url + '</td>');
+            row.append('<td>' + repo.identity_file + '</td>');
+            new_body.append(row);
+        }
+
+        table_body.html(new_body.html());
+    }
+
     function add_repository() {
         var request = $.get("/add_repository", {"url": url.val()});
 
@@ -33,6 +50,7 @@ $(function () {
                 deploy_key.parent().hide();
                 $('#failed_to_clone').remove();
                 toggle_state();
+                update_repository_list(response.repositories);
             }
         });
 
