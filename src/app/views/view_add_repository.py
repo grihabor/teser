@@ -13,7 +13,7 @@ logger.setLevel(logging.INFO)
 
 
 def validate_repository(url, identity_file):
-    path = '{host}:{port}/clone_repo?url={url}&identity_file={identity_file}'.format(
+    path = 'http://{host}:{port}/clone_repo?url={url}&identity_file={identity_file}'.format(
         host='tester',
         port=6000,
         url=url,
