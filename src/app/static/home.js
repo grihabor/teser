@@ -15,13 +15,15 @@ $(function () {
     }
 
     function update_repository_list(repositories) {
-        var repo,
+        var i,
+            repo,
             table_body = $('#repo_table > tbody'),
             new_body = $('<tbody></tbody>'),
             row,
             item;
 
-        for(repo in repositories) {
+        for(i in repositories) {
+            repo = repositories[i];
             row = $('<tr></tr>');
             row.append('<td>' + repo.url + '</td>');
             row.append('<td>' + repo.identity_file + '</td>');
