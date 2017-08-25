@@ -18,7 +18,7 @@ services:
       file: ./base.yml
       service: gunicorn
     environment:
-      - FLASK_HOST=127.0.0.1
+      - FLASK_HOST=0.0.0.0
       - FLASK_PORT=6000
     volumes:
       - keys:/project/keys
