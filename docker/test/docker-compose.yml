@@ -22,6 +22,7 @@ services:
       - FLASK_PORT=6000
     volumes:
       - keys:/project/keys
+    command: python3 /project/src/tester/app.py
 
   postgres:
     image: library/postgres:9.6-alpine
