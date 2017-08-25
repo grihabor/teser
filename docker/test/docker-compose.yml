@@ -15,8 +15,8 @@ services:
 
   tester:
     extends:
-      file: ./base.yml
-      service: gunicorn
+      file: ../dev/base.yml
+      service: flask
     environment:
       - FLASK_HOST=0.0.0.0
       - FLASK_PORT=6000

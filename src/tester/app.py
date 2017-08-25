@@ -15,6 +15,7 @@ ARG_IDENTITY_FILE = 'identity_file'
 DIR_TESTER = os.path.join(DIR_SRC, 'tester')
 FILE_CLONE_SH = os.path.join(DIR_TESTER, 'clone.sh')
 
+
 @app.route('/')
 def index():
     return 'Internal tester service'
