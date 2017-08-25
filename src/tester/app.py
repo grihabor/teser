@@ -1,11 +1,16 @@
 import os
 import subprocess
 import tempfile
-from urllib.parse import urlparse, ParseResult
 
+import logging
 from flask import Flask, request, jsonify
 
 from util import DIR_ROOT, DIR_SRC, DIR_KEYS
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 app = Flask(__name__)
 
@@ -14,6 +19,7 @@ ARG_URL = 'url'
 ARG_IDENTITY_FILE = 'identity_file'
 DIR_TESTER = os.path.join(DIR_SRC, 'tester')
 FILE_CLONE_SH = os.path.join(DIR_TESTER, 'clone.sh')
+
 
 @app.route('/')
 def index():
@@ -38,7 +44,15 @@ def parse_repo_url(url):
                 path=path)
 
 
-@app.route('/clone_repo')
+def routes():
+    routes = {}
+    for rule in app.url_map.iter_rules():
+        if rule.endpoint != 'static':
+            routes[rule.rule] = app.view_functions[rule.endpoint].__doc__
+    return routes
+
+
+@app.route('/clone_repo', methods=['GET'])
 def clone_repo():
     if ARG_URL not in request.args:
         return jsonify(dict(details='url_missing_error', ok=0))
@@ -86,6 +100,7 @@ def clone_repo():
 
 
 def main():
+    logger.info('Starting tester...')
     app.run('0.0.0.0', 6000, debug=True)
 
 

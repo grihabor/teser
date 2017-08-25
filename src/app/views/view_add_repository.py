@@ -13,8 +13,11 @@ logger.setLevel(logging.INFO)
 
 
 def validate_repository(url, identity_file):
-    path = 'http://tester:6000/clone_repo?url={}&identity_file={}'.format(
-        url, identity_file
+    path = 'http://{host}:{port}/clone_repo?url={url}&identity_file={identity_file}'.format(
+        host='tester',
+        port=6000,
+        url=url,
+        identity_file=identity_file
     )
 
     with urllib.request.urlopen(path) as r:
