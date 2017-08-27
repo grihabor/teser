@@ -58,7 +58,8 @@ def _add_repository(url):
     return jsonify(dict(
         result=result,
         details=details,
-        repositories=[dict(url=repo.url,
+        repositories=[dict(id=repo.id,
+                           url=repo.url,
                            identity_file=repo.identity_file)
                       for repo in current_user.repositories]
     ))

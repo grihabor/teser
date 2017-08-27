@@ -36,6 +36,7 @@ class RepositoryTableBody extends React.Component {
             const repo = this.state.repositories[i];
             repo_list.push(
                 <Repository
+                    key={repo.id}
                     url={repo.url}
                     identity_file={repo.identity_file}/>
             );
