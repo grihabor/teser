@@ -16,8 +16,8 @@ function load_repositories(onSuccess) {
     });
 }
 
-class RepositoryList extends React.Component {
-    constructor (props) {
+class RepositoryTableBody extends React.Component {
+    constructor(props) {
         super(props);
         this.state = {
             repositories: props.repositories
@@ -44,11 +44,34 @@ class RepositoryList extends React.Component {
     }
 }
 
+function RepositoryTable(props) {
+    return (
+        <table id="repo_table" className="table table-striped">
+            <thead>
+            <tr>
+                <th>URL</th>
+                <th>Identity file</th>
+            </tr>
+            </thead>
+            <RepositoryTableBody repositories={props.repositories}/>
+        </table>
+    )
+}
+
+function RepositoryList(props) {
+    return (
+        <div>
+            <h2>Your repositories</h2>
+            <RepositoryTable repositories={props.repositories}/>
+        </div>
+    )
+}
+
 
 function main() {
     load_repositories(function (repositories) {
         ReactDOM.render(
-            <RepositoryList repositories={repositories} />,
+            <RepositoryList repositories={repositories}/>,
             document.getElementById("repository_list")
         );
     });
