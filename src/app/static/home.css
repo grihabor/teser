@@ -16,10 +16,6 @@ textarea#deploy_key {
     height: 150px;
 }
 
-form#add_repository > div:nth-child(2) {
-    display: none;
-}
-
 @media only screen
 and (min-device-width: 600px)
 and (min-width: 600px) {

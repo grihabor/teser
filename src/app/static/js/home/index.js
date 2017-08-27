@@ -1,5 +1,3 @@
-
-
 function HomePage(props) {
     return (
         <div id="page_content">
@@ -9,7 +7,6 @@ function HomePage(props) {
         </div>
     )
 }
-
 
 
 function main() {

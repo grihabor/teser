@@ -7,11 +7,12 @@ function RepositoryURL(props) {
         </div>
     )
 }
+
 function RepositoryDeployKey(props) {
-    return (
+    return props.hidden ? <div /> : (
         <div className="form-group ">
             <label className="control-label">Public key</label>
-            <textarea className="form-control" id="deploy_key" name="deploy_key" readOnly="" />
+            <textarea className="form-control" id="deploy_key" name="deploy_key" readOnly="readOnly"/>
             <p className="help-block">Add this key to your project "Deploy keys"</p>
         </div>
     )
@@ -23,14 +24,23 @@ function RepositorySubmit(props) {
     )
 }
 
-function RepositoryAddForm(props) {
-    return (
-        <form id="add_repository">
-            <RepositoryURL />
-            <RepositoryDeployKey />
-            <RepositorySubmit />
-        </form>
-    )
+class RepositoryAddForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            hidden_key: true
+        };
+    }
+
+    render() {
+        return (
+            <form id="add_repository">
+                <RepositoryURL />
+                <RepositoryDeployKey hidden={this.state.hidden_key}/>
+                <RepositorySubmit />
+            </form>
+        )
+    }
 }
 
 function RepositoryAdd(props) {
