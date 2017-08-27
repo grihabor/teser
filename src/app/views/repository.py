@@ -65,7 +65,7 @@ def _add_repository(url):
     ))
 
 
-def import_add_repository(app):
+def import_repository(app):
     @app.route('/api/repository/add')
     @login_required
     def add_repository():
