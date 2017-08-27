@@ -1,4 +1,4 @@
-div.repository-container {
+div#page_container {
     grid-template-columns: 1fr;
     display: grid;
     grid-gap: 30px;
@@ -8,11 +8,11 @@ div.repository-container {
     width: auto;
 }
 
-h1, h2 {
+.header {
     text-align: center;
 }
 
-#deploy_key {
+textarea#deploy_key {
     height: 150px;
 }
 
@@ -23,7 +23,7 @@ form#add_repository > div:nth-child(2) {
 @media only screen
 and (min-device-width: 600px)
 and (min-width: 600px) {
-    div.repository-container {
+    div#page_container {
         grid-template-columns: 1fr 1fr;
     }
 }

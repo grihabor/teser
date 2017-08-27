@@ -62,18 +62,29 @@ function RepositoryTable(props) {
 function RepositoryList(props) {
     return (
         <div>
-            <h2>Your repositories</h2>
+            <h2 className="header">Your repositories</h2>
             <RepositoryTable repositories={props.repositories}/>
         </div>
     )
 }
 
+function HomePage(props) {
+    return (
+        <div id="page_content">
+            <h1 className="header">Home</h1>
+            <RepositoryList repositories={props.repositories}/>
+        </div>
+    )
+}
+
+
+
 
 function main() {
     load_repositories(function (repositories) {
         ReactDOM.render(
-            <RepositoryList repositories={repositories}/>,
-            document.getElementById("repository_list")
+            <HomePage repositories={repositories}/>,
+            document.getElementById("page_container")
         );
     });
 
