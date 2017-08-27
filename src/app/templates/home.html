@@ -1,27 +1,6 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% macro render_repositories(repositories) %}
-    {#
-    <table id="repo_table" class="table table-striped">
-        <thead>
-        <tr>
-            <td>URL</td>
-            <td>Identity File</td>
-        </tr>
-        </thead>
-        <tbody>
-        {% for repository in repositories %}
-            <tr>
-                <td>{{ repository.url }}</td>
-                <td>{{ repository.identity_file }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    #}
-{% endmacro %}
-
 {% block styles %}
     {{ super() }}
     <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="home.css") }}>
@@ -29,29 +8,6 @@
 
 {% block content %}
     <div id="page_container"></div>
-        <h1>Home</h1>
-    <div id="page_content" class="repository-container">
-        <div id="repository_list" class="repository-list">
-            <h2>Your repositories</h2>
-
-            {% if repositories %}
-                {{ render_repositories(repositories) }}
-            {% else %}
-                <p>You have no repositories yet</p>
-            {% endif %}
-        </div>
-
-        <div class="repository-add">
-            <h2>Add repository</h2>
-
-            <form id="add_repository">
-                {{ wtf.form_field(form.url) }}
-                {{ wtf.form_field(form.deploy_key) }}
-                {{ wtf.form_field(form.submit_button) }}
-            </form>
-
-        </div>
-    </div>
 {% endblock %}
 
 {% block scripts %}
