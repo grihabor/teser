@@ -1,4 +1,4 @@
-div#page_container {
+div#page_content {
     grid-template-columns: 1fr;
     display: grid;
     grid-gap: 30px;
@@ -23,7 +23,12 @@ form#add_repository > div:nth-child(2) {
 @media only screen
 and (min-device-width: 600px)
 and (min-width: 600px) {
-    div#page_container {
+    div#page_content {
         grid-template-columns: 1fr 1fr;
+    }
+
+    #home_header {
+        grid-column-start: 1;
+        grid-column-end: 3;
     }
 }
