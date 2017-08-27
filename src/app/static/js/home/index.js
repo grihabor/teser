@@ -5,10 +5,10 @@ function HomePage(props) {
         <div id="page_content">
             <h1 className="header">Home</h1>
             <RepositoryList repositories={props.repositories}/>
+            <RepositoryAdd repositories={props.repositories}/>
         </div>
     )
 }
-
 
 
 
