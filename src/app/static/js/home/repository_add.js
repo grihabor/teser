@@ -1,8 +1,9 @@
+
 function RepositoryURL(props) {
     return (
         <div className="form-group required">
             <label className="control-label">URL</label>
-            <input className="form-control" id="url" name="url" required="" value="" type="text"/>
+            <input className="form-control" id="url" name="url" required="" value={props.value} type="text" onChange={props.onChange}/>
             <p className="help-block">Example: user@gitlab.com:/user/project</p>
         </div>
     )
@@ -20,7 +21,12 @@ function RepositoryDeployKey(props) {
 
 function RepositorySubmit(props) {
     return (
-        <input className="btn btn-default" id="submit_button" name="submit_button" value="Add" type="submit"/>
+        <input
+            className="btn btn-default"
+            id="submit_button"
+            name="submit_button"
+            value="Add"
+            type="text"/>
     )
 }
 
@@ -28,14 +34,31 @@ class RepositoryAddForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            url_value: "",
             hidden_key: true
         };
+
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleURLChange = this.handleURLChange.bind(this);
+    }
+
+    handleURLChange(event) {
+        event.preventDefault();
+
+        this.setState({
+            url_value: event.target.value
+        });
+    }
+
+    handleSubmit(event) {
+        console.log('A name was submitted: ' + this.state.value);
+        event.preventDefault();
     }
 
     render() {
         return (
             <form id="add_repository">
-                <RepositoryURL />
+                <RepositoryURL value={this.state.url_value} onChange={this.handleURLChange}/>
                 <RepositoryDeployKey hidden={this.state.hidden_key}/>
                 <RepositorySubmit />
             </form>
