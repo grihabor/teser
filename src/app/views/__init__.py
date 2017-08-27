@@ -1,5 +1,5 @@
 from .deploy_key import import_generate_deploy_key
-from .view_add_repository import import_add_repository
+from .repository import import_add_repository
 from .index import import_index
 from .home import import_home
 
