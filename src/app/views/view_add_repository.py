@@ -74,6 +74,8 @@ def import_add_repository(app):
     @app.route('/api/repository/list')
     @login_required
     def repositories():
-        return [dict(url=repo.url,
-                     identity_file=repo.identity_file)
-                for repo in current_user.repositories]
+        return jsonify(dict(
+            repositories=[dict(url=repo.url,
+                               identity_file=repo.identity_file)
+                          for repo in current_user.repositories]
+        ))

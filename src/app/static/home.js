@@ -20,12 +20,14 @@ class RepositoryList extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            repositories: []
+            repositories: props.repositories
         };
+    }
 
-        load_repositories(function(repositories){
-            this.state.repositories = repositories;
-        });
+    update_repositories(repositories) {
+        console.log('Loaded list: ' + repositories);
+        console.log(this);
+        this.state.repositories = repositories;
     }
 
     render() {
@@ -44,10 +46,12 @@ class RepositoryList extends React.Component {
 
 
 function main() {
-    ReactDOM.render(
-        <RepositoryList/>,
-        document.getElementById("repository_list")
-    );
+    load_repositories(function (repositories) {
+        ReactDOM.render(
+            <RepositoryList repositories={repositories} />,
+            document.getElementById("repository_list")
+        );
+    });
 
     var state = 0,
         deploy_key = $("#deploy_key"),
