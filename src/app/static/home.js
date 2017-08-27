@@ -1,15 +1,54 @@
-
 function Repository(props) {
     return (
         <tr>
-        <td>Repo</td>
+            <td>{props.url}</td>
+            <td>{props.identity_file}</td>
         </tr>
     );
 }
 
+function load_repositories(onSuccess) {
+    let repositories;
+    const request = $.get('/api/repository/list', {});
+
+    request.success(function (response) {
+        onSuccess(response.repositories);
+    });
+}
+
+class RepositoryList extends React.Component {
+    constructor (props) {
+        super(props);
+        this.state = {
+            repositories: []
+        };
+
+        load_repositories(function(repositories){
+            this.state.repositories = repositories;
+        });
+    }
+
+    render() {
+        let repo_list = [];
+        for (let i in this.state.repositories) {
+            const repo = this.state.repositories[i];
+            repo_list.push(
+                <Repository
+                    url={repo.url}
+                    identity_file={repo.identity_file}/>
+            );
+        }
+        return <tbody>{repo_list}</tbody>
+    }
+}
 
 
-$(function () {
+function main() {
+    ReactDOM.render(
+        <RepositoryList/>,
+        document.getElementById("repository_list")
+    );
+
     var state = 0,
         deploy_key = $("#deploy_key"),
         url = $("#url");
@@ -33,7 +72,7 @@ $(function () {
             row,
             item;
 
-        for(i in repositories) {
+        for (i in repositories) {
             repo = repositories[i];
             row = $('<tr></tr>');
             row.append('<td>' + repo.url + '</td>');
@@ -45,7 +84,7 @@ $(function () {
     }
 
     function add_repository() {
-        var request = $.get("/add_repository", {"url": url.val()});
+        var request = $.get("/api/repository/add", {"url": url.val()});
 
         request.success(function (response) {
             var url_container = url.parent();
@@ -114,4 +153,6 @@ $(function () {
 
         return false;
     });
-});
+}
+
+main();

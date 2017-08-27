@@ -28,6 +28,7 @@
 {% block content %}
     <h1>Home</h1>
     <div class="repository-container">
+        <div id="repository_list"></div>
         <div class="repository-list">
             <h2>Your repositories</h2>
 
@@ -53,8 +54,9 @@
 
 {% block scripts %}
     {{ super() }}
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/6.1.19/browser.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
     <script type="text/babel" src="{{ url_for('static', filename='home.js') }}"></script>
 {% endblock %}

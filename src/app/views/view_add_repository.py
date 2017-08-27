@@ -65,8 +65,15 @@ def _add_repository(url):
 
 
 def import_add_repository(app):
-    @app.route('/add_repository')
+    @app.route('/api/repository/add')
     @login_required
     def add_repository():
         url = request.args['url']
         return _add_repository(url)
+
+    @app.route('/api/repository/list')
+    @login_required
+    def repositories():
+        return [dict(url=repo.url,
+                     identity_file=repo.identity_file)
+                for repo in current_user.repositories]
