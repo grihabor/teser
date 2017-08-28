@@ -23,10 +23,8 @@ function RepositorySubmit(props) {
     return (
         <input
             className="btn btn-default"
-            id="submit_button"
-            name="submit_button"
             value="Add"
-            type="text"/>
+            type="submit"/>
     )
 }
 

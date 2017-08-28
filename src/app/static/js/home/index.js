@@ -1,11 +1,16 @@
 function HomePage(props) {
-    return (
-        <div id="page_content">
-            <h1 id="home_header" className="header">Home</h1>
-            <RepositoryList repositories={props.repositories}/>
-            <RepositoryAdd repositories={props.repositories}/>
-        </div>
-    )
+    constructor(props) {
+        super(props);
+    },
+    render() {
+        return (
+            <div id="page_content">
+                <h1 id="home_header" className="header">Home</h1>
+                <RepositoryList repositories={props.repositories}/>
+                <RepositoryAdd />
+            </div>
+        )
+    }
 }
 
 
