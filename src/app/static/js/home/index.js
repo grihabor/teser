@@ -4,17 +4,19 @@ class HomePage extends React.Component {
         this.state = {
             repositories: []
         };
-        this.add_repository.bind(this);
+        this.update_repositories.bind(this);
     }
-    add_repository(reposittory) {
-        console.log('Add repo: ' + repository);
+    update_repositories(){
+        load_repositories(function (repositories) {
+            this.setState({repositories: repositories});
+        })
     }
     render() {
         return (
             <div id="page_content">
                 <h1 id="home_header" className="header">Home</h1>
-                <RepositoryList repositories={this.props.repositories}/>
-                <RepositoryAdd onAdd={this.add_repository}/>
+                <RepositoryList repositories={this.state.repositories}/>
+                <RepositoryAdd onAdd={this.update_repositories}/>
             </div>
         )
     }
