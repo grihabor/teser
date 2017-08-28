@@ -51,6 +51,7 @@ class RepositoryAddForm extends React.Component {
     handleSubmit(event) {
         console.log('A name was submitted: ' + this.state.value);
         event.preventDefault();
+alert();
     }
 
     render() {

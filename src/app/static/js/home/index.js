@@ -1,13 +1,20 @@
-function HomePage(props) {
+class HomePage extends React.Component {
     constructor(props) {
         super(props);
+        this.state({
+            repositories = []
+        });
+        this.add_repository.bind(this);
+    },
+    add_repository(reposittory) {
+        console.log('Add repo: ' + repository);
     },
     render() {
         return (
             <div id="page_content">
                 <h1 id="home_header" className="header">Home</h1>
                 <RepositoryList repositories={props.repositories}/>
-                <RepositoryAdd />
+                <RepositoryAdd onAdd={this.add_repository}/>
             </div>
         )
     }
