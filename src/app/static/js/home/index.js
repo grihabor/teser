@@ -1,16 +1,31 @@
+
+function load_repositories(onSuccess) {
+    const request = $.get('/api/repository/list', {});
+
+    request.success(function (response) {
+        onSuccess(response.repositories);
+    });
+}
+
 class HomePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             repositories: []
         };
-        this.update_repositories.bind(this);
+        this.set_repositories = this.set_repositories.bind(this);
+        this.update_repositories = this.update_repositories.bind(this);
+
+        this.update_repositories();
     }
 
-    update_repositories(){
-        load_repositories(function (repositories) {
-            this.setState({repositories: repositories});
-        })
+    set_repositories(repositories) {
+        console.log('Set repos: ' + repositories);
+        this.setState({repositories: repositories});
+    }
+
+    update_repositories() {
+        load_repositories(this.set_repositories);
     }
 
     render() {
@@ -18,7 +33,7 @@ class HomePage extends React.Component {
             <div id="page_content">
                 <h1 id="home_header" className="header">Home</h1>
                 <RepositoryList repositories={this.state.repositories}/>
-                <RepositoryAdd onAdd={this.update_repositories}/>
+                <RepositoryAdd onAdd={this.set_repositories}/>
             </div>
         )
     }
@@ -26,12 +41,10 @@ class HomePage extends React.Component {
 
 
 function main() {
-    load_repositories(function (repositories) {
-        ReactDOM.render(
-            <HomePage repositories={repositories}/>,
-            document.getElementById("page_container")
-        );
-    });
+    ReactDOM.render(
+        <HomePage />,
+        document.getElementById("page_container")
+    );
 
     var state = 0,
         deploy_key = $("#deploy_key"),

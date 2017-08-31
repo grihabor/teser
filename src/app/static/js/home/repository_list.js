@@ -8,16 +8,6 @@ function Repository(props) {
     );
 }
 
-function load_repositories(onSuccess) {
-    let repositories;
-    const request = $.get('/api/repository/list', {});
-
-    request.success(function (response) {
-        alert('Got repos: ' + response.repositories.toString());
-        onSuccess(response.repositories);
-    });
-}
-
 function RepositoryTableBody(props) {
     return (
         <tbody>
