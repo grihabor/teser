@@ -42,9 +42,11 @@ class HomePage extends React.Component {
 
 function main() {
     ReactDOM.render(
-        <HomePage />,
+        <HomePage/>,
         document.getElementById("page_container")
     );
+}
+/*{
 
     var state = 0,
         deploy_key = $("#deploy_key"),
@@ -151,5 +153,6 @@ function main() {
         return false;
     });
 }
+*/
 
 main();

@@ -51,12 +51,14 @@ class RepositoryAddForm extends React.Component {
     handleSubmit(event) {
         console.log('A name was submitted: ' + this.state.value);
         event.preventDefault();
-alert();
+        this.setState((prevState) => ({
+            hidden_key: !prevState.hidden_key
+        }));
     }
 
     render() {
         return (
-            <form id="add_repository">
+            <form id="add_repository" onSubmit={this.handleSubmit}>
                 <RepositoryURL value={this.state.url_value} onChange={this.handleURLChange}/>
                 <RepositoryDeployKey hidden={this.state.hidden_key}/>
                 <RepositorySubmit />

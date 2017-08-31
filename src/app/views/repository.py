@@ -20,8 +20,8 @@ def validate_repository(url, identity_file):
         identity_file=identity_file
     )
 
-    with urllib.request.urlopen(path) as r:
-        data = json.load(r)
+    with urllib.request.urlopen(path) as f:
+        data = json.loads(f.read().decode('utf-8'))
 
     logger.info(data)
     return data
