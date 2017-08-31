@@ -172,7 +172,7 @@ function RepositoryAdd(props) {
     return (
         <div>
             <h2 className="header">Add repository</h2>
-            <RepositoryAddForm/>
+            <RepositoryAddForm onAdd={props.onAdd}/>
         </div>
     )
 }
