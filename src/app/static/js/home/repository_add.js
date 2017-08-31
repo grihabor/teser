@@ -21,21 +21,23 @@ function add_repository(url, onSuccess, onFailure, onError, onTimeout) {
     })
 }
 
-function is_array(variable){
+function is_array(variable) {
     return Object.prototype.toString.call(variable) === '[object Array]';
 }
 
 function RepositoryURL(props) {
     let className = "form-group required",
-        error_block = <div />;
+        error_block = <div/>;
 
     if (props.has_error) {
         className += " has-error";
         error_block = (<p className="help-block raw-output" id="failed_to_clone">
-                {is_array(props.error_details)
-                    ? props.error_details.map(function(line){return <p>{line}</p>;})
-                    : props.error_details }
-            </p>)
+            {is_array(props.error_details)
+                ? props.error_details.map(function (line) {
+                    return <p>{line}</p>;
+                })
+                : props.error_details}
+        </p>)
     }
     return (
         <div className={className}>
@@ -48,11 +50,28 @@ function RepositoryURL(props) {
     )
 }
 
+function show_deploy_key(onSuccess) {
+    var request = $.get("/generate_deploy_key");
+
+    request.success(function (response) {
+        onSuccess(response);
+    });
+
+    request.error(function (jqXHR, textStatus, errorThrown) {
+        if (textStatus == 'timeout')
+            console.log('The server is not responding');
+
+        if (textStatus == 'error')
+            console.log(errorThrown);
+    })
+}
+
 function RepositoryDeployKey(props) {
     return props.hidden ? <div/> : (
         <div className="form-group ">
             <label className="control-label">Public key</label>
-            <textarea className="form-control" id="deploy_key" name="deploy_key" readOnly="readOnly"/>
+            <textarea className="form-control" id="deploy_key" name="deploy_key" readOnly="readOnly"
+                      value={props.value}/>
             <p className="help-block">Add this key to your project "Deploy keys"</p>
         </div>
     )
@@ -73,6 +92,7 @@ class RepositoryAddForm extends React.Component {
         this.state = {
             url_value: "",
             hidden_key: true,
+            key_value: "",
             error_details: "",
             has_error: false
         };
@@ -93,7 +113,15 @@ class RepositoryAddForm extends React.Component {
         console.log('A name was submitted: ' + this.state.value);
         event.preventDefault();
         if (this.state.hidden_key) {
-            this.setState({hidden_key: false})
+            function onSuccess(response) {
+                this.setState({
+                    hidden_key: false,
+                    key_value: response.deploy_key
+                });
+            }
+            onSuccess = onSuccess.bind(this);
+            show_deploy_key(onSuccess);
+
         } else {
             function onSuccess(response) {
                 this.setState({
@@ -131,7 +159,9 @@ class RepositoryAddForm extends React.Component {
                     error_details={this.state.error_details}
                     has_error={this.state.has_error}
                     onChange={this.handleURLChange}/>
-                <RepositoryDeployKey hidden={this.state.hidden_key}/>
+                <RepositoryDeployKey
+                    hidden={this.state.hidden_key}
+                    value={this.state.key_value}/>
                 <RepositorySubmit/>
             </form>
         )

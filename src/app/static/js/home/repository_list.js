@@ -1,4 +1,3 @@
-
 function Repository(props) {
     return (
         <tr>
@@ -11,12 +10,12 @@ function Repository(props) {
 function RepositoryTableBody(props) {
     return (
         <tbody>
-            { props.repositories.map(function(repo){
-                return <Repository
-                    key={repo.id}
-                    url={repo.url}
-                    identity_file={repo.identity_file}/>
-            })}
+        {props.repositories.map(function (repo) {
+            return <Repository
+                key={repo.id}
+                url={repo.url}
+                identity_file={repo.identity_file}/>
+        })}
         </tbody>
     )
 }

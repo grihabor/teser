@@ -1,4 +1,3 @@
-
 function load_repositories(onSuccess) {
     const request = $.get('/api/repository/list', {});
 
@@ -47,6 +46,7 @@ function main() {
         document.getElementById("page_container")
     );
 }
+
 /*{
 
     var state = 0,
