@@ -12,6 +12,11 @@ div#page_content {
     text-align: center;
 }
 
+.raw-output {
+    background-color: #eee;
+    padding: 10px;
+}
+
 textarea#deploy_key {
     height: 150px;
 }

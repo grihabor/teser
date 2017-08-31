@@ -7,6 +7,7 @@ function load_repositories(onSuccess) {
     });
 }
 
+
 class HomePage extends React.Component {
     constructor(props) {
         super(props);
@@ -82,37 +83,7 @@ function main() {
         table_body.html(new_body.html());
     }
 
-    function add_repository() {
-        var request = $.get("/api/repository/add", {"url": url.val()});
 
-        request.success(function (response) {
-            var url_container = url.parent();
-
-            console.log('Add repo');
-            console.log(response);
-
-            if (response.result != 'ok') {
-                url_container.addClass('has-error');
-                $("#failed_to_clone").remove();
-                failed_to_clone(response.details).insertAfter(url);
-            } else {
-                url.val("");
-                url_container.removeClass('has-error');
-                deploy_key.parent().hide();
-                $('#failed_to_clone').remove();
-                toggle_state();
-                update_repository_list(response.repositories);
-            }
-        });
-
-        request.error(function (jqXHR, textStatus, errorThrown) {
-            if (textStatus == 'timeout')
-                console.log('The server is not responding');
-
-            if (textStatus == 'error')
-                console.log(errorThrown);
-        })
-    }
 
     function show_deploy_key() {
         var request = $.get("/generate_deploy_key");

@@ -51,9 +51,7 @@ def _add_repository(url):
             details = 'Failed to save the repository into database'
     else:
         result = 'fail'
-        details = 'Failed to validate the url:<br> > {}'.format(
-            validation['details'].replace('\n', '<br> > ')
-        )
+        details = ['Failed to validate the url:'] + validation['details'].split('\n')
 
     return jsonify(dict(
         result=result,

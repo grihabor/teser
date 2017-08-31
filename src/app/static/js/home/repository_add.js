@@ -1,16 +1,55 @@
+function add_repository(url, onSuccess, onFailure, onError, onTimeout) {
+    var request = $.get("/api/repository/add", {"url": url});
+
+    request.success(function (response) {
+        console.log('Add repo');
+        console.log(response);
+
+        if (response.result !== 'ok') {
+            onFailure(response);
+        } else {
+            onSuccess(response);
+        }
+    });
+
+    request.error(function (jqXHR, textStatus, errorThrown) {
+        if (textStatus === 'timeout')
+            console.log('The server is not responding');
+
+        if (textStatus === 'error')
+            console.log(errorThrown);
+    })
+}
+
+function is_array(variable){
+    return Object.prototype.toString.call(variable) === '[object Array]';
+}
 
 function RepositoryURL(props) {
+    let className = "form-group required",
+        error_block = <div />;
+
+    if (props.has_error) {
+        className += " has-error";
+        error_block = (<p className="help-block raw-output" id="failed_to_clone">
+                {is_array(props.error_details)
+                    ? props.error_details.map(function(line){return <p>{line}</p>;})
+                    : props.error_details }
+            </p>)
+    }
     return (
-        <div className="form-group required">
+        <div className={className}>
             <label className="control-label">URL</label>
-            <input className="form-control" id="url" name="url" required="" value={props.value} type="text" onChange={props.onChange}/>
+            <input className="form-control" id="url" name="url" required="" value={props.value} type="text"
+                   onChange={props.onChange}/>
+            {error_block}
             <p className="help-block">Example: user@gitlab.com:/user/project</p>
         </div>
     )
 }
 
 function RepositoryDeployKey(props) {
-    return props.hidden ? <div /> : (
+    return props.hidden ? <div/> : (
         <div className="form-group ">
             <label className="control-label">Public key</label>
             <textarea className="form-control" id="deploy_key" name="deploy_key" readOnly="readOnly"/>
@@ -33,7 +72,9 @@ class RepositoryAddForm extends React.Component {
         super(props);
         this.state = {
             url_value: "",
-            hidden_key: true
+            hidden_key: true,
+            error_details: "",
+            has_error: false
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -51,17 +92,47 @@ class RepositoryAddForm extends React.Component {
     handleSubmit(event) {
         console.log('A name was submitted: ' + this.state.value);
         event.preventDefault();
-        this.setState((prevState) => ({
-            hidden_key: !prevState.hidden_key
-        }));
+        if (this.state.hidden_key) {
+            this.setState({hidden_key: false})
+        } else {
+            function onSuccess(response) {
+                this.setState({
+                    error_details: "",
+                    has_error: false,
+                    hidden_key: true,
+                    url_value: ""
+                });
+                this.props.onAdd(response.repositories);
+            }
+
+            function onFailure(response) {
+                this.setState({
+                    error_details: response.details,
+                    has_error: true
+                });
+            }
+
+            onSuccess = onSuccess.bind(this);
+            onFailure = onFailure.bind(this);
+
+            add_repository(
+                this.state.url_value,
+                onSuccess,
+                onFailure
+            );
+        }
     }
 
     render() {
         return (
             <form id="add_repository" onSubmit={this.handleSubmit}>
-                <RepositoryURL value={this.state.url_value} onChange={this.handleURLChange}/>
+                <RepositoryURL
+                    value={this.state.url_value}
+                    error_details={this.state.error_details}
+                    has_error={this.state.has_error}
+                    onChange={this.handleURLChange}/>
                 <RepositoryDeployKey hidden={this.state.hidden_key}/>
-                <RepositorySubmit />
+                <RepositorySubmit/>
             </form>
         )
     }
@@ -71,7 +142,7 @@ function RepositoryAdd(props) {
     return (
         <div>
             <h2 className="header">Add repository</h2>
-            <RepositoryAddForm />
+            <RepositoryAddForm/>
         </div>
     )
 }
