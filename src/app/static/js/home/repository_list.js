@@ -1,3 +1,4 @@
+
 function Repository(props) {
     return (
         <tr>
@@ -12,37 +13,22 @@ function load_repositories(onSuccess) {
     const request = $.get('/api/repository/list', {});
 
     request.success(function (response) {
+        alert('Got repos: ' + response.repositories.toString());
         onSuccess(response.repositories);
     });
 }
 
-class RepositoryTableBody extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            repositories: props.repositories
-        };
-    }
-
-    update_repositories(repositories) {
-        console.log('Loaded list: ' + repositories);
-        console.log(this);
-        this.state.repositories = repositories;
-    }
-
-    render() {
-        let repo_list = [];
-        for (let i in this.state.repositories) {
-            const repo = this.state.repositories[i];
-            repo_list.push(
-                <Repository
+function RepositoryTableBody(props) {
+    return (
+        <tbody>
+            { props.repositories.map(function(repo){
+                return <Repository
                     key={repo.id}
                     url={repo.url}
                     identity_file={repo.identity_file}/>
-            );
-        }
-        return <tbody>{repo_list}</tbody>
-    }
+            })}
+        </tbody>
+    )
 }
 
 function RepositoryTable(props) {

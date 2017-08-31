@@ -6,11 +6,13 @@ class HomePage extends React.Component {
         };
         this.update_repositories.bind(this);
     }
+
     update_repositories(){
         load_repositories(function (repositories) {
             this.setState({repositories: repositories});
         })
     }
+
     render() {
         return (
             <div id="page_content">
