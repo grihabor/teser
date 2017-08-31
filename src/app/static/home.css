@@ -1,4 +1,4 @@
-div.repository-container {
+div#page_content {
     grid-template-columns: 1fr;
     display: grid;
     grid-gap: 30px;
@@ -8,22 +8,28 @@ div.repository-container {
     width: auto;
 }
 
-h1, h2 {
+.header {
     text-align: center;
 }
 
-#deploy_key {
-    height: 150px;
+.raw-output {
+    background-color: #eee;
+    padding: 10px;
 }
 
-form#add_repository > div:nth-child(2) {
-    display: none;
+textarea#deploy_key {
+    height: 150px;
 }
 
 @media only screen
 and (min-device-width: 600px)
 and (min-width: 600px) {
-    div.repository-container {
+    div#page_content {
         grid-template-columns: 1fr 1fr;
+    }
+
+    #home_header {
+        grid-column-start: 1;
+        grid-column-end: 3;
     }
 }

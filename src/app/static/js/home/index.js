@@ -1,4 +1,54 @@
-$(function () {
+function load_repositories(onSuccess) {
+    const request = $.get('/api/repository/list', {});
+
+    request.success(function (response) {
+        onSuccess(response.repositories);
+    });
+}
+
+
+class HomePage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            repositories: []
+        };
+        this.set_repositories = this.set_repositories.bind(this);
+        this.update_repositories = this.update_repositories.bind(this);
+
+        this.update_repositories();
+    }
+
+    set_repositories(repositories) {
+        console.log('Set repos: ' + repositories);
+        this.setState({repositories: repositories});
+    }
+
+    update_repositories() {
+        load_repositories(this.set_repositories);
+    }
+
+    render() {
+        return (
+            <div id="page_content">
+                <h1 id="home_header" className="header">Home</h1>
+                <RepositoryList repositories={this.state.repositories}/>
+                <RepositoryAdd onAdd={this.set_repositories}/>
+            </div>
+        )
+    }
+}
+
+
+function main() {
+    ReactDOM.render(
+        <HomePage/>,
+        document.getElementById("page_container")
+    );
+}
+
+/*{
+
     var state = 0,
         deploy_key = $("#deploy_key"),
         url = $("#url");
@@ -22,7 +72,7 @@ $(function () {
             row,
             item;
 
-        for(i in repositories) {
+        for (i in repositories) {
             repo = repositories[i];
             row = $('<tr></tr>');
             row.append('<td>' + repo.url + '</td>');
@@ -33,37 +83,7 @@ $(function () {
         table_body.html(new_body.html());
     }
 
-    function add_repository() {
-        var request = $.get("/add_repository", {"url": url.val()});
 
-        request.success(function (response) {
-            var url_container = url.parent();
-
-            console.log('Add repo');
-            console.log(response);
-
-            if (response.result != 'ok') {
-                url_container.addClass('has-error');
-                $("#failed_to_clone").remove();
-                failed_to_clone(response.details).insertAfter(url);
-            } else {
-                url.val("");
-                url_container.removeClass('has-error');
-                deploy_key.parent().hide();
-                $('#failed_to_clone').remove();
-                toggle_state();
-                update_repository_list(response.repositories);
-            }
-        });
-
-        request.error(function (jqXHR, textStatus, errorThrown) {
-            if (textStatus == 'timeout')
-                console.log('The server is not responding');
-
-            if (textStatus == 'error')
-                console.log(errorThrown);
-        })
-    }
 
     function show_deploy_key() {
         var request = $.get("/generate_deploy_key");
@@ -103,4 +123,7 @@ $(function () {
 
         return false;
     });
-});
+}
+*/
+
+main();

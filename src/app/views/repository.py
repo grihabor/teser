@@ -20,8 +20,8 @@ def validate_repository(url, identity_file):
         identity_file=identity_file
     )
 
-    with urllib.request.urlopen(path) as r:
-        data = json.load(r)
+    with urllib.request.urlopen(path) as f:
+        data = json.loads(f.read().decode('utf-8'))
 
     logger.info(data)
     return data
@@ -51,22 +51,30 @@ def _add_repository(url):
             details = 'Failed to save the repository into database'
     else:
         result = 'fail'
-        details = 'Failed to validate the url:<br> > {}'.format(
-            validation['details'].replace('\n', '<br> > ')
-        )
+        details = ['Failed to validate the url:'] + validation['details'].split('\n')
 
     return jsonify(dict(
         result=result,
         details=details,
-        repositories=[dict(url=repo.url,
+        repositories=[dict(id=repo.id,
+                           url=repo.url,
                            identity_file=repo.identity_file)
                       for repo in current_user.repositories]
     ))
 
 
-def import_add_repository(app):
-    @app.route('/add_repository')
+def import_repository(app):
+    @app.route('/api/repository/add')
     @login_required
     def add_repository():
         url = request.args['url']
         return _add_repository(url)
+
+    @app.route('/api/repository/list')
+    @login_required
+    def repositories():
+        return jsonify(dict(
+            repositories=[dict(url=repo.url,
+                               identity_file=repo.identity_file)
+                          for repo in current_user.repositories]
+        ))

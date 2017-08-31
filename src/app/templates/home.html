@@ -1,57 +1,22 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% macro render_repositories(repositories) %}
-    <table id="repo_table" class="table table-striped">
-        <thead>
-        <tr>
-            <td>URL</td>
-            <td>Identity File</td>
-        </tr>
-        </thead>
-        <tbody>
-        {% for repository in repositories %}
-            <tr>
-                <td>{{ repository.url }}</td>
-                <td>{{ repository.identity_file }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-{% endmacro %}
-
 {% block styles %}
     {{ super() }}
     <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="home.css") }}>
 {% endblock %}
 
 {% block content %}
-    <h1>Home</h1>
-    <div class="repository-container">
-        <div class="repository-list">
-            <h2>Your repositories</h2>
-
-            {% if repositories %}
-                {{ render_repositories(repositories) }}
-            {% else %}
-                <p>You have no repositories yet</p>
-            {% endif %}
-        </div>
-
-        <div class="repository-add">
-            <h2>Add repository</h2>
-
-            <form id="add_repository">
-                {{ wtf.form_field(form.url) }}
-                {{ wtf.form_field(form.deploy_key) }}
-                {{ wtf.form_field(form.submit_button) }}
-            </form>
-
-        </div>
-    </div>
+    <div id="page_container"></div>
 {% endblock %}
 
 {% block scripts %}
     {{ super() }}
-    <script type="text/javascript" src="{{ url_for('static', filename='home.js') }}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+
+    <script type="text/babel" src="{{ url_for('static', filename='js/home/repository_add.js') }}"></script>
+    <script type="text/babel" src="{{ url_for('static', filename='js/home/repository_list.js') }}"></script>
+    <script type="text/babel" src="{{ url_for('static', filename='js/home/index.js') }}"></script>
 {% endblock %}

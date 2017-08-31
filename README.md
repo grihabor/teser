@@ -42,7 +42,7 @@ MAIL_USE_SSL=1
   1. Setup test/config.env file
   2. Get sertificate for your domain ([Certbot](https://certbot.eff.org/))
   3. Place **cert.key** and **cert.crt** into **test/nginx/**
-  4. Modify **test/nginx/nginx.cong** to use your own domain (replace *grihabor.tk*)
+  4. Modify **test/nginx/nginx.conf** to use your own domain (replace *grihabor.tk*)
 
 Now you are ready to run `make test-up`!
 
