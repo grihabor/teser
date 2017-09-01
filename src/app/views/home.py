@@ -1,9 +1,11 @@
 import logging
 
-from flask import render_template
-from flask_security import login_required, current_user
+from flask import render_template, url_for
+from flask_security import login_required, current_user, roles_required
 from flask_wtf import FlaskForm
 from wtforms import StringField, validators, TextAreaField, SubmitField
+
+from models import RolesUsers, Role
 
 logger = logging.getLogger(__name__)
 
@@ -22,8 +24,15 @@ def import_home(app):
     @app.route('/home', methods=['GET', 'POST'])
     @login_required
     def home():
-        logger.info('Current user: {}'.format(current_user))
+        logger.info('Current user: {0}, roles: {0.roles}'.format(current_user))
+        admin_page = url_for('admin_page') if current_user.has_role('admin') else ''
         form = RepositoryForm()
         return render_template('home.html',
                                form=form,
-                               repositories=current_user.repositories)
+                               repositories=current_user.repositories,
+                               admin_page=admin_page)
+
+    @app.route('/admin_page')
+    @roles_required('admin')
+    def admin_page():
+        return 'Hi admin!'

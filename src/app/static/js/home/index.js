@@ -29,9 +29,15 @@ class HomePage extends React.Component {
     }
 
     render() {
+        const admin_page_link = (
+            this.props.admin_page !== ""
+            ? <p className="screen-width">Go to <a href={this.props.admin_page}>Admin page</a></p>
+                : <div className="screen-width"/>
+        );
         return (
             <div id="page_content">
-                <h1 id="home_header" className="header">Home</h1>
+                <h1 className="header screen-width">Home</h1>
+                {admin_page_link}
                 <RepositoryList repositories={this.state.repositories}/>
                 <RepositoryAdd onAdd={this.set_repositories}/>
             </div>
@@ -41,9 +47,11 @@ class HomePage extends React.Component {
 
 
 function main() {
+    const container = document.getElementById("page_container");
+    const admin_page = container.getAttribute('data-admin-page');
     ReactDOM.render(
-        <HomePage/>,
-        document.getElementById("page_container")
+        <HomePage admin_page={admin_page}/>,
+        container
     );
 }
 

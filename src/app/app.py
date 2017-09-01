@@ -33,6 +33,12 @@ security = Security(app, user_datastore)
 views.import_views(app)
 
 
+@app.before_first_request
+def run():
+    admin_role = user_datastore.find_or_create_role('admin')
+    user_datastore.add_role_to_user(user_datastore.get_user('grihabor@mail.ru'), admin_role)
+    user_datastore.commit()
+
 def main():
     host = os.getenv('FLASK_HOST', '127.0.0.1')
     port = int(os.getenv('FLASK_PORT', 5000))
