@@ -33,6 +33,25 @@ security = Security(app, user_datastore)
 views.import_views(app)
 
 
+@app.before_first_request
+def run():
+    admins = os.getenv('ADMINS', None)
+    if not admins:
+        return
+
+    logger.info('Creating admins: {}'.format(admins))
+
+    try:
+        admin_role = user_datastore.find_or_create_role('admin')
+        for admin_email in admins.split(','):
+            admin = user_datastore.get_user(admin_email)
+            if admin:
+                user_datastore.add_role_to_user(admin, admin_role)
+        user_datastore.commit()
+    except Exception as e:
+        logger.warning('Failed to initialize admins: {}'.format(e))
+
+
 def main():
     host = os.getenv('FLASK_HOST', '127.0.0.1')
     port = int(os.getenv('FLASK_PORT', 5000))

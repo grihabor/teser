@@ -1,5 +1,4 @@
-{% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base_react.html" %}
 
 {% block styles %}
     {{ super() }}
@@ -7,16 +6,12 @@
 {% endblock %}
 
 {% block content %}
-    <div id="page_container"></div>
+    <div id="page_container" data-admin-page="{{ admin_page }}"></div>
 {% endblock %}
 
 {% block scripts %}
     {{ super() }}
-    <script src="//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
-
-    <script type="text/babel" src="{{ url_for('static', filename='js/home/repository_add.js') }}"></script>
-    <script type="text/babel" src="{{ url_for('static', filename='js/home/repository_list.js') }}"></script>
-    <script type="text/babel" src="{{ url_for('static', filename='js/home/index.js') }}"></script>
+    <script type="text/babel" src="{{ url_for('static', filename='js/home/repository_add.jsx') }}"></script>
+    <script type="text/babel" src="{{ url_for('static', filename='js/home/repository_list.jsx') }}"></script>
+    <script type="text/babel" src="{{ url_for('static', filename='js/home/index.jsx') }}"></script>
 {% endblock %}

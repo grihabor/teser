@@ -28,7 +28,7 @@ and (min-width: 600px) {
         grid-template-columns: 1fr 1fr;
     }
 
-    #home_header {
+    .screen-width {
         grid-column-start: 1;
         grid-column-end: 3;
     }

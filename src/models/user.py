@@ -1,10 +1,10 @@
-from database import Base
-from flask_security import UserMixin, RoleMixin
-from sqlalchemy.orm import relationship, backref
+from flask_security import UserMixin
 from sqlalchemy import (
-    Boolean, DateTime, Column, Integer,
-    String, ForeignKey
+    Boolean, DateTime, Column, Integer, String
 )
+from sqlalchemy.orm import relationship, backref
+
+from database import Base
 
 
 class User(Base, UserMixin):
@@ -26,3 +26,6 @@ class User(Base, UserMixin):
     confirmed_at = Column(DateTime())
     roles = relationship('Role', secondary='roles_users',
                          backref=backref('users', lazy='dynamic'))
+
+    def __repr__(self):
+        return '<User id={0.id} email={0.email}>'.format(self)

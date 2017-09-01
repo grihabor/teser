@@ -1,8 +1,8 @@
-from database import Base
 from sqlalchemy import (
-    Boolean, DateTime, Column, Integer,
-    String, ForeignKey
+    Column, Integer, ForeignKey
 )
+
+from database import Base
 
 
 class RolesUsers(Base):

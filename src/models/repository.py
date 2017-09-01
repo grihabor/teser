@@ -1,7 +1,8 @@
-from database import Base
 from sqlalchemy import (
     Integer, String, ForeignKey, Column
 )
+
+from database import Base
 
 
 class Repository(Base):

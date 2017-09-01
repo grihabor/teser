@@ -29,23 +29,35 @@ class HomePage extends React.Component {
     }
 
     render() {
-        return (
+        const page_content = (
             <div id="page_content">
-                <h1 id="home_header" className="header">Home</h1>
+                <h1 className="header screen-width">Home</h1>
                 <RepositoryList repositories={this.state.repositories}/>
                 <RepositoryAdd onAdd={this.set_repositories}/>
             </div>
-        )
+        );
+        if (this.props.admin_page !== ""){
+            return (
+                <div>
+                    <p className="screen-width">Go to <a href={this.props.admin_page}>Admin page</a></p>
+                    {page_content}
+                </div>
+            )
+        } else {
+            return page_content;
+        }
     }
 }
 
 
-function main() {
+(function main() {
+    const container = document.getElementById("page_container");
+    const admin_page = container.getAttribute('data-admin-page');
     ReactDOM.render(
-        <HomePage/>,
-        document.getElementById("page_container")
+        <HomePage admin_page={admin_page}/>,
+        container
     );
-}
+})();
 
 /*{
 
@@ -125,5 +137,3 @@ function main() {
     });
 }
 */
-
-main();
