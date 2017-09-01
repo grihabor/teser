@@ -1,3 +1,4 @@
+from views.admin_page import import_admin_page
 from .deploy_key import import_generate_deploy_key
 from .repository import import_repository
 from .index import import_index
@@ -9,3 +10,4 @@ def import_views(app):
     import_repository(app)
     import_index(app)
     import_home(app)
+    import_admin_page(app)

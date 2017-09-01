@@ -1,0 +1,10 @@
+{% extends "base_react.html" %}
+
+{% block content %}
+    <div id="page_container"></div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script type="text/babel" src="{{ url_for('static', filename='js/admin_page/index.jsx') }}"></script>
+{% endblock %}

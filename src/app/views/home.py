@@ -5,8 +5,6 @@ from flask_security import login_required, current_user, roles_required
 from flask_wtf import FlaskForm
 from wtforms import StringField, validators, TextAreaField, SubmitField
 
-from models import RolesUsers, Role
-
 logger = logging.getLogger(__name__)
 
 
@@ -32,7 +30,3 @@ def import_home(app):
                                repositories=current_user.repositories,
                                admin_page=admin_page)
 
-    @app.route('/admin_page')
-    @roles_required('admin')
-    def admin_page():
-        return 'Hi admin!'

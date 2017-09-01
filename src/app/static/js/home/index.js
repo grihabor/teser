@@ -46,14 +46,14 @@ class HomePage extends React.Component {
 }
 
 
-function main() {
+(function main() {
     const container = document.getElementById("page_container");
     const admin_page = container.getAttribute('data-admin-page');
     ReactDOM.render(
         <HomePage admin_page={admin_page}/>,
         container
     );
-}
+})();
 
 /*{
 
@@ -133,5 +133,3 @@ function main() {
     });
 }
 */
-
-main();
