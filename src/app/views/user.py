@@ -12,6 +12,7 @@ def import_user(app):
         return jsonify(dict(users=[
             dict(email=user.email,
                  username=user.username,
-                 id=user.id)
+                 id=user.id,
+                 roles=[role.name for role in user.roles])
             for user in users
         ]))

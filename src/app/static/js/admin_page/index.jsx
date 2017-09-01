@@ -14,6 +14,7 @@ function UserTableBody(props) {
                 <td>{user.id}</td>
                 <td>{user.email}</td>
                 <td>{user.username}</td>
+                <td>{user.roles}</td>
             </tr>
         })}
         </tbody>
@@ -49,6 +50,7 @@ class UserTable extends React.Component {
                     <th>Id</th>
                     <th>Email</th>
                     <th>Username</th>
+                    <th>Roles</th>
                 </tr>
                 </thead>
                 <UserTableBody users={this.state.users}/>
