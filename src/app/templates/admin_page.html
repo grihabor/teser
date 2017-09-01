@@ -1,7 +1,7 @@
 {% extends "base_react.html" %}
 
 {% block content %}
-    <div id="page_container"></div>
+    <div id="page_container" data-home-page="{{ url_for('home') }}"></div>
 {% endblock %}
 
 {% block scripts %}

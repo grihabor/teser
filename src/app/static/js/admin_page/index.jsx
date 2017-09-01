@@ -68,9 +68,12 @@ function UserList(props) {
 
 function AdminPage(props) {
     return (
-        <div id="page_content">
-            <h1 className="header screen-width">Admin Page</h1>
-            <UserList/>
+        <div>
+            <p className="screen-width">Back to <a href={props.home_page}>Home page</a></p>
+            <div id="page_content">
+                <h1 className="header screen-width">Admin Page</h1>
+                <UserList/>
+            </div>
         </div>
     )
 }
@@ -78,8 +81,9 @@ function AdminPage(props) {
 
 (function () {
     const container = document.getElementById("page_container");
+    const home_page = container.getAttribute('data-home-page');
     ReactDOM.render(
-        <AdminPage/>,
+        <AdminPage home_page={home_page}/>,
         container
     );
 })();

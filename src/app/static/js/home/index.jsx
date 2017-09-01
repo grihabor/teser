@@ -29,19 +29,23 @@ class HomePage extends React.Component {
     }
 
     render() {
-        const admin_page_link = (
-            this.props.admin_page !== ""
-                ? <p className="screen-width">Go to <a href={this.props.admin_page}>Admin page</a></p>
-                : <div className="screen-width"/>
-        );
-        return (
+        const page_content = (
             <div id="page_content">
                 <h1 className="header screen-width">Home</h1>
-                {admin_page_link}
                 <RepositoryList repositories={this.state.repositories}/>
                 <RepositoryAdd onAdd={this.set_repositories}/>
             </div>
-        )
+        );
+        if (this.props.admin_page !== ""){
+            return (
+                <div>
+                    <p className="screen-width">Go to <a href={this.props.admin_page}>Admin page</a></p>
+                    {page_content}
+                </div>
+            )
+        } else {
+            return page_content;
+        }
     }
 }
 
