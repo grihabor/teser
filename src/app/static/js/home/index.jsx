@@ -31,7 +31,7 @@ class HomePage extends React.Component {
     render() {
         const admin_page_link = (
             this.props.admin_page !== ""
-            ? <p className="screen-width">Go to <a href={this.props.admin_page}>Admin page</a></p>
+                ? <p className="screen-width">Go to <a href={this.props.admin_page}>Admin page</a></p>
                 : <div className="screen-width"/>
         );
         return (
