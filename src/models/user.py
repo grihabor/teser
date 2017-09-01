@@ -26,3 +26,6 @@ class User(Base, UserMixin):
     confirmed_at = Column(DateTime())
     roles = relationship('Role', secondary='roles_users',
                          backref=backref('users', lazy='dynamic'))
+
+    def __repr__(self):
+        return '<User id={0.id} email={0.email}>'.format(self)
