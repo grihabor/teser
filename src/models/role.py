@@ -1,11 +1,10 @@
-from database import Base
-from flask_security import UserMixin, RoleMixin
+from flask_security import RoleMixin
 from sqlalchemy import (
-    Boolean, DateTime, Column, Integer,
-    String, ForeignKey
+    Column, Integer,
+    String
 )
 
-
+from database import Base
 
 
 class Role(Base, RoleMixin):

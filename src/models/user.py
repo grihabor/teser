@@ -1,10 +1,10 @@
-from database import Base
-from flask_security import UserMixin, RoleMixin
-from sqlalchemy.orm import relationship, backref
+from flask_security import UserMixin
 from sqlalchemy import (
-    Boolean, DateTime, Column, Integer,
-    String, ForeignKey
+    Boolean, DateTime, Column, Integer, String
 )
+from sqlalchemy.orm import relationship, backref
+
+from database import Base
 
 
 class User(Base, UserMixin):
