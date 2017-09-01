@@ -1,5 +1,9 @@
 function AdminPage(props){
-    return <h1>Admin Page</h1>
+    return (
+        <div id="page_content">
+            <h1 className="header">Admin Page</h1>
+        </div>
+    )
 }
 
 
