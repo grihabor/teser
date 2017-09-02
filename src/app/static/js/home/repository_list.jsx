@@ -4,7 +4,10 @@ function Repository(props) {
             <td>{props.url}</td>
             <td>{props.identity_file}</td>
             <td>
-                <button onClick={props.onRemove}>Remove</button>
+                <input
+                    type="button"
+                    onClick={props.onRemove}
+                    value="Remove" />
             </td>
         </tr>
     );
@@ -18,7 +21,7 @@ function RepositoryTableBody(props) {
                 key={repo.id}
                 url={repo.url}
                 identity_file={repo.identity_file}
-                onRemove={props.onRemove} />
+                onRemove={function(){console.log(repo);props.onRemove(repo.id)}} />
         })}
         </tbody>
     )
