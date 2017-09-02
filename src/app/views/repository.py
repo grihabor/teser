@@ -63,18 +63,52 @@ def _add_repository(url):
     ))
 
 
+def remove_repo(repo_id):
+    repo = Repository.query.get(repo_id)
+    if repo is None:
+        return dict(result='fail',
+                    details='Repository not found')
+
+    if repo.user_id != current_user.id:
+        return dict(result='fail',
+                    details='User does not own the repository')
+
+    try:
+        db_session.delete(repo)
+        db_session.commit()
+    except Exception as e:
+        logger.warning(e)
+        return dict(result='fail',
+                    details='Database error')
+
+    return dict(result='ok')
+
+
+def user_repositories(user):
+    return [dict(url=repo.url,
+                 identity_file=repo.identity_file,
+                 id=repo.id)
+            for repo in user.repositories]
+
+
 def import_repository(app):
     @app.route('/api/repository/add')
     @login_required
-    def add_repository():
+    def repository_add():
         url = request.args['url']
         return _add_repository(url)
 
     @app.route('/api/repository/list')
     @login_required
-    def repositories():
+    def repository_list():
         return jsonify(dict(
-            repositories=[dict(url=repo.url,
-                               identity_file=repo.identity_file)
-                          for repo in current_user.repositories]
+            repositories=user_repositories(current_user)
         ))
+
+    @app.route('/api/repository/remove')
+    @login_required
+    def repository_remove():
+        repo_id = int(request.args['id'])
+        result = remove_repo(repo_id)
+        result['repositories'] = user_repositories(current_user)
+        return jsonify(result)
