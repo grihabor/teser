@@ -105,7 +105,8 @@ class RepositoryAddForm extends React.Component {
         event.preventDefault();
 
         this.setState({
-            url_value: event.target.value
+            url_value: event.target.value,
+            has_error: false
         });
     }
 
