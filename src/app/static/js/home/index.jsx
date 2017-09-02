@@ -6,6 +6,13 @@ function load_repositories(onSuccess) {
     });
 }
 
+function remove_repository(repo_id, onSuccess) {
+    const request = $.get('/api/repository/remove', {id: repo_id});
+
+    request.success(function (response) {
+        onSuccess(response.repositories);
+    });
+}
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -15,8 +22,13 @@ class HomePage extends React.Component {
         };
         this.set_repositories = this.set_repositories.bind(this);
         this.update_repositories = this.update_repositories.bind(this);
+        this.handleRemove = this.handleRemove.bind(this);
 
         this.update_repositories();
+    }
+
+    handleRemove(event) {
+        remove_repository(event.target.name, this.set_repositories);
     }
 
     set_repositories(repositories) {
@@ -32,7 +44,7 @@ class HomePage extends React.Component {
         const page_content = (
             <div id="page_content">
                 <h1 className="header screen-width">Home</h1>
-                <RepositoryList repositories={this.state.repositories}/>
+                <RepositoryList repositories={this.state.repositories} onRemove={this.handleRemove} />
                 <RepositoryAdd onAdd={this.set_repositories}/>
             </div>
         );

@@ -4,7 +4,7 @@ function Repository(props) {
             <td>{props.url}</td>
             <td>{props.identity_file}</td>
             <td>
-                <button>Delete</button>
+                <button onClick={props.onRemove}>Remove</button>
             </td>
         </tr>
     );
@@ -17,7 +17,8 @@ function RepositoryTableBody(props) {
             return <Repository
                 key={repo.id}
                 url={repo.url}
-                identity_file={repo.identity_file}/>
+                identity_file={repo.identity_file}
+                onRemove={props.onRemove} />
         })}
         </tbody>
     )
@@ -33,7 +34,7 @@ function RepositoryTable(props) {
                 <th></th>
             </tr>
             </thead>
-            <RepositoryTableBody repositories={props.repositories}/>
+            <RepositoryTableBody repositories={props.repositories} onRemove={props.onRemove} />
         </table>
     )
 }
@@ -42,7 +43,7 @@ function RepositoryList(props) {
     return (
         <div>
             <h2 className="header">Your repositories</h2>
-            <RepositoryTable repositories={props.repositories}/>
+            <RepositoryTable repositories={props.repositories} onRemove={props.onRemove} />
         </div>
     )
 }
