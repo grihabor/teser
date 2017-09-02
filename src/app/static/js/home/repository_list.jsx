@@ -3,6 +3,9 @@ function Repository(props) {
         <tr>
             <td>{props.url}</td>
             <td>{props.identity_file}</td>
+            <td>
+                <button>Delete</button>
+            </td>
         </tr>
     );
 }
@@ -27,6 +30,7 @@ function RepositoryTable(props) {
             <tr>
                 <th>URL</th>
                 <th>Identity file</th>
+                <th></th>
             </tr>
             </thead>
             <RepositoryTableBody repositories={props.repositories}/>
