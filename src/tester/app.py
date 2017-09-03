@@ -72,6 +72,7 @@ def clone_repo():
             tempfile.NamedTemporaryFile('w') as f:
         content = template.read()
         content = content.format(identity_file=identity_file_path,
+                                 repository_name=parsed['path'].rsplit('/', 1)[-1],
                                  **parsed)
         f.write(content)
         f.flush()
@@ -97,6 +98,12 @@ def clone_repo():
     return jsonify(dict(ok=(process.returncode == 0),
                         returncode=process.returncode,
                         details=out))
+
+
+@app.route('/run_tests')
+def run_tests():
+    repo_id = int(request.args['repository_id'])
+    return ''
 
 
 def main():

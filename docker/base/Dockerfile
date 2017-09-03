@@ -4,10 +4,12 @@ MAINTAINER Borodin Gregory <grihabor@mail.ru>
 RUN echo "ipv6" >> /etc/modules
 
 # install service dependencies
-RUN apk --update --no-cache add \
+RUN apk update \
+ && apk --update --no-cache add \
         libpq \
         openssh-client \
-        git
+        git \
+        docker
 
 # install build dependencies, python packages
 # then remove build dependencies

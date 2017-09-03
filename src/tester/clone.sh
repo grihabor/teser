@@ -19,3 +19,10 @@ else
     exit 1
 fi
 
+rm -rf {repository_name}
+if [ $? -eq 0 ]; then
+    echo "remove {repository_name}: ok"
+else
+    echo "remove {repository_name}: fail"
+    exit 1
+fi
