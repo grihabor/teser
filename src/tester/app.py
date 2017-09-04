@@ -81,7 +81,7 @@ def clone_repo():
     identity_file = request.args[ARG_IDENTITY_FILE]
 
     if parsed is None:
-        return jsonify(dict(ok=0, details='url_parsing_error'))
+        return jsonify(dict(ok=0, details='URL parsing error'))
 
     return jsonify(run_bash_script(
         FILE_CLONE_SH,
