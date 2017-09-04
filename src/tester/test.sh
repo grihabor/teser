@@ -1,7 +1,9 @@
 #!/bin/sh
 
+pwd
+
 eval `ssh-agent`
-ssh-add {identity_file}
+ssh-add {identity_file_path}
 if [ $? -eq 0 ]; then
     echo "ssh-add: ok"
 else
@@ -9,9 +11,9 @@ else
     exit 1
 fi
 
-ssh -o StrictHostKeyChecking=no {user}@{host} ls
+ssh -o StrictHostKeyChecking=no {git.user}@{git.host} ls
 
-git clone {user}@{host}:{path}
+git clone {git.user}@{git.host}:{git.path}
 if [ $? -eq 0 ]; then
     echo "git clone: ok"
 else
@@ -20,7 +22,8 @@ else
 fi
 
 cd {repository_name}
-make tests
+docker build . -t img:{identity_file}
+docker run img:{identity_file}
 
 rm -rf {repository_name}
 if [ $? -eq 0 ]; then

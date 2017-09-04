@@ -7,6 +7,7 @@ from flask_security import login_required, current_user
 
 from database import db_session
 from models import Repository
+from util import safe_get_repository, RepositoryError
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -63,15 +64,7 @@ def _add_repository(url):
     ))
 
 
-def remove_repo(repo_id):
-    repo = Repository.query.get(repo_id)
-    if repo is None:
-        return dict(result='fail',
-                    details='Repository not found')
-
-    if repo.user_id != current_user.id:
-        return dict(result='fail',
-                    details='User does not own the repository')
+def remove_repo(repo):
 
     try:
         db_session.delete(repo)
@@ -108,7 +101,12 @@ def import_repository(app):
     @app.route('/api/repository/remove')
     @login_required
     def repository_remove():
-        repo_id = int(request.args['id'])
-        result = remove_repo(repo_id)
+        try:
+            repo = safe_get_repository('id')
+            result = remove_repo(repo)
+        except RepositoryError as e:
+            result = dict(result='fail',
+                          details=str(e))
+
         result['repositories'] = user_repositories(current_user)
         return jsonify(result)
