@@ -54,7 +54,7 @@ def safe_get_repository(repo_id_arg, user_id_arg=None):
     try:
         repo_id = int(repo_id_str)
     except ValueError:
-        raise InvalidRepositoryId('Failed to convert {} to {}'.format(repo_id, int))
+        raise InvalidRepositoryId('Failed to convert {} to {}'.format(repo_id_str, int))
 
     repo = Repository.query.get(repo_id)
 
@@ -71,7 +71,7 @@ def safe_get_repository(repo_id_arg, user_id_arg=None):
         try:
             user_id = int(user_id_str)
         except ValueError:
-            raise InvalidUserId(user_id_str)
+            raise InvalidUserId('Failed to convert {} to {}'.format(user_id_str, int))
 
     if repo.user_id != user_id:
         raise RepositoryAccessDenied('User does not own the repository')
