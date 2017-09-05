@@ -13,6 +13,16 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
+class UnifiedResponse:
+    def __init__(self, *, result, details):
+        self.result = result
+        self.details = details
+
+    def __iter__(self):
+        yield 'result', self.result
+        yield 'details', self.details
+
+
 def validate_repository(url, identity_file):
     path = 'http://{host}:{port}/clone_repo?url={url}&identity_file={identity_file}'.format(
         host='tester',
@@ -43,10 +53,13 @@ def _add_repository(url):
     identity_file = current_user.generated_identity_file
 
     if identity_file is None:
-        return "", 500
+        return UnifiedResponse(
+            result='fail',
+            details="Current user doesn't have generated identity file"
+        )
 
     validation = validate_repository(url, identity_file)
-    details = ''
+
     if validation['ok']:
         repo = Repository(user_id=current_user.id,
                           url=url,
@@ -55,19 +68,22 @@ def _add_repository(url):
             db_session.add(repo)
             current_user.generated_identity_file = None
             db_session.commit()
-            result = 'ok'
+            response = UnifiedResponse(result='ok',
+                                       details='')
         except Exception as e:
             logger.warning(e)
             db_session.rollback()
-            result = 'fail'
-            details = 'Failed to save the repository into database'
+            response = UnifiedResponse(
+                result='fail',
+                details='Failed to save the repository into database'
+            )
     else:
-        result = 'fail'
-        details = ['Failed to validate the url:'] + process_details(validation['details'])
+        response = UnifiedResponse(
+            result='fail',
+            details=['Failed to validate the url:'] + process_details(validation['details'])
+        )
 
-    return jsonify(dict(
-        result=result,
-        details=details,
+    return jsonify(dict(response).update(
         repositories=[dict(id=repo.id,
                            url=repo.url,
                            identity_file=repo.identity_file)
@@ -76,16 +92,18 @@ def _add_repository(url):
 
 
 def remove_repo(repo):
-
     try:
         db_session.delete(repo)
         db_session.commit()
     except Exception as e:
         logger.warning(e)
-        return dict(result='fail',
-                    details='Database error')
+        return UnifiedResponse(
+            result='fail',
+            details='Database error'
+        )
 
-    return dict(result='ok')
+    return UnifiedResponse(result='ok',
+                           details='')
 
 
 def user_repositories(user):
@@ -116,8 +134,11 @@ def import_repository(app):
             repo = safe_get_repository('id')
             result = remove_repo(repo)
         except RepositoryError as e:
-            result = dict(result='fail',
-                          details=str(e))
+            result = UnifiedResponse(
+                result='fail',
+                details=str(e)
+            )
 
-        result['repositories'] = user_repositories(current_user)
-        return jsonify(result)
+        return jsonify(dict(result).update(
+            user_repositories(current_user))
+        )
