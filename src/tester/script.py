@@ -65,6 +65,8 @@ def preprocess_script(f, **kwargs):
     for raw_line in f:
         line = raw_line.strip()
         logger.info(line)
+        if line == '':
+            continue
         command = line.format(**kwargs)
         script_code.append(command)
         script_code.append(check_code.format(command=command))
@@ -105,4 +107,4 @@ def run_bash_script(template_path, *, tempdir, **kwargs):
 
     return dict(ok=(process.returncode == 0),
                 returncode=process.returncode,
-                details=output)
+                details=output.split('\n'))
