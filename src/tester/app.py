@@ -1,16 +1,15 @@
-import functools
 import logging
+logging.basicConfig(level=logging.INFO)
+
 import os
-import subprocess
-import tempfile
 
 from flask import Flask, request, jsonify, render_template
 from flask_bootstrap import Bootstrap
 
 from models import Repository
-from util import DIR_SRC, DIR_KEYS, safe_get_repository
+from tester.script import run_bash_script
+from util import DIR_SRC, safe_get_repository
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -88,50 +87,6 @@ def clone_repo():
         identity_file=identity_file,
         git=Git(**parsed)
     ))
-
-
-def inside_tempdir(f):
-    @functools.wraps(f)
-    def wrapper(*args, **kwargs):
-        with tempfile.TemporaryDirectory() as tempdir:
-            return f(*args, tempdir=tempdir, **kwargs)
-
-    return wrapper
-
-
-@inside_tempdir
-def run_bash_script(template_path, *, tempdir, **kwargs):
-    identity_file_path = os.path.join(DIR_KEYS, kwargs['identity_file'])
-
-    with open(template_path, 'r') as template, \
-            tempfile.NamedTemporaryFile('w') as f:
-        content = template.read()
-        content = content.format(
-            identity_file_path=identity_file_path,
-            repository_name=kwargs['git'].path.rsplit('/', 1)[-1],
-            **kwargs
-        )
-        f.write(content)
-        f.flush()
-
-        command = ['sh', f.name]
-
-        print('Command: {}'.format(' '.join(command)))
-
-        with tempfile.NamedTemporaryFile('w') as f:
-            process = subprocess.Popen(command, cwd=tempdir, stdout=f.file, stderr=f.file)
-            try:
-                process.communicate(timeout=100)
-            except subprocess.TimeoutExpired:
-                process.kill()
-                process.communicate()
-
-            with open(f.name) as fr:
-                out = fr.read()  # TODO Warning: maybe too large
-
-    return dict(ok=(process.returncode == 0),
-                returncode=process.returncode,
-                details=out)
 
 
 @app.route('/run_tests')
