@@ -1,10 +1,16 @@
+FROM library/alpine:3.6 as alpine_docker
+RUN apk update \
+ && apk add docker
+
+
 FROM library/python:3.6-alpine3.6
 MAINTAINER Borodin Gregory <grihabor@mail.ru>
 
 RUN echo "ipv6" >> /etc/modules
 
 # install service dependencies
-RUN apk --update --no-cache add \
+RUN apk update \
+ && apk --update --no-cache add \
         libpq \
         openssh-client \
         git
@@ -28,3 +34,4 @@ RUN apk --update add --virtual build-dependencies \
         bcrypt==3.1 \
  && apk del build-dependencies
 
+COPY --from=alpine_docker /usr/bin/docker /usr/bin/docker

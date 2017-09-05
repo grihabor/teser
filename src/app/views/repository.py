@@ -7,6 +7,10 @@ from flask_security import login_required, current_user
 
 from database import db_session
 from models import Repository
+from util import safe_get_repository
+from util.details import process_details
+from util.exception import UIError
+from util.unified_response import UnifiedResponse
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -31,10 +35,13 @@ def _add_repository(url):
     identity_file = current_user.generated_identity_file
 
     if identity_file is None:
-        return "", 500
+        return UnifiedResponse(
+            result='fail',
+            details="Current user doesn't have generated identity file"
+        )
 
     validation = validate_repository(url, identity_file)
-    details = ''
+
     if validation['ok']:
         repo = Repository(user_id=current_user.id,
                           url=url,
@@ -43,19 +50,22 @@ def _add_repository(url):
             db_session.add(repo)
             current_user.generated_identity_file = None
             db_session.commit()
-            result = 'ok'
+            response = UnifiedResponse(result='ok',
+                                       details='')
         except Exception as e:
             logger.warning(e)
             db_session.rollback()
-            result = 'fail'
-            details = 'Failed to save the repository into database'
+            response = UnifiedResponse(
+                result='fail',
+                details='Failed to save the repository into database'
+            )
     else:
-        result = 'fail'
-        details = ['Failed to validate the url:'] + validation['details'].split('\n')
+        response = UnifiedResponse(
+            result='fail',
+            details=['Failed to validate the url:'] + process_details(validation['details'])
+        )
 
-    return jsonify(dict(
-        result=result,
-        details=details,
+    return jsonify(dict(response).update(
         repositories=[dict(id=repo.id,
                            url=repo.url,
                            identity_file=repo.identity_file)
@@ -63,25 +73,19 @@ def _add_repository(url):
     ))
 
 
-def remove_repo(repo_id):
-    repo = Repository.query.get(repo_id)
-    if repo is None:
-        return dict(result='fail',
-                    details='Repository not found')
-
-    if repo.user_id != current_user.id:
-        return dict(result='fail',
-                    details='User does not own the repository')
-
+def remove_repo(repo):
     try:
         db_session.delete(repo)
         db_session.commit()
     except Exception as e:
         logger.warning(e)
-        return dict(result='fail',
-                    details='Database error')
+        return UnifiedResponse(
+            result='fail',
+            details='Database error'
+        )
 
-    return dict(result='ok')
+    return UnifiedResponse(result='ok',
+                           details='')
 
 
 def user_repositories(user):
@@ -108,7 +112,15 @@ def import_repository(app):
     @app.route('/api/repository/remove')
     @login_required
     def repository_remove():
-        repo_id = int(request.args['id'])
-        result = remove_repo(repo_id)
-        result['repositories'] = user_repositories(current_user)
-        return jsonify(result)
+        try:
+            repo = safe_get_repository('id')
+            result = remove_repo(repo)
+        except UIError as e:
+            result = UnifiedResponse(
+                result='fail',
+                details=str(e)
+            )
+
+        return jsonify(dict(result).update(
+            user_repositories(current_user))
+        )
