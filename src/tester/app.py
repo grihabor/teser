@@ -108,7 +108,7 @@ def run_tests():
     # if request.remote_addr.endswith('.0.1'):
     #     return render_template('debug.html', **json_data)
 
-    return jsonify(result)
+    return jsonify(dict(result))
 
 
 def main():

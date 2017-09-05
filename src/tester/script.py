@@ -6,6 +6,7 @@ import functools
 import logging
 
 from util import DIR_KEYS
+from util.unified_response import UnifiedResponse
 
 logger = logging.getLogger(__name__)
 
@@ -105,6 +106,7 @@ def run_bash_script(template_path, *, tempdir, **kwargs):
             with open(f.name) as fr:
                 output = fr.read()  # TODO Warning: maybe too large
 
-    return dict(ok=(process.returncode == 0),
-                returncode=process.returncode,
-                details=output.split('\n'))
+    return UnifiedResponse(
+        result='ok' if (process.returncode == 0) else 'fail',
+        details=output.split('\n')
+    )

@@ -7,20 +7,12 @@ from flask_security import login_required, current_user
 
 from database import db_session
 from models import Repository
-from util import safe_get_repository, RepositoryError
+from util import safe_get_repository
+from util.exception import UIError
+from util.unified_response import UnifiedResponse
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-
-
-class UnifiedResponse:
-    def __init__(self, *, result, details):
-        self.result = result
-        self.details = details
-
-    def __iter__(self):
-        yield 'result', self.result
-        yield 'details', self.details
 
 
 def validate_repository(url, identity_file):
@@ -133,7 +125,7 @@ def import_repository(app):
         try:
             repo = safe_get_repository('id')
             result = remove_repo(repo)
-        except RepositoryError as e:
+        except UIError as e:
             result = UnifiedResponse(
                 result='fail',
                 details=str(e)
