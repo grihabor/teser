@@ -1,34 +1,9 @@
-#!/bin/sh
-
 pwd
-
 eval `ssh-agent`
 ssh-add {identity_file_path}
-if [ $? -eq 0 ]; then
-    echo "ssh-add: ok"
-else
-    echo "ssh-add: fail"
-    exit 1
-fi
-
 ssh -o StrictHostKeyChecking=no {git.user}@{git.host} ls
-
 git clone {git.user}@{git.host}:{git.path}
-if [ $? -eq 0 ]; then
-    echo "git clone: ok"
-else
-    echo "git clone: fail"
-    exit 1
-fi
-
 cd {repository_name}
 docker build . -t img:{identity_file}
 docker run img:{identity_file}
-
 rm -rf {repository_name}
-if [ $? -eq 0 ]; then
-    echo "remove {repository_name}: ok"
-else
-    echo "remove {repository_name}: fail"
-    exit 1
-fi
