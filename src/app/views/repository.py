@@ -8,6 +8,7 @@ from flask_security import login_required, current_user
 from database import db_session
 from models import Repository
 from util import safe_get_repository
+from util.details import process_details
 from util.exception import UIError
 from util.unified_response import UnifiedResponse
 
@@ -28,17 +29,6 @@ def validate_repository(url, identity_file):
 
     logger.info(data)
     return data
-
-
-def process_details(details):
-    if type(details) not in [str, list]:
-        raise ValueError('details must be {} or {}'.format(str, list))
-
-    if type(details) is list:
-        return [process_details(part)
-                for part in details]
-    elif type(details) is str:
-        return details.split('\n')
 
 
 def _add_repository(url):

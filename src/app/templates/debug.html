@@ -1,8 +1,20 @@
 {% extends 'base.html' %}
 
+{% macro render_details(details) %}
+    {% if details is string %}
+        <p>{{ details }}</p>
+    {% else %}
+        {% for value in details recursive %}
+            {% if value is string %}
+                <p>{{ value }}</p>
+            {% else %}
+                <div>{{ loop(value) }}</div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endmacro %}
+
 {% block content %}
-    {% for line in details.split('\n') %}
-        <p>{{ line }}</p>
-    {% endfor %}
+    {{ render_details(details) }}
 {% endblock %}
 

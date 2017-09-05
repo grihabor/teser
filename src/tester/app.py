@@ -1,4 +1,8 @@
 import logging
+import socket
+
+from util.details import process_details
+
 logging.basicConfig(level=logging.INFO)
 
 import os
@@ -91,7 +95,6 @@ def clone_repo():
 
 @app.route('/run_tests')
 def run_tests():
-    logger.info('User ip: {}'.format(request.remote_addr))
     repo = safe_get_repository(ARG_REPOSITORY_ID, ARG_USER_ID)  # type: Repository
 
     result = run_bash_script(
@@ -103,10 +106,9 @@ def run_tests():
         git=Git(**parse_repo_url(repo.url))
     )
 
-    logger.info('Client address: {}'.format(request.remote_addr))
-
-    # if request.remote_addr.endswith('.0.1'):
-    #     return render_template('debug.html', **json_data)
+    if 'debug' in request.args:
+        result.details = process_details(result.details)
+        return render_template('debug.html', **dict(result))
 
     return jsonify(dict(result))
 
