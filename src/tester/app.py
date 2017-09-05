@@ -20,7 +20,7 @@ Bootstrap(app)
 ARG_URL = 'url'
 ARG_IDENTITY_FILE = 'identity_file'
 ARG_REPOSITORY_ID = 'repository_id'
-
+ARG_USER_ID = 'user_id'
 
 DIR_TESTER = os.path.join(DIR_SRC, 'tester')
 FILE_CLONE_SH = os.path.join(DIR_TESTER, 'clone.sh')
@@ -100,17 +100,16 @@ def inside_tempdir(f):
 
 
 @inside_tempdir
-def run_bash_script(template_path, *, git, identity_file, tempdir):
-    identity_file_path = os.path.join(DIR_KEYS, identity_file)
+def run_bash_script(template_path, *, tempdir, **kwargs):
+    identity_file_path = os.path.join(DIR_KEYS, kwargs['identity_file'])
 
     with open(template_path, 'r') as template, \
             tempfile.NamedTemporaryFile('w') as f:
         content = template.read()
         content = content.format(
             identity_file_path=identity_file_path,
-            identity_file=identity_file,
-            repository_name=git.path.rsplit('/', 1)[-1],
-            git=git
+            repository_name=kwargs['git'].path.rsplit('/', 1)[-1],
+            **kwargs
         )
         f.write(content)
         f.flush()
@@ -137,7 +136,7 @@ def run_bash_script(template_path, *, git, identity_file, tempdir):
 
 @app.route('/run_tests')
 def run_tests():
-    repo = safe_get_repository(ARG_REPOSITORY_ID)  # type: Repository
+    repo = safe_get_repository(ARG_REPOSITORY_ID, ARG_USER_ID)  # type: Repository
 
     json_data = run_bash_script(
         FILE_TEST_SH,

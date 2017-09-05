@@ -11,8 +11,10 @@ DIR_ROOT = os.path.normpath(os.path.join(DIR_SRC, os.pardir))
 
 DIR_KEYS = os.path.join(DIR_ROOT, 'keys')
 
+class UIError(Exception):
+    pass
 
-class RepositoryError(Exception):
+class RepositoryError(UIError):
     pass
 
 
@@ -32,13 +34,25 @@ class RepositoryAccessDenied(RepositoryError):
     pass
 
 
-def safe_get_repository(id_arg):
-    if id_arg not in request.args:
-        raise MissingRepositoryId(id_arg)
+class UserError(UIError):
+    pass
 
-    repo_id = request.args[id_arg]
+
+class MissingUserId(UserError):
+    pass
+
+
+class InvalidUserId(UserError):
+    pass
+
+
+def safe_get_repository(repo_id_arg, user_id_arg=None):
+    if repo_id_arg not in request.args:
+        raise MissingRepositoryId(repo_id_arg)
+
+    repo_id_str = request.args[repo_id_arg]
     try:
-        repo_id = int(repo_id)
+        repo_id = int(repo_id_str)
     except ValueError:
         raise InvalidRepositoryId('Failed to convert {} to {}'.format(repo_id, int))
 
@@ -47,7 +61,19 @@ def safe_get_repository(id_arg):
     if repo is None:
         raise RepositoryNotFound(str(repo_id))
 
-    if repo.user_id != current_user.id:
+    if user_id_arg is None:
+        user_id = current_user.id
+    else:
+        if user_id_arg not in request.args:
+            raise MissingUserId(user_id_arg)
+
+        user_id_str = request.args[user_id_arg]
+        try:
+            user_id = int(user_id_str)
+        except ValueError:
+            raise InvalidUserId(user_id_str)
+
+    if repo.user_id != user_id:
         raise RepositoryAccessDenied('User does not own the repository')
 
     return repo
