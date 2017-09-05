@@ -28,6 +28,17 @@ def validate_repository(url, identity_file):
     return data
 
 
+def process_details(details):
+    if type(details) not in [str, list]:
+        raise ValueError('details must be {} or {}'.format(str, list))
+
+    if type(details) is list:
+        return [process_details(part)
+                for part in details]
+    elif type(details) is str:
+        return details.split('\n')
+
+
 def _add_repository(url):
     identity_file = current_user.generated_identity_file
 
@@ -52,7 +63,7 @@ def _add_repository(url):
             details = 'Failed to save the repository into database'
     else:
         result = 'fail'
-        details = ['Failed to validate the url:'] + validation['details'].split('\n')
+        details = ['Failed to validate the url:'] + process_details(validation['details'])
 
     return jsonify(dict(
         result=result,

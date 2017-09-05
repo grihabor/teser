@@ -50,33 +50,59 @@ class Result:
         self.returncode = returncode
 
 
+def preprocess_script(f, **kwargs):
+    script_code = []
+
+    check_code = '\n'.join([
+        'if [ $? -eq 0 ]; then',
+        '    echo "-- ok: {command}"',
+        'else',
+        '    echo "-- fail: {command}"',
+        '    exit 1',
+        'fi',
+    ])
+
+    for raw_line in f:
+        line = raw_line.strip()
+        logger.info(line)
+        command = line.format(**kwargs)
+        script_code.append(command)
+        script_code.append(check_code.format(command=command))
+
+    return '\n'.join(script_code)
+
+
 @inside_tempdir
 def run_bash_script(template_path, *, tempdir, **kwargs):
-    output_list = []
-    returncode = 0
+    logger.info('Run script: {}'.format(template_path))
     identity_file_path = os.path.join(DIR_KEYS, kwargs['identity_file'])
 
-    with open(template_path, 'r') as template:
-        content_template = template.read()
-        content = content_template.format(
+    with open(template_path, 'r') as template, \
+            tempfile.NamedTemporaryFile('w') as f:
+        values = dict(
             identity_file_path=identity_file_path,
             repository_name=kwargs['git'].path.rsplit('/', 1)[-1],
             **kwargs
         )
+        content = preprocess_script(template, **values)
+        f.write(content)
+        f.flush()
 
-        for line in content.split('\n'):
-            line = line.strip()
-            if line.startswith('#') or line == '':
-                continue
+        command = ['sh', f.name]
 
-            command = line.split()
-            logger.info('Command: {}'.format(command))
-            result = run_command(command, tempdir)
-            output_list.append(result.output)
-            if result.returncode != 0:
-                returncode = result.returncode
-                break
+        logger.info('Command: {}'.format(' '.join(command)))
 
-    return dict(ok=(returncode == 0),
-                returncode=returncode,
-                details=output_list)
+        with tempfile.NamedTemporaryFile('w') as f:
+            process = subprocess.Popen(command, cwd=tempdir, stdout=f.file, stderr=f.file)
+            try:
+                process.communicate(timeout=100)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.communicate()
+
+            with open(f.name) as fr:
+                output = fr.read()  # TODO Warning: maybe too large
+
+    return dict(ok=(process.returncode == 0),
+                returncode=process.returncode,
+                details=output)

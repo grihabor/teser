@@ -91,11 +91,12 @@ def clone_repo():
 
 @app.route('/run_tests')
 def run_tests():
+    logger.info('User ip: {}'.format(request.remote_addr))
     repo = safe_get_repository(ARG_REPOSITORY_ID, ARG_USER_ID)  # type: Repository
 
-    json_data = run_bash_script(
+    result = run_bash_script(
         FILE_TEST_SH,
-        identity_file='349f4e08-4476-4aa0-a724-49946d52d684',
+        identity_file=repo.identity_file,
         git_template=Git(path='/grihabor/compressor',
                          user='git',
                          host='gitlab.com'),
@@ -104,10 +105,10 @@ def run_tests():
 
     logger.info('Client address: {}'.format(request.remote_addr))
 
-    if request.remote_addr.endswith('.0.1'):
-        return render_template('debug.html', **json_data)
+    # if request.remote_addr.endswith('.0.1'):
+    #     return render_template('debug.html', **json_data)
 
-    return jsonify(json_data)
+    return jsonify(result)
 
 
 def main():
