@@ -1,11 +1,4 @@
 
-
-function TestingPanel(props) {
-    return (
-        <h3>Testing panel</h3>
-    )
-}
-
 class AdminPage extends React.Component{
     constructor(props) {
         super(props);
@@ -15,6 +8,7 @@ class AdminPage extends React.Component{
 
         this.showTestingPanel = this.showTestingPanel.bind(this);
         this.showUserList = this.showUserList.bind(this);
+        this.showActiveRepositoryList = this.showActiveRepositoryList.bind(this);
     }
     showUserList() {
         this.setState({tab: 'user_list'});
@@ -22,12 +16,17 @@ class AdminPage extends React.Component{
     showTestingPanel() {
         this.setState({tab: 'testing_panel'});
     }
+    showActiveRepositoryList() {
+        this.setState({tab: 'active_repository_list'});
+    }
     render() {
         let tab_content;
         if (this.state.tab === 'user_list') {
             tab_content = <UserList />;
-        } else {
+        } else if (this.state.tab === 'testing_panel'){
             tab_content = <TestingPanel />;
+        } else {
+            tab_content = <ActiveRepositoryList />;
         }
         return (
         <div>
@@ -42,6 +41,9 @@ class AdminPage extends React.Component{
                 <div>
                 <button onClick={this.showUserList}>
                     User List
+                </button>
+                <button onClick={this.showActiveRepositoryList}>
+                    Active Repository List
                 </button>
                 <button onClick={this.showTestingPanel}>
                     Testing Panel
