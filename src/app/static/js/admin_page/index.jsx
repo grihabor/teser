@@ -1,83 +1,57 @@
-function load_users(onSuccess) {
-    const request = $.get('/api/user/list', {});
 
-    request.success(function (response) {
-        onSuccess(response.users);
-    });
-}
 
-function UserTableBody(props) {
+function TestingPanel(props) {
     return (
-        <tbody>
-        {props.users.map(function (user) {
-            return <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.email}</td>
-                <td>{user.username}</td>
-                <td>{user.roles}</td>
-            </tr>
-        })}
-        </tbody>
+        <h3>Testing panel</h3>
     )
 }
 
-class UserTable extends React.Component {
+class AdminPage extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            users: []
-        };
+            tab: 'user_list'
+        }
 
-        this.set_users = this.set_users.bind(this);
-        this.update_users = this.update_users.bind(this);
-
-        this.update_users();
+        this.showTestingPanel = this.showTestingPanel.bind(this);
+        this.showUserList = this.showUserList.bind(this);
     }
-
-    set_users(users) {
-        this.setState({users: users});
+    showUserList() {
+        this.setState({tab: 'user_list'});
     }
-
-    update_users() {
-        load_users(this.set_users);
+    showTestingPanel() {
+        this.setState({tab: 'testing_panel'});
     }
-
     render() {
+        let tab_content;
+        if (this.state.tab === 'user_list') {
+            tab_content = <UserList />;
+        } else {
+            tab_content = <TestingPanel />;
+        }
         return (
-            <table className="table table-stripped">
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Email</th>
-                    <th>Username</th>
-                    <th>Roles</th>
-                </tr>
-                </thead>
-                <UserTableBody users={this.state.users}/>
-            </table>
-        )
-    }
-}
-
-function UserList(props) {
-    return (
         <div>
-            <h2 className="header">User List</h2>
-            <UserTable/>
-        </div>
-    )
-}
-
-function AdminPage(props) {
-    return (
-        <div>
-            <p className="screen-width">Back to <a href={props.home_page}>Home page</a></p>
+            <p className="screen-width">
+                Back to <a href={this.props.home_page}>Home page</a>
+            </p>
+            
             <div id="page_content">
-                <h1 className="header screen-width">Admin Page</h1>
-                <UserList/>
+                <h1 className="header screen-width">
+                    Admin Page
+                </h1>
+                <div>
+                <button onClick={this.showUserList}>
+                    User List
+                </button>
+                <button onClick={this.showTestingPanel}>
+                    Testing Panel
+                </button>
+                </div>
+                {tab_content}
             </div>
         </div>
-    )
+        )
+    }
 }
 
 
