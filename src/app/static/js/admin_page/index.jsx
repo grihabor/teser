@@ -3,9 +3,8 @@ class TabView extends React.Component {
     constructor(props) {
         let i,
             tab,
-            onClick,
-            patched_tabs = [];
-        
+            onClick;
+      
         function makeOnClick(tab) {
             function onClick() {
                 this.setState({
@@ -47,41 +46,38 @@ class TabView extends React.Component {
     }
 }
 
-class AdminPage extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            tab: 'user_list'
-        }
-        
-    }
-    
-    render() {
+class AdminPage (props) {
         const tabs = {
             user_list: {
                 id: 'user_list',
+                title: 'User List',
                 content: <UserList />
             }, testing_panel: {
                 id: 'testing_panel',
+                title: 'Testing Panel',
                 content: <TestingPanel />
             }, active_repository_list: {
                 id: 'active_repository_list',
+                title: 'Active Repositories',
                 content: <ActiveRepositoryList />
             }, smth: {
                 id: 'smth',
+                title: 'Smth',
                 content: <div>smth</div>
             }
         };
         return (
             <div>
                 <p className="screen-width">
-                    Back to <a href={this.props.home_page}>Home page</a>
+                    Back to <a href={props.home_page}>Home page</a>
                 </p>
             
-                <TabView tabs={tabs} />
+                <TabView 
+                    tabs={tabs} 
+                    initial_tab={tabs.user_list} />
             </div>
         )
-    }
+    
 }
 
 
