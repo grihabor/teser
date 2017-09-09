@@ -27,26 +27,27 @@ class TabView extends React.Component {
     }
     
     render() {
-        const tab = this.props.tabs[this.tab_id];
-        const tab_content = tab.content;
+        const tab = this.props.tabs[this.state.tab_id];
+        
         return (
             <div>
                 <div>
-                    {this.props.tabs.map(function(tab) {
+                    {Object.keys(this.props.tabs).map(function(i) {
+                        const tab_obj = this.props.tabs[i];
                         return (
-                            <button onClick={tab.onClick}>
-                                {tab.title}
+                            <button onClick={tab_obj.onClick}>
+                                {tab_obj.title}
                             </button>
                         )
                     })}
                 </div>
-                {tab_content}
+                {tab.content}
             </div>
         )
     }
 }
 
-class AdminPage (props) {
+def AdminPage (props) {
         const tabs = {
             user_list: {
                 id: 'user_list',
