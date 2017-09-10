@@ -1,4 +1,4 @@
-function ActiveRepositoryList(props){
+function ActiveRepositoryList(props) {
     return (
         <div>
             <h3>Active Repository List</h3>
@@ -13,13 +13,13 @@ class TestingPanel extends React.Component {
             repo: ''
         };
     }
-    
+
     render() {
         return (
-        <div>
-            <h3>Testing panel</h3>
-            
-        </div>
+            <div>
+                <h3>Testing panel</h3>
+
+            </div>
         )
     }
 }
