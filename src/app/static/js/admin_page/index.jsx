@@ -1,5 +1,5 @@
 
-def AdminPage (props) {
+function AdminPage (props) {
         const tabs = {
             user_list: {
                 id: 'user_list',

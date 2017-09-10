@@ -1,25 +1,16 @@
 
 class TabView extends React.Component {
-    constructor(props) {
-        let i,
-            tab,
-            onClick;
-      
-        function makeOnClick(tab) {
-            onClick = function () {
+
+    makeOnClick(tab) {
+        const onClick = function () {
                 this.setState({
                     tab_id: tab.id
                 });
-            }
+            };
             return onClick.bind(this);
         }
-        makeOnClick = makeOnClick.bind(this);
-        
-        for (i in props.tabs) {
-            tab = props.tabs[i];
-            tab.onClick = makeOnClick(tab);
-        }
-        
+
+    constructor(props) {
         super(props);
         this.state = {
             tab_id: props.initial_tab.id
@@ -27,15 +18,16 @@ class TabView extends React.Component {
     }
     
     render() {
+        const tab_view = this;
         const tab = this.props.tabs[this.state.tab_id];
-        
         return (
             <div>
                 <div>
                     {Object.keys(this.props.tabs).map(function(i) {
-                        const tab_obj = this.props.tabs[i];
+                        const tab_obj = tab_view.props.tabs[i];
                         return (
-                            <button onClick={tab_obj.onClick}>
+                            <button key={tab_obj.id}
+                                    onClick={tab_view.makeOnClick(tab_obj)}>
                                 {tab_obj.title}
                             </button>
                         )
