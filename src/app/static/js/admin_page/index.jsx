@@ -13,10 +13,6 @@ function AdminPage (props) {
                 id: 'active_repository_list',
                 title: 'Active Repositories',
                 content: <ActiveRepositoryList />
-            }, smth: {
-                id: 'smth',
-                title: 'Smth',
-                content: <div>smth</div>
             }
         };
         return (
