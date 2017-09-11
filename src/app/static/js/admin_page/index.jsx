@@ -5,13 +5,13 @@ function AdminPage(props) {
             title: 'User List',
             content: <UserList />
         }, {
-            id: 'testing_panel',
-            title: 'Testing Panel',
-            content: <TestingPanel />
-        }, {
             id: 'active_repository_list',
             title: 'Active Repositories',
             content: <ActiveRepositoryList />
+        }, {
+            id: 'testing_panel',
+            title: 'Testing Panel',
+            content: <TestingPanel />
         }
     ];
     return (

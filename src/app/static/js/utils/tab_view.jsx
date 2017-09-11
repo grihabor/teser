@@ -14,16 +14,21 @@ class TabView extends React.Component {
         this.state = {
             tab_id: props.initial_tab.id
         };
+        
+        this.lookup = {};
+        for (let i in this.props.tabs) {
+            const tab = this.props.tabs[i];
+            this.lookup[tab.id] = tab;
+        }
     }
 
     render() {
         const tab_view = this;
-        const tab = this.props.tabs[this.state.tab_id];
+        const tab = this.lookup[this.state.tab_id];
         return (
             <div>
                 <div>
-                    {Object.keys(this.props.tabs).map(function (i) {
-                        const tab_obj = tab_view.props.tabs[i];
+                    {this.props.tabs.map(function (tab_obj) {
                         return (
                             <button key={tab_obj.id}
                                     onClick={tab_view.makeOnClick(tab_obj)}>
