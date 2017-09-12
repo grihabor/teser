@@ -6,7 +6,7 @@ from flask import request, jsonify
 from flask_security import login_required, current_user, roles_required
 
 from database import db_session
-from models import Repository
+from models import Repository, User
 from util import safe_get_repository
 from util.details import process_details
 from util.exception import UIError
@@ -93,7 +93,7 @@ def remove_repo(repo):
                            details='')
 
 
-def repo_dict(repo)
+def repo_dict(repo):
     return dict(url=repo.url,
                 identity_file=repo.identity_file,
                 id=repo.id)
