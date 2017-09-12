@@ -56,7 +56,7 @@ class HomePage extends React.Component {
 
     render() {
         let admin_page = null;
-        if (this.props.admin_page !== ""){
+        if (this.props.admin_page !== "") {
             admin_page = (
                 <p className="screen-width">
                     Go to <a href={this.props.admin_page}>Admin page</a>
@@ -71,7 +71,7 @@ class HomePage extends React.Component {
                 <RepositoryList
                     repositories={this.state.repositories}
                     onRemove={this.handleRemove}
-                    onActivate={this.handleActivate} />
+                    onActivate={this.handleActivate}/>
                 <RepositoryAdd onAdd={this.set_repositories}/>
             </div>
         );

@@ -1,4 +1,3 @@
-
 function TableViewBody(props) {
     const buttons = props.buttons;
 
@@ -8,10 +7,12 @@ function TableViewBody(props) {
             props.items.map(function (item) {
                 return <tr>
                     {props.columns.map(function (column_id) {
-                        if (buttons.hasOwnProperty(column_id)){
+                        if (buttons.hasOwnProperty(column_id)) {
                             const button = buttons[column_id];
                             return (
-                                <button onClick={function(){button.onClick(item)}}>
+                                <button onClick={function () {
+                                    button.onClick(item)
+                                }}>
                                     {button.value(item)}
                                 </button>
                             );
@@ -65,7 +66,7 @@ class TableView extends React.Component {
                 <TableViewBody
                     items={this.state.items}
                     buttons={this.buttons}
-                    columns={this.props.columns} />
+                    columns={this.props.columns}/>
             </table>
         )
     }

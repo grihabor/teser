@@ -14,7 +14,7 @@ class TabView extends React.Component {
         this.state = {
             tab_id: props.initial_tab.id
         };
-        
+
         this.lookup = {};
         for (let i in this.props.tabs) {
             const tab = this.props.tabs[i];

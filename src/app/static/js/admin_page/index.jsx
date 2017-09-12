@@ -3,15 +3,15 @@ function AdminPage(props) {
         {
             id: 'user_list',
             title: 'User List',
-            content: <UserList />
+            content: <UserList/>
         }, {
             id: 'active_repository_list',
             title: 'Active Repositories',
-            content: <ActiveRepositoryList />
+            content: <ActiveRepositoryList/>
         }, {
             id: 'testing_panel',
             title: 'Testing Panel',
-            content: <TestingPanel />
+            content: <TestingPanel/>
         }
     ];
     return (

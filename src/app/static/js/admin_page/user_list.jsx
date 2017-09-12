@@ -25,7 +25,7 @@ function UserList(props) {
                            'email': 'Email',
                            'username': 'Username',
                            'roles': 'Roles'
-                       }} />
+                       }}/>
         </div>
 
     )
