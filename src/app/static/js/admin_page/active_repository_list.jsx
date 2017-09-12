@@ -14,12 +14,10 @@ function ActiveRepositoryList(props) {
             <TableView items={[]}
                       load_items={load_active_repos}
                       columns={['id', 'url']}
-                      name_mapping={
-                          {
-                              'id': 'Id',
-                              'url': 'Url'
-                          }
-                      }  />
+                      name_mapping={{
+                          'id': 'Id',
+                          'url': 'Url'
+                      }}  />
         </div>
     )
 }
