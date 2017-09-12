@@ -14,7 +14,11 @@ class User(Base, UserMixin):
     username = Column(String(255))
     password = Column(String(255))
 
-    repositories = relationship('Repository', back_populates='user')
+    repositories = relationship(
+        'Repository',
+        back_populates='user',
+        primaryjoin='User.id==Repository.user_id'
+    )
     generated_identity_file = Column(
         String(255), 
         nullable=True
