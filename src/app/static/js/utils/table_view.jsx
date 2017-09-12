@@ -6,7 +6,7 @@ function TableViewBody(props) {
             props.items.map(function (item) {
                 return <tr>
                     {props.columns.map(function (column_id) {
-                        return item[column_id];
+                        return <td>{item[column_id]}</td>;
                     })}
                 </tr>
             })

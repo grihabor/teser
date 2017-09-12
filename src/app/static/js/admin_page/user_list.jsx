@@ -66,7 +66,21 @@ function UserList(props) {
             <h2 className="header">
                 User List
             </h2>
-            <UserTable/>
+            <TableView items={[]}
+                       load_items={load_users}
+                       columns={[
+                           'id',
+                           'email',
+                           'username',
+                           'roles'
+                       ]}
+                       name_mapping={{
+                           'id': 'Id',
+                           'email': 'Email',
+                           'username': 'Username',
+                           'roles': 'Roles'
+                       }} />
         </div>
+
     )
 }
