@@ -51,7 +51,7 @@ function RepositoryURL(props) {
 }
 
 function show_deploy_key(onSuccess) {
-    var request = $.get("/generate_deploy_key");
+    var request = $.get("/api/deploy_key/generate");
 
     request.success(function (response) {
         onSuccess(response);
