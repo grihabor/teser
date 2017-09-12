@@ -1,6 +1,6 @@
 from flask_security import UserMixin
 from sqlalchemy import (
-    Boolean, DateTime, Column, Integer, String
+    Boolean, DateTime, Column, Integer, String, ForeignKey
 )
 from sqlalchemy.orm import relationship, backref
 
@@ -14,9 +14,16 @@ class User(Base, UserMixin):
     username = Column(String(255))
     password = Column(String(255))
 
-    repositories = relationship('Repository')
-    generated_identity_file = Column(String(255), nullable=True)
-    active_repository_id = Column(Integer)
+    repositories = relationship('Repository', back_populates='user')
+    generated_identity_file = Column(
+        String(255), 
+        nullable=True
+    )
+    active_repository_id = Column(
+        Integer, 
+        ForeignKey('repository.id'), 
+        nullable=True
+    )
     
     last_login_at = Column(DateTime())
     current_login_at = Column(DateTime())

@@ -3,7 +3,7 @@ import logging
 import urllib
 
 from flask import request, jsonify
-from flask_security import login_required, current_user
+from flask_security import login_required, current_user, roles_required
 
 from database import db_session
 from models import Repository
@@ -11,6 +11,8 @@ from util import safe_get_repository
 from util.details import process_details
 from util.exception import UIError
 from util.unified_response import UnifiedResponse
+
+from sqlalchemy.orm import join
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -91,11 +93,27 @@ def remove_repo(repo):
                            details='')
 
 
+def repo_dict(repo)
+    return dict(url=repo.url,
+                identity_file=repo.identity_file,
+                id=repo.id)
+                 
+                 
 def user_repositories(user):
-    return [dict(url=repo.url,
-                 identity_file=repo.identity_file,
-                 id=repo.id)
+    return [repo_dict(repo)
             for repo in user.repositories]
+
+def active_repositories():
+    query = db_session.query(
+        Repository
+    ).select_from(join(
+        User, 
+        Repository, 
+        User.active_repository_id == Repository.id
+    ))
+    
+    return [repo_dict(repo)
+            for repo in query.all()]
 
 
 def import_repository(app):
@@ -111,7 +129,14 @@ def import_repository(app):
         return jsonify(dict(
             repositories=user_repositories(current_user)
         ))
-
+    
+    @app.route('/api/repository/active/list')
+    @roles_required('admin')
+    def active_repository_list():
+        return jsonify(dict(
+            active_repositories=active_repositories()
+        ))
+    
     @app.route('/api/repository/remove')
     @login_required
     def repository_remove():
