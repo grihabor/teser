@@ -2,8 +2,14 @@ function read_logs() {
 
 }
 
-function run_tests(value) {
+function run_tests(repository, onSuccess) {
+    const request = $.get('/api/tests/run', {
+        repository_id: repository.id
+    });
 
+    request.success(function (response) {
+        onSuccess(response.details);
+    });
 }
 
 function load_active_repos(onSuccess) {
@@ -28,7 +34,7 @@ function ActiveRepositoryList(props) {
                        }}
                        buttons={{
                            'run_tests': {
-                               onClick: run_tests,
+                               onClick: function(item){run_tests(item, props.show_logs)},
                                value: function (repository) {
                                    return 'Run tests';
                                }
