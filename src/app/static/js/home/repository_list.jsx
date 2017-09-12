@@ -28,7 +28,7 @@ function RepositoryTableBody(props) {
                 url={repo.url}
                 identity_file={repo.identity_file}
                 onRemove={function(){props.onRemove(repo.id)}}
-                onActiavte={function(){props.onActivate(repo.id)}} />
+                onActivate={function(){props.onActivate(repo.id)}} />
         })}
         </tbody>
     )

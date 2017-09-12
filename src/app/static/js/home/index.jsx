@@ -64,7 +64,7 @@ class HomePage extends React.Component {
             )
         }
 
-        const page_content = (
+        return (
             <div id="page_content">
                 {admin_page}
                 <h1 className="header screen-width">Home</h1>
