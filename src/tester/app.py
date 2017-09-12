@@ -2,6 +2,7 @@ import logging
 import socket
 
 from util.details import process_details
+from util.unified_response import UnifiedResponse
 
 logging.basicConfig(level=logging.INFO)
 
@@ -72,25 +73,40 @@ def missing(arg):
     return 'Missing argument: {}'.format(arg)
 
 
-@app.route('/clone_repo', methods=['GET'])
-def clone_repo():
+def _clone_repo():
     if ARG_URL not in request.args:
-        return jsonify(dict(details=missing(ARG_URL), ok=0))
+        return UnifiedResponse(
+            details=missing(ARG_URL), 
+            result='fail'
+        )
     if ARG_IDENTITY_FILE not in request.args:
-        return jsonify(dict(details=missing(ARG_IDENTITY_FILE), ok=0))
+        return UnifiedResponse(
+            details=missing(ARG_IDENTITY_FILE), 
+            result='fail'
+        )
 
     url = request.args[ARG_URL]
     parsed = parse_repo_url(url)
     identity_file = request.args[ARG_IDENTITY_FILE]
 
     if parsed is None:
-        return jsonify(dict(ok=0, details='URL parsing error'))
+        return UnifiedResponse(
+            result='fail', 
+            details='URL parsing error'
+        )
 
-    return jsonify(run_bash_script(
+    result = run_bash_script(
         FILE_CLONE_SH,
         identity_file=identity_file,
         git=Git(**parsed)
-    ))
+    )
+    
+    return result
+
+
+@app.route('/clone_repo', methods=['GET'])
+def clone_repo():
+    return jsonify(dict(_clone_repo()))
 
 
 @app.route('/run_tests')

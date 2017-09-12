@@ -26,9 +26,10 @@ def validate_repository(url, identity_file):
 
     with urllib.request.urlopen(path) as f:
         data = json.loads(f.read().decode('utf-8'))
-
+    
     logger.info(data)
-    return data
+    return UnifiedResponse(result=data['result'],
+                           details=data['details'])
 
 
 def _add_repository(url):
@@ -42,7 +43,7 @@ def _add_repository(url):
 
     validation = validate_repository(url, identity_file)
 
-    if validation['ok']:
+    if validation.result == 'ok':
         repo = Repository(user_id=current_user.id,
                           url=url,
                           identity_file=identity_file)
@@ -62,15 +63,17 @@ def _add_repository(url):
     else:
         response = UnifiedResponse(
             result='fail',
-            details=['Failed to validate the url:'] + process_details(validation['details'])
+            details=['Failed to validate the url:'] + process_details(validation.details)
         )
 
-    return jsonify(dict(response).update(
+    d = dict(response)
+    d.update(
         repositories=[dict(id=repo.id,
                            url=repo.url,
                            identity_file=repo.identity_file)
                       for repo in current_user.repositories]
-    ))
+    )
+    return d
 
 
 def remove_repo(repo):
@@ -100,7 +103,7 @@ def import_repository(app):
     @login_required
     def repository_add():
         url = request.args['url']
-        return _add_repository(url)
+        return jsonify(dict(_add_repository(url)))
 
     @app.route('/api/repository/list')
     @login_required

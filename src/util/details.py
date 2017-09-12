@@ -8,6 +8,6 @@ def process_details(details):
                 for part in details]
     elif type(details) is str:
         if details.find('\n') == -1:
-            return details
+            return [details]
         else:
             return details.split('\n')
