@@ -10,7 +10,7 @@ function load_active_repos(onSuccess) {
 function ActiveRepositoryList(props) {
     return (
         <div>
-            <h3>Active Repository List</h3>
+            <h2 className="header">Active Repository List</h2>
             <TableView items={[]}
                       load_items={load_active_repos}
                       columns={['id', 'url']}

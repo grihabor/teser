@@ -10,7 +10,7 @@ class TestingPanel extends React.Component {
     render() {
         return (
             <div>
-                <h3>Testing panel</h3>
+                <h2 className="header">Testing panel</h2>
 
             </div>
         )
