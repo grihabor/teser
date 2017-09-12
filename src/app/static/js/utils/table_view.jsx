@@ -28,7 +28,7 @@ class TableView extends React.Component {
     }
 
     set_items(items) {
-        this.state({items: items});
+        this.setState({items: items});
     }
 
     update_items() {
