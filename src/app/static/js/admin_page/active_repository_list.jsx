@@ -34,7 +34,9 @@ function ActiveRepositoryList(props) {
                        }}
                        buttons={{
                            'run_tests': {
-                               onClick: function(item){run_tests(item, props.show_logs)},
+                               onClick: function (item) {
+                                   run_tests(item, props.show_logs)
+                               },
                                value: function (repository) {
                                    return 'Run tests';
                                }

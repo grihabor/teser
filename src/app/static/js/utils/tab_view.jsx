@@ -1,4 +1,3 @@
-
 class TabView extends React.Component {
 
     constructor(props) {
@@ -29,7 +28,7 @@ class TabView extends React.Component {
                 tab_id: props.initial_tab.id
             };
 
-            this.currentTabId = (function (){
+            this.currentTabId = (function () {
                 return this.state.tab_id
             }).bind(this);
         }
