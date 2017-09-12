@@ -1,11 +1,21 @@
 
 function TableViewBody(props) {
+    const buttons = props.buttons;
+
     return (
         <tbody>
         {
             props.items.map(function (item) {
                 return <tr>
                     {props.columns.map(function (column_id) {
+                        if (buttons.hasOwnProperty(column_id)){
+                            const button = buttons[column_id];
+                            return (
+                                <button onClick={function(){button.onClick(item)}}>
+                                    {button.value(item)}
+                                </button>
+                            );
+                        }
                         return <td>{item[column_id]}</td>;
                     })}
                 </tr>
@@ -23,6 +33,12 @@ class TableView extends React.Component {
         };
         this.set_items = this.set_items.bind(this);
         this.update_items = this.update_items.bind(this);
+
+        if (!props.hasOwnProperty('buttons')) {
+            this.buttons = {};
+        } else {
+            this.buttons = props.buttons;
+        }
 
         this.update_items();
     }
@@ -48,6 +64,7 @@ class TableView extends React.Component {
                 </thead>
                 <TableViewBody
                     items={this.state.items}
+                    buttons={this.buttons}
                     columns={this.props.columns} />
             </table>
         )
