@@ -4,7 +4,7 @@ from .deploy_key import import_generate_deploy_key
 from .repository import import_repository
 from .index import import_index
 from .home import import_home
-
+from .api import import_api
 
 def import_views(app):
     import_generate_deploy_key(app)
@@ -13,4 +13,4 @@ def import_views(app):
     import_home(app)
     import_admin_page(app)
     import_user(app)
-
+    import_api(app)
