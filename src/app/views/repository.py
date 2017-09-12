@@ -136,7 +136,28 @@ def import_repository(app):
         return jsonify(dict(
             active_repositories=active_repositories()
         ))
-    
+
+    @app.route('/api/repository/activate')
+    @login_required
+    def activate_repository():
+        repo = safe_get_repository('id')  # type: Repository
+        try:
+            user = repo.user
+            user.active_repository_id = repo.id
+            db_session.commit()
+            response = UnifiedResponse(result='ok',
+                                       details='Changed user active repository')
+
+        except Exception:
+            response = UnifiedResponse(result='fail',
+                                       details='Database error')
+
+        r = dict(response)
+        r.update(dict(
+            repositories=user_repositories(current_user)
+        ))
+        return jsonify(r)
+
     @app.route('/api/repository/remove')
     @login_required
     def repository_remove():
