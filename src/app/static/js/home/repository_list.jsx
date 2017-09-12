@@ -9,6 +9,12 @@ function Repository(props) {
                     onClick={props.onRemove}
                     value="Remove" />
             </td>
+            <td>
+                <input
+                    type="button"
+                    onClick={props.onActivate}
+                    value="Activate" />
+            </td>
         </tr>
     );
 }
@@ -21,7 +27,8 @@ function RepositoryTableBody(props) {
                 key={repo.id}
                 url={repo.url}
                 identity_file={repo.identity_file}
-                onRemove={function(){console.log(repo);props.onRemove(repo.id)}} />
+                onRemove={function(){props.onRemove(repo.id)}}
+                onActiavte={function(){props.onActivate(repo.id)}} />
         })}
         </tbody>
     )
@@ -37,7 +44,10 @@ function RepositoryTable(props) {
                 <th></th>
             </tr>
             </thead>
-            <RepositoryTableBody repositories={props.repositories} onRemove={props.onRemove} />
+            <RepositoryTableBody
+                repositories={props.repositories}
+                onRemove={props.onRemove}
+                onActivate={props.onActivate} />
         </table>
     )
 }
@@ -46,7 +56,10 @@ function RepositoryList(props) {
     return (
         <div>
             <h2 className="header">Your repositories</h2>
-            <RepositoryTable repositories={props.repositories} onRemove={props.onRemove} />
+            <RepositoryTable
+                repositories={props.repositories}
+                onRemove={props.onRemove}
+                onActivate={props.onActivate} />
         </div>
     )
 }

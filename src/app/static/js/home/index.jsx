@@ -14,6 +14,14 @@ function remove_repository(repo_id, onSuccess) {
     });
 }
 
+function activate_repository(repo_id, onSuccess) {
+    const request = $.get('/api/repository/activate', {id: repo_id});
+
+    request.success(function (response) {
+        onSuccess(response.repositories);
+    });
+}
+
 class HomePage extends React.Component {
     constructor(props) {
         super(props);
@@ -23,13 +31,18 @@ class HomePage extends React.Component {
         this.set_repositories = this.set_repositories.bind(this);
         this.update_repositories = this.update_repositories.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
+        this.handleActivate = this.handleActivate.bind(this);
 
         this.update_repositories();
     }
 
     handleRemove(repo_id) {
-        console.log(repo_id);
         remove_repository(repo_id, this.set_repositories);
+    }
+
+    handleActivate(repo_id) {
+        console.log('Activate ' + repo_id);
+        activate_repository(repo_id, this.set_repositories);
     }
 
     set_repositories(repositories) {
@@ -55,7 +68,10 @@ class HomePage extends React.Component {
             <div id="page_content">
                 {admin_page}
                 <h1 className="header screen-width">Home</h1>
-                <RepositoryList repositories={this.state.repositories} onRemove={this.handleRemove} />
+                <RepositoryList
+                    repositories={this.state.repositories}
+                    onRemove={this.handleRemove}
+                    onActivate={this.handleActivate} />
                 <RepositoryAdd onAdd={this.set_repositories}/>
             </div>
         );
