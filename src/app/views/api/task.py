@@ -1,6 +1,7 @@
 import logging
 import urllib
 
+from flask import jsonify, json
 from flask_security import login_required
 from util import safe_get_repository
 
@@ -19,4 +20,4 @@ def import_task(app):
         with urllib.request.urlopen(url) as f:
             response = f.read()
 
-        return response
+        return jsonify(json.loads(response))

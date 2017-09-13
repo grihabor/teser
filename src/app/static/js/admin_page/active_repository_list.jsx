@@ -8,6 +8,7 @@ function run_tests(repository, onSuccess) {
     });
 
     request.success(function (response) {
+        console.log('Got: '+ response);
         onSuccess(response.details);
     });
 }
