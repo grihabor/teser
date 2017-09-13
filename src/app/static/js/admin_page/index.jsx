@@ -1,12 +1,14 @@
 class Logs extends React.Component {
     constructor(props) {
         super(props);
+        alert('create logs: ' + props.logs);
     }
 
     render() {
         return (
             <div>
                 <h2 className="header">Logs</h2>
+                <p>{this.props.logs}</p>
             </div>
         );
     }
@@ -19,7 +21,8 @@ class AdminPage extends React.Component {
         this.set_current_tab = this.set_current_tab.bind(this);
 
         this.state = {
-            current_tab_id: 'user_list'
+            current_tab_id: 'user_list',
+            logs: ['Log is empty']
         };
 
         this.tabs = [
@@ -40,6 +43,7 @@ class AdminPage extends React.Component {
     }
 
     show_logs(details) {
+        alert(details);
         this.setState({
             current_tab_id: 'logs',
             logs: details
@@ -53,11 +57,13 @@ class AdminPage extends React.Component {
     }
 
     render() {
-        const tabs = this.tabs.concat([{
+        alert('render ' + this.state.logs);
+        const logs_tab = {
             id: 'logs',
             title: 'Logs',
-            content: <Logs log={this.state.logs}/>
-        }]);
+            content: <Logs logs={this.state.logs}/>
+        };
+        const tabs = this.tabs.concat([logs_tab]);
         return (
             <div>
                 <p className="screen-width">
@@ -66,8 +72,8 @@ class AdminPage extends React.Component {
 
                 <TabView
                     current_tab_id={this.state.current_tab_id}
-                    set_current_tab={this.set_current_tab}
-                    tabs={tabs}/>
+                    set_current_tab={this.set_current_tab} 
+                    tabs={tabs} />
             </div>
         )
     }
