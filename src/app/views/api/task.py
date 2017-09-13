@@ -3,8 +3,8 @@ import urllib
 
 from flask import jsonify, json
 from flask_security import login_required
-from util import safe_get_repository
 
+from util import safe_get_repository
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

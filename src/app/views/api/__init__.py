@@ -1,6 +1,6 @@
-from .task import import_task
 from .deploy_key import import_generate_deploy_key
 from .repository import import_repository
+from .task import import_task
 from .user import import_user
 
 

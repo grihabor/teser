@@ -1,7 +1,7 @@
-import subprocess
 import os
-import sys
 import shutil
+import subprocess
+import sys
 
 from database import POSTGRES_URL
 from util import DIR_SRC
@@ -34,11 +34,13 @@ def maybe_create_alembic_ini():
                         SQLALCHEMY_URL, POSTGRES_URL
                     ))
 
+
 def run_migrations():
     subprocess.run(["alembic", "upgrade", "head"],
                    cwd=DIR_SRC,
                    stdout=sys.stdout,
                    stderr=subprocess.STDOUT)
+
 
 def init():
     maybe_create_base_html()
