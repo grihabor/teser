@@ -6,3 +6,5 @@ build_and_push:
 	docker build -t $(TAG) .
 	docker push $(TAG)
 
+pull:
+	docker pull $(TAG)
