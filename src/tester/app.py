@@ -112,6 +112,10 @@ def clone_repo():
 @app.route('/run_tests')
 def run_tests():
     repo = safe_get_repository(ARG_REPOSITORY_ID, ARG_USER_ID)  # type: Repository
+    kwargs = parse_repo_url(repo.url)
+    if kwargs is None:
+        return jsonify(dict(UnifiedResponse(result='fail',
+                                            details='Invalid repository')))
 
     result = run_bash_script(
         FILE_TEST_SH,
@@ -119,7 +123,7 @@ def run_tests():
         git_template=Git(path='/grihabor/compressor',
                          user='git',
                          host='gitlab.com'),
-        git=Git(**parse_repo_url(repo.url))
+        git=Git(**kwargs)
     )
 
     if 'debug' in request.args:

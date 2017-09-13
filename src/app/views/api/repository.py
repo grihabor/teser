@@ -52,8 +52,10 @@ def _add_repository(url):
             db_session.add(repo)
             current_user.generated_identity_file = None
             db_session.commit()
-            response = UnifiedResponse(result='ok',
-                                       details='')
+            response = UnifiedResponse(
+                result='ok',
+                details=''
+            )
         except Exception as e:
             logger.warning(e)
             db_session.rollback()
@@ -68,12 +70,13 @@ def _add_repository(url):
         )
 
     d = dict(response)
-    d.update(
-        repositories=[dict(id=repo.id,
-                           url=repo.url,
-                           identity_file=repo.identity_file)
-                      for repo in current_user.repositories]
-    )
+    d.update(dict(
+        repositories=[dict(
+            id=repo.id,
+            url=repo.url,
+            identity_file=repo.identity_file
+        ) for repo in current_user.repositories]
+    ))
     return d
 
 
@@ -170,6 +173,6 @@ def import_repository(app):
                 details=str(e)
             )
 
-        return jsonify(dict(result).update(
-            user_repositories(current_user))
-        )
+        return jsonify(dict(result).update(dict(
+            repositories=user_repositories(current_user)
+        )))
