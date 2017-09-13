@@ -72,8 +72,8 @@ class AdminPage extends React.Component {
 
                 <TabView
                     current_tab_id={this.state.current_tab_id}
-                    set_current_tab={this.set_current_tab} 
-                    tabs={tabs} />
+                    set_current_tab={this.set_current_tab}
+                    tabs={tabs}/>
             </div>
         )
     }
