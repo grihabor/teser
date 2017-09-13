@@ -1,13 +1,8 @@
 import logging
-
 import urllib
 
-import json
-from flask import jsonify
-from flask_security import login_required\
-
+from flask_security import login_required
 from util import safe_get_repository
-from util.unified_response import UnifiedResponse
 
 
 logger = logging.getLogger(__name__)
