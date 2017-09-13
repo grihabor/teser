@@ -1,7 +1,6 @@
 class Logs extends React.Component {
     constructor(props) {
         super(props);
-        alert('create logs: ' + props.logs);
     }
 
     render() {
@@ -43,7 +42,6 @@ class AdminPage extends React.Component {
     }
 
     show_logs(details) {
-        alert(details);
         this.setState({
             current_tab_id: 'logs',
             logs: details
@@ -57,7 +55,6 @@ class AdminPage extends React.Component {
     }
 
     render() {
-        alert('render ' + this.state.logs);
         const logs_tab = {
             id: 'logs',
             title: 'Logs',
