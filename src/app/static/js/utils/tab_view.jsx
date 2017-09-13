@@ -1,6 +1,21 @@
+function searchForId(arr, id) {
+    let i,
+        item;
+    for (i in arr) {
+        item = arr[i];
+        if (item.id === id) {
+            return item;
+        }
+    }
+    return null;
+}
+
 function render() {
     const tab_view = this;
-    const tab = this.lookup[this.getCurrentTabId()];
+    const tab = searchForId(
+        this.props.tabs,
+        this.getCurrentTabId()
+    );
     return (
         <div>
             <div>
@@ -18,15 +33,6 @@ function render() {
     )
 }
 
-function createLookup(arr) {
-    let lookup = {};
-    for (let i in arr) {
-        const item = arr[i];
-        lookup[item.id] = item;
-    }
-    return lookup;
-}
-
 
 class TabView extends React.Component {
 
@@ -37,17 +43,18 @@ class TabView extends React.Component {
         return onClick.bind(this);
     }
 
+    getCurrentTabId() {
+        return this.props.current_tab_id;
+    }
+
+
     constructor(props) {
         super(props);
         this.makeOnClick = this.makeOnClick.bind(this);
-
-        this.getCurrentTabId = (function () {
-            return this.props.current_tab_id;
-        }).bind(this);
+        this.getCurrentTabId = this.getCurrentTabId.bind(this);
     }
 
     render() {
-        this.lookup = createLookup(this.props.tabs);
         return render.call(this);
     }
 }
@@ -63,20 +70,19 @@ class TabViewWithState extends React.Component {
         return onClick.bind(this);
     }
 
+    getCurrentTabId() {
+        return this.state.tab_id;
+    }
+
     constructor(props) {
         super(props);
 
         this.makeOnClick = this.makeOnClick.bind(this);
+        this.getCurrentTabId = this.getCurrentTabId.bind(this);
 
         this.state = {
             tab_id: props.initial_tab.id
         };
-
-        this.getCurrentTabId = (function () {
-            return this.state.tab_id
-        }).bind(this);
-
-        this.lookup = createLookup(this.props.tabs);
     }
 
     render() {
