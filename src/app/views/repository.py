@@ -3,14 +3,16 @@ import logging
 import urllib
 
 from flask import request, jsonify
-from flask_security import login_required, current_user
+from flask_security import login_required, current_user, roles_required
 
 from database import db_session
-from models import Repository
+from models import Repository, User
 from util import safe_get_repository
 from util.details import process_details
 from util.exception import UIError
 from util.unified_response import UnifiedResponse
+
+from sqlalchemy.orm import join
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -26,9 +28,10 @@ def validate_repository(url, identity_file):
 
     with urllib.request.urlopen(path) as f:
         data = json.loads(f.read().decode('utf-8'))
-
+    
     logger.info(data)
-    return data
+    return UnifiedResponse(result=data['result'],
+                           details=data['details'])
 
 
 def _add_repository(url):
@@ -42,7 +45,7 @@ def _add_repository(url):
 
     validation = validate_repository(url, identity_file)
 
-    if validation['ok']:
+    if validation.result == 'ok':
         repo = Repository(user_id=current_user.id,
                           url=url,
                           identity_file=identity_file)
@@ -62,15 +65,17 @@ def _add_repository(url):
     else:
         response = UnifiedResponse(
             result='fail',
-            details=['Failed to validate the url:'] + process_details(validation['details'])
+            details=['Failed to validate the url:'] + process_details(validation.details)
         )
 
-    return jsonify(dict(response).update(
+    d = dict(response)
+    d.update(
         repositories=[dict(id=repo.id,
                            url=repo.url,
                            identity_file=repo.identity_file)
                       for repo in current_user.repositories]
-    ))
+    )
+    return d
 
 
 def remove_repo(repo):
@@ -88,11 +93,27 @@ def remove_repo(repo):
                            details='')
 
 
+def repo_dict(repo):
+    return dict(url=repo.url,
+                identity_file=repo.identity_file,
+                id=repo.id)
+                 
+                 
 def user_repositories(user):
-    return [dict(url=repo.url,
-                 identity_file=repo.identity_file,
-                 id=repo.id)
+    return [repo_dict(repo)
             for repo in user.repositories]
+
+def active_repositories():
+    query = db_session.query(
+        Repository
+    ).select_from(join(
+        User, 
+        Repository, 
+        User.active_repository_id == Repository.id
+    ))
+    
+    return [repo_dict(repo)
+            for repo in query.all()]
 
 
 def import_repository(app):
@@ -100,7 +121,7 @@ def import_repository(app):
     @login_required
     def repository_add():
         url = request.args['url']
-        return _add_repository(url)
+        return jsonify(dict(_add_repository(url)))
 
     @app.route('/api/repository/list')
     @login_required
@@ -108,6 +129,34 @@ def import_repository(app):
         return jsonify(dict(
             repositories=user_repositories(current_user)
         ))
+    
+    @app.route('/api/repository/active/list')
+    @roles_required('admin')
+    def active_repository_list():
+        return jsonify(dict(
+            active_repositories=active_repositories()
+        ))
+
+    @app.route('/api/repository/activate')
+    @login_required
+    def activate_repository():
+        repo = safe_get_repository('id')  # type: Repository
+        try:
+            user = repo.user
+            user.active_repository_id = repo.id
+            db_session.commit()
+            response = UnifiedResponse(result='ok',
+                                       details='Changed user active repository')
+
+        except Exception:
+            response = UnifiedResponse(result='fail',
+                                       details='Database error')
+
+        r = dict(response)
+        r.update(dict(
+            repositories=user_repositories(current_user)
+        ))
+        return jsonify(r)
 
     @app.route('/api/repository/remove')
     @login_required

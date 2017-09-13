@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def import_generate_deploy_key(app):
-    @app.route('/generate_deploy_key', methods=['GET'])
+    @app.route('/api/deploy_key/generate', methods=['GET'])
     @login_required
     def generate_deploy_key():
         identity_file = current_user.generated_identity_file

@@ -51,7 +51,7 @@ function RepositoryURL(props) {
 }
 
 function show_deploy_key(onSuccess) {
-    var request = $.get("/generate_deploy_key");
+    var request = $.get("/api/deploy_key/generate");
 
     request.success(function (response) {
         onSuccess(response);
@@ -110,46 +110,53 @@ class RepositoryAddForm extends React.Component {
         });
     }
 
+    showDeployKey() {
+        function onSuccess(response) {
+            this.setState({
+                hidden_key: false,
+                key_value: response.deploy_key
+            });
+        }
+
+        onSuccess = onSuccess.bind(this);
+        show_deploy_key(onSuccess);
+    }
+
+    addRepository() {
+        function onSuccess(response) {
+            this.setState({
+                error_details: "",
+                has_error: false,
+                hidden_key: true,
+                url_value: ""
+            });
+            this.props.onAdd(response.repositories);
+        }
+
+        function onFailure(response) {
+            this.setState({
+                error_details: response.details,
+                has_error: true
+            });
+        }
+
+        onSuccess = onSuccess.bind(this);
+        onFailure = onFailure.bind(this);
+
+        add_repository(
+            this.state.url_value,
+            onSuccess,
+            onFailure
+        );
+    }
+
     handleSubmit(event) {
-        console.log('A name was submitted: ' + this.state.value);
+        console.log('Submit: ' + this.state.value);
         event.preventDefault();
         if (this.state.hidden_key) {
-            function onSuccess(response) {
-                this.setState({
-                    hidden_key: false,
-                    key_value: response.deploy_key
-                });
-            }
-
-            onSuccess = onSuccess.bind(this);
-            show_deploy_key(onSuccess);
-
+            this.showDeployKey();
         } else {
-            function onSuccess(response) {
-                this.setState({
-                    error_details: "",
-                    has_error: false,
-                    hidden_key: true,
-                    url_value: ""
-                });
-                this.props.onAdd(response.repositories);
-            }
-
-            function onFailure(response) {
-                this.setState({
-                    error_details: response.details,
-                    has_error: true
-                });
-            }
-
-            onSuccess = onSuccess.bind(this);
-            onFailure = onFailure.bind(this);
-
-            add_repository(
-                this.state.url_value,
-                onSuccess,
-                onFailure
-            );
+            this.addRepository();
         }
     }
 

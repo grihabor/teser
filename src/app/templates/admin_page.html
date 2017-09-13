@@ -6,7 +6,11 @@
 
 {% block scripts %}
     {{ super() }}
-    <script type="text/babel" src="{{ url_for('static', filename='js/admin_page/index.jsx') }}"></script>
+    {% for script in script_list %}
+        <script type="text/babel"
+                src="{{ url_for('static', filename=script) }}">
+        </script>
+    {% endfor %}
 {% endblock %}
 
 {% block styles %}

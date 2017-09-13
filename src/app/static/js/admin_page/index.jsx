@@ -1,83 +1,76 @@
-function load_users(onSuccess) {
-    const request = $.get('/api/user/list', {});
-
-    request.success(function (response) {
-        onSuccess(response.users);
-    });
-}
-
-function UserTableBody(props) {
-    return (
-        <tbody>
-        {props.users.map(function (user) {
-            return <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.email}</td>
-                <td>{user.username}</td>
-                <td>{user.roles}</td>
-            </tr>
-        })}
-        </tbody>
-    )
-}
-
-class UserTable extends React.Component {
+class Logs extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            users: []
-        };
-
-        this.set_users = this.set_users.bind(this);
-        this.update_users = this.update_users.bind(this);
-
-        this.update_users();
-    }
-
-    set_users(users) {
-        this.setState({users: users});
-    }
-
-    update_users() {
-        load_users(this.set_users);
     }
 
     render() {
         return (
-            <table className="table table-stripped">
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Email</th>
-                    <th>Username</th>
-                    <th>Roles</th>
-                </tr>
-                </thead>
-                <UserTableBody users={this.state.users}/>
-            </table>
-        )
+            <div>
+                <h2 className="header">Logs</h2>
+            </div>
+        );
     }
 }
 
-function UserList(props) {
-    return (
-        <div>
-            <h2 className="header">User List</h2>
-            <UserTable/>
-        </div>
-    )
-}
+class AdminPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.show_logs = this.show_logs.bind(this);
+        this.set_current_tab = this.set_current_tab.bind(this);
 
-function AdminPage(props) {
-    return (
-        <div>
-            <p className="screen-width">Back to <a href={props.home_page}>Home page</a></p>
-            <div id="page_content">
-                <h1 className="header screen-width">Admin Page</h1>
-                <UserList/>
+        this.state = {
+            current_tab_id: 'user_list'
+        };
+
+        this.tabs = [
+            {
+                id: 'user_list',
+                title: 'User List',
+                content: <UserList/>
+            }, {
+                id: 'active_repository_list',
+                title: 'Active Repositories',
+                content: <ActiveRepositoryList show_logs={this.show_logs}/>
+            }, {
+                id: 'testing_panel',
+                title: 'Testing Panel',
+                content: <TestingPanel/>
+            }
+        ];
+    }
+
+    show_logs(details) {
+        this.setState({
+            current_tab_id: 'logs',
+            logs: details
+        })
+    }
+
+    set_current_tab(tab) {
+        this.setState({
+            current_tab_id: tab.id
+        })
+    }
+
+    render() {
+        const tabs = this.tabs.concat([{
+            id: 'logs',
+            title: 'Logs',
+            content: <Logs log={this.state.logs}/>
+        }]);
+        return (
+            <div>
+                <p className="screen-width">
+                    Back to <a href={this.props.home_page}>Home page</a>
+                </p>
+
+                <TabView
+                    current_tab_id={this.state.current_tab_id}
+                    set_current_tab={this.set_current_tab}
+                    tabs={tabs}/>
             </div>
-        </div>
-    )
+        )
+    }
 }
 
 
