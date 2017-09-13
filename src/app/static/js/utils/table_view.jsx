@@ -10,11 +10,11 @@ function TableViewBody(props) {
                         if (buttons.hasOwnProperty(column_id)) {
                             const button = buttons[column_id];
                             return (
-                                <button onClick={function () {
+                                <td><button onClick={function () {
                                     button.onClick(item)
                                 }}>
                                     {button.value(item)}
-                                </button>
+                                </button></td>
                             );
                         }
                         return <td>{item[column_id]}</td>;

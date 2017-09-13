@@ -7,6 +7,7 @@ class Logs extends React.Component {
         return (
             <div>
                 <h2 className="header">Logs</h2>
+                <p>{this.props.logs}</p>
             </div>
         );
     }
@@ -19,7 +20,8 @@ class AdminPage extends React.Component {
         this.set_current_tab = this.set_current_tab.bind(this);
 
         this.state = {
-            current_tab_id: 'user_list'
+            current_tab_id: 'user_list',
+            logs: ['Log is empty']
         };
 
         this.tabs = [
@@ -53,11 +55,12 @@ class AdminPage extends React.Component {
     }
 
     render() {
-        const tabs = this.tabs.concat([{
+        const logs_tab = {
             id: 'logs',
             title: 'Logs',
-            content: <Logs log={this.state.logs}/>
-        }]);
+            content: <Logs logs={this.state.logs}/>
+        };
+        const tabs = this.tabs.concat([logs_tab]);
         return (
             <div>
                 <p className="screen-width">
