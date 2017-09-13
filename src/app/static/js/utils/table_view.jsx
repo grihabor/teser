@@ -5,19 +5,22 @@ function TableViewBody(props) {
         <tbody>
         {
             props.items.map(function (item) {
-                return <tr>
+                return <tr key={item.id}>
                     {props.columns.map(function (column_id) {
-                        if (buttons.hasOwnProperty(column_id)) {
-                            const button = buttons[column_id];
-                            return (
-                                <td><button onClick={function () {
-                                    button.onClick(item)
-                                }}>
-                                    {button.value(item)}
-                                </button></td>
-                            );
-                        }
-                        return <td>{item[column_id]}</td>;
+                        const td_content = (function () {
+                            if (buttons.hasOwnProperty(column_id)) {
+                                const button = buttons[column_id];
+                                return (
+                                        <button onClick={function () {
+                                            button.onClick(item)
+                                        }}>
+                                            {button.value(item)}
+                                        </button>
+                                );
+                            }
+                            return item[column_id];
+                        })();
+                        return <td key={column_id}>{td_content}</td>;
                     })}
                 </tr>
             })
@@ -57,9 +60,9 @@ class TableView extends React.Component {
         return (
             <table className="table table-stripped">
                 <thead>
-                <tr>
+                <tr key="header_row">
                     {this.props.columns.map(function (column_id) {
-                        return <th>{name_mapping[column_id]}</th>;
+                        return <th key={column_id}>{name_mapping[column_id]}</th>;
                     })}
                 </tr>
                 </thead>
