@@ -30,11 +30,10 @@ function createLookup(arr) {
 
 class TabView extends React.Component {
 
-
     makeOnClick(tab) {
         const onClick = function () {
             this.props.set_current_tab(tab);
-        }
+        };
         return onClick.bind(this);
     }
 
@@ -42,22 +41,19 @@ class TabView extends React.Component {
         super(props);
         this.makeOnClick = this.makeOnClick.bind(this);
 
-
         this.getCurrentTabId = (function () {
             return this.props.current_tab_id;
         }).bind(this);
-
-
-        this.lookup = createLookup(this.props.tabs);
-
     }
 
     render() {
+        this.lookup = createLookup(this.props.tabs);
         return render.call(this);
     }
 }
 
 class TabViewWithState extends React.Component {
+
     makeOnClick(tab) {
         const onClick = function () {
             this.setState({
@@ -70,7 +66,6 @@ class TabViewWithState extends React.Component {
     constructor(props) {
         super(props);
 
-
         this.makeOnClick = this.makeOnClick.bind(this);
 
         this.state = {
@@ -80,7 +75,6 @@ class TabViewWithState extends React.Component {
         this.getCurrentTabId = (function () {
             return this.state.tab_id
         }).bind(this);
-
 
         this.lookup = createLookup(this.props.tabs);
     }
