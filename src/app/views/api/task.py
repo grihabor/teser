@@ -4,6 +4,7 @@ import urllib
 from flask import jsonify, json
 from flask_security import login_required
 
+from tasks import run_tests
 from util import safe_get_repository
 
 logger = logging.getLogger(__name__)
@@ -24,11 +25,9 @@ def import_task(app):
     def task_start():
         repo = safe_get_repository('repository_id')
 
-        url = f'http://tester:6000/run_tests?repository_id={repo.id}&user_id={repo.user_id}'
-        with urllib.request.urlopen(url) as f:
-            response = f.read()
+        task_result = run_tests()
 
-        result = json.loads(response)
+        result = json.loads(task_result)
         result['details'] = [
             dict(text=text,
                  color=color_mapping(text))

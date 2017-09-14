@@ -34,4 +34,6 @@ RUN apk --update add --virtual build-dependencies \
         bcrypt==3.1 \
  && apk del build-dependencies
 
+RUN pip3 install --no-cache-dir celery==4.1
+
 COPY --from=alpine_docker /usr/bin/docker /usr/bin/docker

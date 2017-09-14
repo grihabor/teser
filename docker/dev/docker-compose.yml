@@ -42,13 +42,19 @@ services:
     environment:
       - FLASK_DEBUG=1
 
+  worker:
+    extends:
+      file: ./base.yml
+      service: flask
+    command: "celery -A tasks worker --loglevel=info"      
+    env_file:
+      - ./config.env
+
   rabbitmq:
+    env_file:
+      - ./config.env
     image: library/rabbitmq:3-alpine
     hostname: rabbit-host
-    environment:
-      - RABBITMQ_DEFAULT_USER=user
-      - RABBITMQ_DEFAULT_PASS=password
-      - RABBITMQ_DEFAULT_VHOST=vhost
     ports:
       - "5672"
 
