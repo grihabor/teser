@@ -109,29 +109,6 @@ def clone_repo():
     return jsonify(dict(_clone_repo()))
 
 
-@app.route('/run_tests')
-def run_tests():
-    repo = safe_get_repository(ARG_REPOSITORY_ID, ARG_USER_ID)  # type: Repository
-    kwargs = parse_repo_url(repo.url)
-    if kwargs is None:
-        return jsonify(dict(UnifiedResponse(result='fail',
-                                            details='Invalid repository')))
-
-    result = run_bash_script(
-        FILE_TEST_SH,
-        identity_file=repo.identity_file,
-        git_template=Git(path='/grihabor/compressor',
-                         user='git',
-                         host='gitlab.com'),
-        git=Git(**kwargs)
-    )
-
-    if 'debug' in request.args:
-        result.details = process_details(result.details)
-        return render_template('debug.html', **dict(result))
-
-    return jsonify(dict(result))
-
 
 def main():
     logger.info('Starting tester...')
