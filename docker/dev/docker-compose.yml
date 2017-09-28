@@ -43,10 +43,11 @@ services:
       - FLASK_DEBUG=1
 
   worker:
-    extends:
-      file: ./base.yml
-      service: flask
-    command: "celery -A tasks worker --loglevel=info"      
+    build:
+      context: ../..
+      dockerfile: docker/dev/worker/Dockerfile
+    environment:
+      - PYTHONPATH=/project/src
     depends_on:
       - rabbitmq
       - postgres
@@ -57,11 +58,10 @@ services:
     env_file:
       - ./config.env
     image: library/rabbitmq:3-alpine
-    hostname: rabbit-host
     ports:
       - "5672"
-    environment:
-      - RABBITMQ_VM_MEMORY_HIGH_WATERMARK=80mb
+#    environment:
+#      - RABBITMQ_VM_MEMORY_HIGH_WATERMARK=80mb
 
 volumes:
   pgdata:

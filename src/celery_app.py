@@ -1,8 +1,8 @@
-import os
 from celery import Celery
+import celeryconfig
 
 
-app = Celery('tasks')
-app.config_from_object('celeryconfig')
+app = Celery()
+app.config_from_object(celeryconfig)
 
 
