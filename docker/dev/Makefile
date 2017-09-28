@@ -6,7 +6,7 @@ pull:
 	$(CMD) pull
 
 up: pull
-	$(CMD) up
+	$(CMD) up --build
 
 down:
 	$(CMD) down

@@ -8,7 +8,7 @@ services:
     environment:
       - PYTHONPATH=/project/src
     volumes:
-      - ~/Projects/testing-server/src:/project/src
+      - "../../src:/project/src"
 
   postgres:
     image: library/postgres:9.6-alpine
