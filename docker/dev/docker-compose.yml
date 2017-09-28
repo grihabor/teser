@@ -47,6 +47,9 @@ services:
       file: ./base.yml
       service: flask
     command: "celery -A tasks worker --loglevel=info"      
+    depends_on:
+      - rabbitmq
+      - postgres
     env_file:
       - ./config.env
 
