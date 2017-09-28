@@ -1,4 +1,6 @@
 import os
+from database import POSTGRES_URL
+
 
 def broker_connection_string():
     user = os.environ['RABBITMQ_DEFAULT_USER']
@@ -8,6 +10,7 @@ def broker_connection_string():
     port = '5672'
     return f'amqp://{user}:{password}@{host}:{port}/{vhost}'
 
-broker_url = broker_connection_string()
 
+broker_url = broker_connection_string()
+result_backend = f'db+{POSTGRES_URL}'
 
