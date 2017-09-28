@@ -36,23 +36,6 @@ def index():
     return 'Internal tester service'
 
 
-def parse_repo_url(url):
-    """Format: {user}@{host}:{path}"""
-
-    result = url.split(':')
-    if len(result) != 2:
-        return
-
-    hostinfo, path = result
-    result = hostinfo.split('@')
-    if len(result) != 2:
-        return
-
-    user, host = result
-    return dict(user=user,
-                host=host,
-                path=path)
-
 
 def routes():
     routes = {}

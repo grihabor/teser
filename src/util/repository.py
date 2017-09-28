@@ -38,3 +38,24 @@ def safe_get_repository(repo_id_arg, user_id_arg=None):
         raise RepositoryAccessDenied('User does not own the repository')
 
     return repo
+    
+    
+def parse_repo_url(url):
+    """Format: {user}@{host}:{path}"""
+
+    result = url.split(':')
+    if len(result) != 2:
+        return
+
+    hostinfo, path = result
+    result = hostinfo.split('@')
+    if len(result) != 2:
+        return
+
+    user, host = result
+    return dict(user=user,
+                host=host,
+                path=path)
+
+
+
