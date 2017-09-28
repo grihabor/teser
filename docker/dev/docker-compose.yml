@@ -60,7 +60,8 @@ services:
     hostname: rabbit-host
     ports:
       - "5672"
-    mem_limit: 128m
+    environment:
+      - RABBITMQ_VM_MEMORY_HIGH_WATERMARK=80mb
 
 volumes:
   pgdata:
