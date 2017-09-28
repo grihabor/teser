@@ -40,6 +40,13 @@ def safe_get_repository(repo_id_arg, user_id_arg=None):
     return repo
     
     
+class Git:
+    def __init__(self, user, host, path):
+        self.path = path
+        self.user = user
+        self.host = host
+        
+        
 def parse_repo_url(url):
     """Format: {user}@{host}:{path}"""
 
@@ -53,9 +60,9 @@ def parse_repo_url(url):
         return
 
     user, host = result
-    return dict(user=user,
-                host=host,
-                path=path)
+    return Git(user=user,
+               host=host,
+               path=path)
 
 
 

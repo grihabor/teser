@@ -45,11 +45,7 @@ def routes():
     return routes
 
 
-class Git:
-    def __init__(self, user, host, path):
-        self.path = path
-        self.user = user
-        self.host = host
+
 
 
 def missing(arg):
