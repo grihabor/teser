@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 services:
   flask:
     extends:
@@ -60,6 +60,10 @@ services:
     hostname: rabbit-host
     ports:
       - "5672"
+    deploy:
+      resources:
+        limits:
+          memory: 50m
 
 volumes:
   pgdata:
