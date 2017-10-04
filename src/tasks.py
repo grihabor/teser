@@ -4,14 +4,14 @@ from models import Repository
 
 
 @app.task(name='tasks.tests.run')
-def tests_run(repo_id):
+def run_tests(repo_id):
     repo = Repository.get(repo_id)
     kwargs = parse_repo_url(repo.url)
     if kwargs is None:
-        return dict(UnifiedResponse(
+        return dict(
             result='fail',
             details='Invalid repository'
-        ))
+        )
 
     result = run_bash_script(
         FILE_TEST_SH,
@@ -22,8 +22,5 @@ def tests_run(repo_id):
         git=Git(**kwargs)
     )
 
-    if 'debug' in request.args:
-        result.details = process_details(result.details)
-        return render_template('debug.html', **dict(result))
-
-    return jsonify(dict(result))
+    return dict(result)
+    
