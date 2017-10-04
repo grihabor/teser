@@ -46,8 +46,6 @@ services:
     build:
       context: ../..
       dockerfile: docker/dev/worker/Dockerfile
-    environment:
-      - PYTHONPATH=/project/src
     depends_on:
       - rabbitmq
       - postgres
