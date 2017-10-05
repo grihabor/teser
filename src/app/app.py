@@ -10,6 +10,7 @@ from flask_security import (
 
 import startup
 import views
+import tasks
 from app_config import setup_config
 from database import db_session
 from models import User, Role
