@@ -43,7 +43,7 @@ services:
     ports:
       - "5672"
     environment:
-      - RABBITMQ_VM_MEMORY_HIGH_WATERMARK=50mb
+      - RABBITMQ_VM_MEMORY_HIGH_WATERMARK=100mb
 
 volumes:
   pgdata:
