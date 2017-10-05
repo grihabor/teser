@@ -25,9 +25,10 @@ def import_task(app):
     def task_start():
         repo = safe_get_repository('repository_id')
 
-        task_result = run_tests()
-
-        result = json.loads(task_result)
+        task_result = run_tests.delay(repo.id)
+        logger.info('Waiting for run_tests...')
+        result = task_result.get()
+        logger.info(f'Got: {result}')
         result['details'] = [
             dict(text=text,
                  color=color_mapping(text))
