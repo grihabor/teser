@@ -4,9 +4,7 @@ services:
     image: grihabor/testing-server:flask
     build: 
       context: ../..
-      dockerfile: docker/dev/Dockerfile
-    environment:
-      - PYTHONPATH=/project/src
+      dockerfile: docker/dev/web/Dockerfile
     volumes:
       - "../../src:/project/src"
 

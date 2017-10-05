@@ -1,9 +1,9 @@
-TAG=grihabor/testing-server:base-flask
+TAG=teser/flask.base:latest
 
 all: build_and_push
 
 build_and_push:
-	docker build -t $(TAG) .
+	docker build -t $(TAG) -f flask/Dockerfile .
 	docker push $(TAG)
 
 pull:
