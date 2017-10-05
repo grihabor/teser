@@ -1,8 +1,9 @@
 import os
+
 from database import POSTGRES_URL
 
-
 result_backend = f'db+{POSTGRES_URL}'
+
 
 def broker_connection_string():
     user = os.environ['RABBITMQ_DEFAULT_USER']
@@ -14,4 +15,3 @@ def broker_connection_string():
 
 
 broker_url = broker_connection_string()
-
