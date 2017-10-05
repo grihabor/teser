@@ -1,9 +1,13 @@
 FROM grihabor/testing-server:base-flask
 MAINTAINER Borodin Gregory <grihabor@mail.ru>
 
-USER nobody
+RUN adduser -s /bin/sh -S worker
+USER worker
+
 ENV PROJECT_ROOT /project
 ENV PYTHONPATH $PROJECT_ROOT/src:$PYTHONPATH
+
+VOLUME $PROJECT_ROOT/keys/
 
 WORKDIR $PROJECT_ROOT
 ADD src ./src
