@@ -1,8 +1,9 @@
-FROM grihabor/testing-server:base-flask
+FROM teser/flask.base:latest
 MAINTAINER Borodin Gregory <grihabor@mail.ru>
 
-RUN adduser -s /bin/sh -S -G ping worker
-# USER worker
+RUN addgroup -g link -S docker
+RUN adduser -s /bin/sh -S -G link worker
+USER worker
 
 ENV PROJECT_ROOT /project
 ENV PYTHONPATH $PROJECT_ROOT/src:$PYTHONPATH
