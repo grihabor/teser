@@ -42,11 +42,22 @@ def safe_get_repository(repo_id_arg, user_id_arg=None):
     
 
 
-class Git:
+class RepositoryLocation(dict):
     def __init__(self, user, host, path):
-        self.path = path
-        self.user = user
-        self.host = host
+        super().__init__()
+        self['path'] = path
+        self['user'] = user
+        self['host'] = host
+
+    @property
+    def path(self):
+        return self['path']
+    @property
+    def user(self):
+        return self['user']
+    @property
+    def host(self):
+        return self['host']
         
         
 def parse_repo_url(url):
@@ -62,7 +73,7 @@ def parse_repo_url(url):
         return
 
     user, host = result
-    return Git(user=user,
-               host=host,
-               path=path)
+    return RepositoryLocation(user=user,
+                              host=host,
+                              path=path)
 

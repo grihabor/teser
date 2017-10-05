@@ -1,21 +1,20 @@
 import logging
 import socket
 
+from utils.repository import RepositoryLocation
+
 logging.basicConfig(level=logging.INFO)
 
 import os
 
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
 from flask_bootstrap import Bootstrap
 
-from models import Repository
 from tester.script import run_bash_script
 from utils import (
-    DIR_SRC, 
-    safe_get_repository,
-    process_details,
-    UnifiedResponse
-)
+    DIR_SRC,
+    UnifiedResponse,
+    parse_repo_url)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -79,7 +78,7 @@ def _clone_repo():
     result = run_bash_script(
         FILE_CLONE_SH,
         identity_file=identity_file,
-        git=Git(**parsed)
+        git=RepositoryLocation(**parsed)
     )
     
     return result
@@ -88,7 +87,6 @@ def _clone_repo():
 @app.route('/clone_repo', methods=['GET'])
 def clone_repo():
     return jsonify(dict(_clone_repo()))
-
 
 
 def main():
