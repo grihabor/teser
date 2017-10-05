@@ -1,5 +1,5 @@
 from celery_app import app
-from util import parse_repo_url
+from utils import parse_repo_url
 from models import Repository
 
 

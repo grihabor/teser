@@ -1,9 +1,6 @@
 import logging
 import socket
 
-from util.details import process_details
-from util.unified_response import UnifiedResponse
-
 logging.basicConfig(level=logging.INFO)
 
 import os
@@ -13,7 +10,12 @@ from flask_bootstrap import Bootstrap
 
 from models import Repository
 from tester.script import run_bash_script
-from util import DIR_SRC, safe_get_repository
+from utils import (
+    DIR_SRC, 
+    safe_get_repository,
+    process_details,
+    UnifiedResponse
+)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

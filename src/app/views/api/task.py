@@ -5,7 +5,7 @@ from flask import jsonify, json
 from flask_security import login_required
 
 from tasks import run_tests
-from util import safe_get_repository
+from utils import safe_get_repository
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

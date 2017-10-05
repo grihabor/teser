@@ -4,7 +4,7 @@ import subprocess
 import sys
 
 from database import POSTGRES_URL
-from util import DIR_SRC
+from utils import DIR_SRC
 
 DIR_APP = os.path.join(DIR_SRC, 'app')
 DIR_TEMPLATES = os.path.join(DIR_APP, 'templates')

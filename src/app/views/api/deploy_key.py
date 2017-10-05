@@ -7,7 +7,7 @@ from flask import jsonify
 from flask_security import login_required, current_user
 
 from database import db_session
-from util import DIR_KEYS
+from utils import DIR_KEYS
 
 logger = logging.getLogger(__name__)
 

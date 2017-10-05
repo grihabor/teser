@@ -1,7 +1,6 @@
 import os
 
-bind = '{}:{}'.format(
-    os.getenv('FLASK_HOST'),
-    os.getenv('FLASK_PORT')
-)
+host = os.getenv('FLASK_HOST')
+port = os.getenv('FLASK_PORT')
+bind = f'{host}:{port}'
 workers = 2

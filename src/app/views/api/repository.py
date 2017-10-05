@@ -8,10 +8,12 @@ from sqlalchemy.orm import join
 
 from database import db_session
 from models import Repository, User
-from util import safe_get_repository
-from util.details import process_details
-from util.exception import UIError
-from util.unified_response import UnifiedResponse
+from utils import (
+    safe_get_repository,
+    process_details,
+    UIError,
+    UnifiedResponse
+)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
