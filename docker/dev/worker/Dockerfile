@@ -1,7 +1,6 @@
 FROM teser/flask.base:latest
 MAINTAINER Borodin Gregory <grihabor@mail.ru>
 
-RUN addgroup -g link -S docker
 RUN adduser -s /bin/sh -S -G link worker
 USER worker
 
