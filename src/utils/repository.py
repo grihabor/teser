@@ -40,29 +40,5 @@ def safe_get_repository(repo_id_arg, user_id_arg=None):
     return repo
     
     
-class Git:
-    def __init__(self, user, host, path):
-        self.path = path
-        self.user = user
-        self.host = host
-        
-        
-def parse_repo_url(url):
-    """Format: {user}@{host}:{path}"""
-
-    result = url.split(':')
-    if len(result) != 2:
-        return
-
-    hostinfo, path = result
-    result = hostinfo.split('@')
-    if len(result) != 2:
-        return
-
-    user, host = result
-    return Git(user=user,
-               host=host,
-               path=path)
-
 
 
