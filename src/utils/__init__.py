@@ -1,4 +1,4 @@
-print('Importing utils...')
+
 from .path import DIR_SRC, DIR_UTIL, DIR_KEYS, DIR_ROOT
 from .repository import (
     safe_get_repository,
@@ -7,3 +7,5 @@ from .repository import (
 from .unified_response import UnifiedResponse
 from .details import process_details
 from .exception import UIError
+
+raise Exception('x')
