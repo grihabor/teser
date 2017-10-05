@@ -5,3 +5,4 @@ from .repository import (
 )
 from .unified_response import UnifiedResponse
 from .details import process_details
+from .exception import UIError
