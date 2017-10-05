@@ -1,6 +1,6 @@
 from celery_app import app
-from utils import parse_repo_url
 from models import Repository
+from utils import parse_repo_url
 
 
 @app.task(name='tasks.tests.run')
