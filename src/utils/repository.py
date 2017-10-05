@@ -1,10 +1,11 @@
 from flask import request
+from flask_security import current_user
+
+from models import Repository
 from .exception import (
     MissingRepositoryId, InvalidRepositoryId, RepositoryNotFound,
     InvalidUserId, MissingUserId, RepositoryAccessDenied
 )
-from flask_security import current_user
-from models import Repository
 
 
 def safe_get_repository(repo_id_arg, user_id_arg=None):
@@ -38,8 +39,6 @@ def safe_get_repository(repo_id_arg, user_id_arg=None):
         raise RepositoryAccessDenied('User does not own the repository')
 
     return repo
-    
-    
 
 
 class RepositoryLocation(dict):
@@ -52,14 +51,16 @@ class RepositoryLocation(dict):
     @property
     def path(self):
         return self['path']
+
     @property
     def user(self):
         return self['user']
+
     @property
     def host(self):
         return self['host']
-        
-        
+
+
 def parse_repo_url(url):
     """Format: {user}@{host}:{path}"""
 
@@ -76,4 +77,3 @@ def parse_repo_url(url):
     return RepositoryLocation(user=user,
                               host=host,
                               path=path)
-

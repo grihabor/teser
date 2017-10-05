@@ -1,4 +1,3 @@
-
 class UnifiedResponse:
     def __init__(self, *, result, details):
         self.result = result
@@ -7,4 +6,3 @@ class UnifiedResponse:
     def __iter__(self):
         yield 'result', self.result
         yield 'details', self.details
-

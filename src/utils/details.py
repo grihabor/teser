@@ -1,4 +1,3 @@
-
 def process_details(details):
     if type(details) not in [str, list]:
         raise ValueError('details must be {} or {}'.format(str, list))
