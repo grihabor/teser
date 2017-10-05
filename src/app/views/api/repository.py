@@ -8,6 +8,7 @@ from sqlalchemy.orm import join
 
 from database import db_session
 from models import Repository, User
+from tasks import clone_repository
 from utils import (
     safe_get_repository,
     process_details,
@@ -20,19 +21,12 @@ logger.setLevel(logging.INFO)
 
 
 def validate_repository(url, identity_file):
-    path = 'http://{host}:{port}/clone_repo?url={url}&identity_file={identity_file}'.format(
-        host='tester',
-        port=6000,
-        url=url,
-        identity_file=identity_file
-    )
 
-    with urllib.request.urlopen(path) as f:
-        data = json.loads(f.read().decode('utf-8'))
+    result = clone_repository.delay(url, identity_file)
+    unified_response = result.get()
 
-    logger.info(data)
-    return UnifiedResponse(result=data['result'],
-                           details=data['details'])
+    logger.info(unified_response)
+    return unified_response
 
 
 def _add_repository(url):

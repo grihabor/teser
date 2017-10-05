@@ -27,10 +27,6 @@ ARG_IDENTITY_FILE = 'identity_file'
 ARG_REPOSITORY_ID = 'repository_id'
 ARG_USER_ID = 'user_id'
 
-DIR_TESTER = os.path.join(DIR_SRC, 'tester')
-FILE_CLONE_SH = os.path.join(DIR_TESTER, 'clone.sh')
-FILE_TEST_SH = os.path.join(DIR_TESTER, 'test.sh')
-
 
 @app.route('/')
 def index():
@@ -48,40 +44,6 @@ def routes():
 
 
 
-
-def missing(arg):
-    return 'Missing argument: {}'.format(arg)
-
-
-def _clone_repo():
-    if ARG_URL not in request.args:
-        return UnifiedResponse(
-            details=missing(ARG_URL), 
-            result='fail'
-        )
-    if ARG_IDENTITY_FILE not in request.args:
-        return UnifiedResponse(
-            details=missing(ARG_IDENTITY_FILE), 
-            result='fail'
-        )
-
-    url = request.args[ARG_URL]
-    parsed = parse_repo_url(url)
-    identity_file = request.args[ARG_IDENTITY_FILE]
-
-    if parsed is None:
-        return UnifiedResponse(
-            result='fail', 
-            details='URL parsing error'
-        )
-
-    result = run_bash_script(
-        FILE_CLONE_SH,
-        identity_file=identity_file,
-        git=RepositoryLocation(**parsed)
-    )
-    
-    return result
 
 
 @app.route('/clone_repo', methods=['GET'])
