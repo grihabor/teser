@@ -1,9 +1,6 @@
 FROM teser/flask.base:latest
 MAINTAINER Borodin Gregory <grihabor@mail.ru>
 
-RUN adduser -s /bin/sh -S -G ping worker
-USER worker
-
 ENV PROJECT_ROOT /project
 ENV PYTHONPATH $PROJECT_ROOT/src:$PYTHONPATH
 
