@@ -73,6 +73,9 @@ def parse_repo_url(url):
     if len(result) != 2:
         return
 
+    if path.endswith('.git'):
+        path = path[:-len('.git')]
+
     user, host = result
     return RepositoryLocation(user=user,
                               host=host,
