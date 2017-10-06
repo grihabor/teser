@@ -12,7 +12,7 @@
 
 ## Config  
 ### Minimum  
-  1. `cp config.env.example dev/config.env`
+  1. `cp config.env.example docker/dev/config.env`
   2. Create gmail account (or use your own) for email bot  
   3. Set variables `MAIL_USERNAME` and `MAIL_PASSWORD`  
 
@@ -39,8 +39,8 @@ MAIL_PORT=465
 MAIL_USE_SSL=1
 ```
 
-  1. Setup test/config.env file
-  2. Get sertificate for your domain ([Certbot](https://certbot.eff.org/))
+  1. Setup docker/test/config.env file
+  2. Get sertificate for your domain (e.g. via [Certbot](https://certbot.eff.org/))
   3. Place **cert.key** and **cert.crt** into **test/nginx/**
   4. Modify **test/nginx/nginx.conf** to use your own domain (replace *grihabor.tk*)
 
