@@ -7,8 +7,6 @@ services:
       dockerfile: docker/dev/Dockerfile
     environment:
       - PYTHONPATH=/project/src
-    volumes:
-      - ~/Projects/testing-server/src:/project/src
 
   postgres:
     image: library/postgres:9.6-alpine
