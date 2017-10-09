@@ -1,6 +1,6 @@
 import os
 import logging
-from app.app import user_datastore
+from datastore import user_datastore
 
 logger = logging.getLogger(__name__)
 

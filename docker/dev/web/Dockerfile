@@ -12,4 +12,5 @@ WORKDIR $PROJECT_ROOT
 
 ADD src ./src
 
-CMD python3 -u $PROJECT_ROOT/src/app/app.py
+CMD python3 -u $PROJECT_ROOT/src/app/run_startup.py \
+ && python3 -u $PROJECT_ROOT/src/app/app.py

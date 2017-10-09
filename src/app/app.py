@@ -14,6 +14,8 @@ import tasks
 from app_config import setup_config
 from database import db_session
 from models import User, Role
+from datastore import user_datastore
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -28,7 +30,6 @@ Bootstrap(app)
 mail = Mail(app)
 
 # Setup Flask-Security
-user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
 
 views.import_views(app)
@@ -45,6 +46,5 @@ def main():
     app.run(**kwargs)
 
 
-startup.init()
 if __name__ == '__main__':
     main()
