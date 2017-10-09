@@ -1,7 +1,6 @@
 version: "2"
 services:
   flask:
-    image: grihabor/testing-server:flask
     build: 
       context: ../..
       dockerfile: docker/dev/web/Dockerfile
@@ -9,10 +8,11 @@ services:
       - "../../src:/project/src"
 
   postgres:
-    image: library/postgres:9.6-alpine
+    build: 
+      context: .
+      dockerfile: postgres/Dockerfile
     ports:
       - "5432:5432"
     env_file:
       - ./config.env
-    environment:
-      - PGDATA=/var/lib/postgresql/data/pgdata
+    

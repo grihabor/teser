@@ -1,9 +1,7 @@
 version: "2"
 services:
   bash:
-    extends:
-      file: ../dev/base.yml
-      service: flask
+    image: tesver/base.flask:latest
     command: /bin/sh
     env_file:
       - ../dev/config.env

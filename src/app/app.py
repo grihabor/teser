@@ -14,6 +14,8 @@ import tasks
 from app_config import setup_config
 from database import db_session
 from models import User, Role
+from datastore import user_datastore
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -28,29 +30,9 @@ Bootstrap(app)
 mail = Mail(app)
 
 # Setup Flask-Security
-user_datastore = SQLAlchemySessionUserDatastore(db_session, User, Role)
 security = Security(app, user_datastore)
 
 views.import_views(app)
-
-
-@app.before_first_request
-def run():
-    admins = os.getenv('ADMINS', None)
-    if not admins:
-        return
-
-    logger.info('Creating admins: {}'.format(admins))
-
-    try:
-        admin_role = user_datastore.find_or_create_role('admin')
-        for admin_email in admins.split(','):
-            admin = user_datastore.get_user(admin_email)
-            if admin:
-                user_datastore.add_role_to_user(admin, admin_role)
-        user_datastore.commit()
-    except Exception as e:
-        logger.warning('Failed to initialize admins: {}'.format(e))
 
 
 def main():
@@ -64,6 +46,5 @@ def main():
     app.run(**kwargs)
 
 
-startup.init()
 if __name__ == '__main__':
     main()

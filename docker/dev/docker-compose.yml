@@ -25,6 +25,7 @@ services:
       - pgdata:/var/lib/postgresql/data/pgdata
 
   worker:
+    image: tesver/worker:latest
     build:
       context: ../..
       dockerfile: docker/dev/worker/Dockerfile
