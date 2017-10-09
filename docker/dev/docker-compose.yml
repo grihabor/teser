@@ -24,23 +24,27 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/pgdata
 
-  tester:
-    env_file:
-     - ./config.env
-    extends:
-      file: ./base.yml
-      service: flask
-    command: "python3 /project/src/tester/app.py"
-    ports:
-      - "5001:6000"
-    volumes_from:
-      - flask
+  worker:
+    build:
+      context: ../..
+      dockerfile: docker/dev/worker/Dockerfile
     depends_on:
+      - rabbitmq
       - postgres
+    env_file:
+      - ./config.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - keys:/project/keys
+
+  rabbitmq:
+    env_file:
+      - ./config.env
+    image: library/rabbitmq:3-alpine
+    ports:
+      - "5672"
     environment:
-      - FLASK_DEBUG=1
+      - RABBITMQ_VM_MEMORY_HIGH_WATERMARK=100mb
 
 volumes:
   pgdata:

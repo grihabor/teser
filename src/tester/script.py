@@ -5,8 +5,7 @@ import functools
 
 import logging
 
-from util import DIR_KEYS
-from util.unified_response import UnifiedResponse
+from utils import DIR_KEYS, UnifiedResponse
 
 logger = logging.getLogger(__name__)
 

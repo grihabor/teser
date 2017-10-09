@@ -1,4 +1,5 @@
-# Testing Server
+# Tesver
+Online judge system for automated contests Tesver (TESting serVER)
 ## Capabilities  
   - register participant
   - clone project repositories on schedule

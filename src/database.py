@@ -1,8 +1,9 @@
 import importlib
 import os
+
 from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 POSTGRES_PASSWORD = 'POSTGRES_PASSWORD'
 POSTGRES_USER = 'POSTGRES_USER'
@@ -29,7 +30,6 @@ db_session = scoped_session(
 
 Base = declarative_base()
 Base.query = db_session.query_property()
-
 
 # def init_db():
 # import all modules here that might define models so that

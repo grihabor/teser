@@ -1,7 +1,7 @@
 import logging
 
 from flask import render_template, url_for
-from flask_security import login_required, current_user, roles_required
+from flask_security import login_required, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, validators, TextAreaField, SubmitField
 
@@ -29,4 +29,3 @@ def import_home(app):
                                form=form,
                                repositories=current_user.repositories,
                                admin_page=admin_page)
-

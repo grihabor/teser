@@ -4,10 +4,20 @@ class Logs extends React.Component {
     }
 
     render() {
+        let logs;
+        if (Array.isArray(this.props.logs)) {
+            logs = this.props.logs.map(function (line) {
+                console.log(line);
+                const logStyle = {color: line.color};
+                return <p style={logStyle}>{line.text}</p>;
+            });
+        } else {
+            logs = this.props.logs;
+        }
         return (
             <div>
                 <h2 className="header">Logs</h2>
-                <p>{this.props.logs}</p>
+                <div>{logs}</div>
             </div>
         );
     }
@@ -21,7 +31,7 @@ class AdminPage extends React.Component {
 
         this.state = {
             current_tab_id: 'user_list',
-            logs: ['Log is empty']
+            logs: [{text: 'Log is empty', color: 'black'}]
         };
 
         this.tabs = [
@@ -42,6 +52,7 @@ class AdminPage extends React.Component {
     }
 
     show_logs(details) {
+        console.log(details);
         this.setState({
             current_tab_id: 'logs',
             logs: details

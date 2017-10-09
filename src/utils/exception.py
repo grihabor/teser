@@ -1,6 +1,6 @@
-
 class UIError(Exception):
     pass
+
 
 class RepositoryError(UIError):
     pass

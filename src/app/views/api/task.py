@@ -1,21 +1,22 @@
-import json
 import logging
 import urllib
 
-from flask import request, jsonify
-from flask_security import login_required, current_user, roles_required
+from flask import jsonify, json
+from flask_security import login_required
 
-from database import db_session
-from models import Repository, User
-from util import safe_get_repository
-from util.details import process_details
-from util.exception import UIError
-from util.unified_response import UnifiedResponse
-
-from sqlalchemy.orm import join
+from tasks import run_tests
+from utils import safe_get_repository
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+
+def color_mapping(text: str):
+    if text.startswith('-- ok:'):
+        return 'green'
+    if text.startswith('-- fail:'):
+        return 'red'
+    return 'black'
 
 
 def import_task(app):
@@ -23,6 +24,14 @@ def import_task(app):
     @login_required
     def task_start():
         repo = safe_get_repository('repository_id')
-        r = UnifiedResponse(result='fail', details='Not implemented')
-        return jsonify(dict(r))
 
+        task_result = run_tests.delay(repo.id)
+        logger.info('Waiting for run_tests...')
+        result = task_result.get()
+        logger.info(f'Got: {result}')
+        result['details'] = [
+            dict(text=text,
+                 color=color_mapping(text))
+            for text in result['details']
+        ]
+        return jsonify(result)

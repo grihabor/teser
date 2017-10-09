@@ -8,8 +8,9 @@ from flask_security import (
     Security, SQLAlchemySessionUserDatastore
 )
 
-import init
+import startup
 import views
+import tasks
 from app_config import setup_config
 from database import db_session
 from models import User, Role
@@ -63,6 +64,6 @@ def main():
     app.run(**kwargs)
 
 
-init.init()
+startup.init()
 if __name__ == '__main__':
     main()

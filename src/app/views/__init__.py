@@ -1,16 +1,13 @@
-from views.admin_page import import_admin_page
-from views.user import import_user
-from .deploy_key import import_generate_deploy_key
-from .repository import import_repository
-from .index import import_index
-from .home import import_home
+from .admin_page import import_admin_page
 from .api import import_api
+from .home import import_home
+from .index import import_index
+
 
 def import_views(app):
-    import_generate_deploy_key(app)
-    import_repository(app)
+    # actual views
     import_index(app)
     import_home(app)
     import_admin_page(app)
-    import_user(app)
+    # api
     import_api(app)
