@@ -5,6 +5,7 @@ import sys
 
 from database import POSTGRES_URL
 from utils import DIR_SRC
+from .admins import create_admins
 
 DIR_APP = os.path.join(DIR_SRC, 'app')
 DIR_TEMPLATES = os.path.join(DIR_APP, 'templates')
@@ -46,3 +47,4 @@ def init():
     maybe_create_base_html()
     maybe_create_alembic_ini()
     run_migrations()
+    create_admins()
