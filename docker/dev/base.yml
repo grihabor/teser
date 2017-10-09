@@ -1,7 +1,6 @@
 version: "2"
 services:
   flask:
-    image: tesver/flask:latest
     build: 
       context: ../..
       dockerfile: docker/dev/web/Dockerfile
@@ -9,7 +8,9 @@ services:
       - "../../src:/project/src"
 
   postgres:
-    image: tesver/postgres:latest
+    build: 
+      context: .
+      dockerfile: postgres/Dockerfile
     ports:
       - "5432:5432"
     env_file:
