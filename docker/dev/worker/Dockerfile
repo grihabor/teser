@@ -1,4 +1,4 @@
-FROM teser/flask.base:latest
+FROM tesver/flask.base:latest
 MAINTAINER Borodin Gregory <grihabor@mail.ru>
 
 ENV PROJECT_ROOT /project

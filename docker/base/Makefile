@@ -1,4 +1,4 @@
-TAG=teser/flask.base:latest
+TAG=tesver/flask.base:latest
 
 all: build_and_push
 
