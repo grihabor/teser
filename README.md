@@ -59,4 +59,4 @@ Now you are ready to run `make test-up`!
   - [Nginx](https://www.nginx.com/resources/wiki/)
   - [Docker](https://www.docker.com/)
   
-  
+![Structure](/doc/structure.png)  

@@ -1,0 +1,17 @@
+graph G {
+    flask [label="Flask"];
+    sqlalchemy [label="SQLAlchemy",shape="box"];
+    celery [label="Celery",shape="box"];
+    worker [label="Celery worker"];
+    gunicorn [label="Gunicorn"];
+    nginx [label="Nginx"];
+    rabbitmq [label="RabbitMQ"];
+    postgres [label="PostgreSQL"];
+
+    nginx -- gunicorn -- flask [color="green"];
+    flask -- sqlalchemy -- worker [color="orange"];
+    sqlalchemy -- postgres [color="orange"];
+    flask -- celery [color="blue"];
+    celery -- worker [color="blue"];
+    celery -- rabbitmq [color="blue"];
+}
