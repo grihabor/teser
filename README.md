@@ -47,3 +47,16 @@ MAIL_USE_SSL=1
 
 Now you are ready to run `make test-up`!
 
+## Dependencies
+  - [Flask](http://flask.pocoo.org/)
+  - [Flask-Security](http://flask-security.readthedocs.io/en/latest/)
+  - [PostgreSQL](https://www.postgresql.org/)
+  - [SQLAlchemy](https://www.sqlalchemy.org/)
+  - [Alembic](http://alembic.zzzcomputing.com/en/latest/)
+  - [RabbitMQ](http://www.rabbitmq.com/)
+  - [Celery](http://www.celeryproject.org/)
+  - [Gunicorn](http://gunicorn.org/)
+  - [Nginx](https://www.nginx.com/resources/wiki/)
+  - [Docker](https://www.docker.com/)
+  
+  
