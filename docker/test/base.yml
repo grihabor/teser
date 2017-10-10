@@ -4,8 +4,6 @@ services:
     image: grihabor/testing-server:gunicorn
     build: 
       context: ../..
-      dockerfile: docker/test/Dockerfile
-    environment:
-      - PYTHONPATH=/project/src
+      dockerfile: docker/test/gunicorn/Dockerfile
     env_file:
       - ./config.env
