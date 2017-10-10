@@ -1,17 +1,64 @@
-graph G {
-    flask [label="Flask"];
-    sqlalchemy [label="SQLAlchemy",shape="box"];
-    celery [label="Celery",shape="box"];
-    worker [label="Celery worker"];
-    gunicorn [label="Gunicorn"];
-    nginx [label="Nginx"];
-    rabbitmq [label="RabbitMQ"];
-    postgres [label="PostgreSQL"];
+digraph G {
+    subgraph cluster_users {
+        user_1 [label = "User", shape = "point"];
+        user_2 [label = "User", shape = "point"];
+        user_3 [label = "User", shape = "point"];
+    }
+    nginx [label = "Nginx", color = "green"];
 
-    nginx -- gunicorn -- flask [color="green"];
-    flask -- sqlalchemy -- worker [color="orange"];
-    sqlalchemy -- postgres [color="orange"];
-    flask -- celery [color="blue"];
-    celery -- worker [color="blue"];
-    celery -- rabbitmq [color="blue"];
+    subgraph cluster_client {
+        label = "web service";
+        color = "cyan";
+
+        gunicorn [label = "Gunicorn", color = "cyan", shape = "box"];
+        flask [label = "Flask", color = "cyan", shape= "box"];
+        python_client [label = "Python", color = "cyan"];
+        sqlalchemy_client [label = "SQLAlchemy", shape = "box", color = "cyan"];
+        celery_client [label = "Celery", shape = "box", color = "cyan"];
+
+        gunicorn -> flask [color = "cyan"];
+        flask -> gunicorn [color = "cyan", label = "WSGI"];
+        flask -> python_client [color = "cyan"];
+        python_client -> flask [color = "cyan"];
+        python_client -> celery_client [color = "cyan", label = "Start repository testing task"];
+
+        python_client -> sqlalchemy_client [color = "cyan", label = "Data"];
+        sqlalchemy_client -> python_client [color = "cyan"];
+    }
+
+    
+    subgraph cluster_worker {
+        color = "magenta";
+        label = "Celery worker";
+
+	sqlalchemy_worker [label = "SQLAlchemy", color = "magenta", shape = "box"];
+        celery_worker [label = "Celery", shape = "box", color = "magenta"];
+        python_worker [label = "Python", color = "magenta"];
+
+        python_worker -> sqlalchemy_worker [color = "magenta", label = "Data"];
+        sqlalchemy_worker -> python_worker [color = "magenta"];
+
+        celery_worker -> python_worker [color = "magenta", label = "Process task"];
+        python_worker -> celery_worker [color = "magenta", label = "Return task result"];
+        celery_worker -> sqlalchemy_worker [color = "magenta", label = "Store task result"];
+    }
+
+    postgres [label = "PostgreSQL", color = "red"];
+    rabbitmq [label = "RabbitMQ", color = "blue"];
+
+    postgres -> sqlalchemy_worker [color = "orange", label = "ORM"];
+    sqlalchemy_worker -> postgres [color = "orange"];
+
+    postgres -> sqlalchemy_client [color = "orange", label = "ORM"];
+    sqlalchemy_client -> postgres [color = "orange"];
+    
+    user_1 -> nginx [color = "green"];
+    user_2 -> nginx [color = "green"];
+    user_3 -> nginx [color = "green"];
+
+    gunicorn -> nginx -> gunicorn [color = "green"];    
+
+    celery_client -> rabbitmq [color = "blue", label = "Add task to the queue"];
+    rabbitmq -> celery_worker [color = "blue", label = "Send task to worker"];
 }
+
