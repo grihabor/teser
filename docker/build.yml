@@ -1,0 +1,6 @@
+version: "2"
+services:
+  rabbitmq:
+    image: library/rabbitmq:3-alpine
+    ports:
+      - "5672"

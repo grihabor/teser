@@ -9,8 +9,6 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - FLASK_HOST=0.0.0.0
-      - FLASK_PORT=5000
       - FLASK_DEBUG=1
     depends_on:
       - postgres
@@ -28,7 +26,7 @@ services:
     image: tesver/worker:latest
     build:
       context: ../..
-      dockerfile: docker/dev/worker/Dockerfile
+      dockerfile: docker/test/worker/Dockerfile
     depends_on:
       - rabbitmq
       - postgres

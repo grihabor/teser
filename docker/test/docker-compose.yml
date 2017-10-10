@@ -5,33 +5,37 @@ services:
       file: ./base.yml
       service: gunicorn
     environment:
-      - FLASK_HOST=0.0.0.0
-      - FLASK_PORT=5000
       - FLASK_DEBUG=0
     depends_on:
       - postgres
     volumes:
       - keys:/project/keys
 
-  tester:
+  worker:
+    extends:
+      file: ../dev/docker-compose.yml
+      service: worker
+    depends_on:
+      - postgres
+      - rabbitmq
+    env_file:
+      - ./config.env
+      
+  rabbitmq:
+    extends: 
+      file: ../build.yml
+      service: rabbitmq
+    env_file:
+      - ./config.env
+    
+  postgres:
     extends:
       file: ../dev/base.yml
-      service: flask
-    environment:
-      - FLASK_HOST=0.0.0.0
-      - FLASK_PORT=6000
-    volumes:
-      - keys:/project/keys
-    command: python3 /project/src/tester/app.py
-
-  postgres:
-    image: library/postgres:9.6-alpine
+      service: postgres
     ports:
       - "127.0.0.1:5432:5432"
     env_file:
       - ./config.env
-    environment:
-      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - pgdata:/var/lib/postgresql/data/pgdata
 
