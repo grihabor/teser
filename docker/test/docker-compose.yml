@@ -30,7 +30,7 @@ services:
     
   postgres:
     extends:
-      file: ../dev/base.yml
+      file: ../build.yml
       service: postgres
     ports:
       - "127.0.0.1:5432:5432"
