@@ -9,6 +9,6 @@ services:
   worker:
     image: tesver/worker:latest
     build:
-      context: ../..
+      context: ..
       dockerfile: docker/dev/worker/Dockerfile
       
