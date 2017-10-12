@@ -1,6 +1,6 @@
 import os
 
-host = os.getenv('APP_HOST')
-port = os.getenv('APP_PORT')
+host = '0.0.0.0'
+port = os.environ['APP_PORT']
 bind = f'{host}:{port}'
 workers = 2

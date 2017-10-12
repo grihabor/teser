@@ -36,8 +36,8 @@ views.import_views(app)
 
 
 def main():
-    host = os.getenv('FLASK_HOST', '127.0.0.1')
-    port = int(os.getenv('FLASK_PORT', 5000))
+    host = '0.0.0.0'
+    port = int(os.environ['APP_PORT'])
 
     kwargs = dict(host=host, port=port)
     logger.info('Flask config: {}'.format(kwargs))
