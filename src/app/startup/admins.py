@@ -1,8 +1,10 @@
 import os
 import logging
+from sqlalchemy.exc import SQLAlchemyError
 from datastore import user_datastore
 
 logger = logging.getLogger(__name__)
+
 
 def create_admins():
     admins = os.getenv('ADMINS', None)

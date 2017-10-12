@@ -1,3 +1,4 @@
+import startup
 import logging
 import os
 
@@ -44,6 +45,11 @@ def main():
 
     logger.info('Starting flask...')
     app.run(**kwargs)
+
+
+@app.before_first_request
+def create_admins():
+    startup.create_admins()
 
 
 if __name__ == '__main__':
