@@ -23,10 +23,9 @@ services:
       - pgdata:/var/lib/postgresql/data/pgdata
 
   worker:
-    image: tesver/worker:latest
-    build:
-      context: ../..
-      dockerfile: docker/test/worker/Dockerfile
+    extends:
+      file: ../build.yml
+      service: worker
     depends_on:
       - rabbitmq
       - postgres

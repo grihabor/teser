@@ -13,7 +13,7 @@ services:
 
   worker:
     extends:
-      file: ../dev/docker-compose.yml
+      file: ../build.yml
       service: worker
     depends_on:
       - postgres
