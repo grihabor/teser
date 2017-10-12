@@ -3,14 +3,13 @@ MAINTAINER Borodin Gregory <grihabor@mail.ru>
 
 ENV PROJECT_ROOT /project
 ENV PYTHONPATH $PYTHONPATH:$PROJECT_ROOT/src
-ENV TESVER_PORT 5000
+ENV APP_PORT 5000
 
-EXPOSE $TESVER_PORT
+EXPOSE $APP_PORT
 VOLUME $PROJECT_ROOT/keys
 
 WORKDIR $PROJECT_ROOT
 
 ADD src ./src
 
-CMD python3 -u $PROJECT_ROOT/src/app/run_startup.py \
- && python3 -u $PROJECT_ROOT/src/app/app.py
+CMD python3 -u ./src/app/run_startup.py && python3 -u ./src/app/app.py

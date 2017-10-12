@@ -28,5 +28,7 @@ alembic-dev:
 alembic-test:
 	cd $(ALEMBIC); make test
 
+startup:
+	cp config.env.example docker/dev/config.env
 
 .PHONY: dev-up test-up down dev-down test-down

@@ -1,0 +1,19 @@
+version: "2"
+services:
+
+  rabbitmq:
+    image: library/rabbitmq:3-alpine
+    ports:
+      - "5672"
+      
+  worker:
+    image: tesver/worker:latest
+    build:
+      context: ..
+      dockerfile: docker/dev/worker/Dockerfile
+  
+  postgres:
+    build: 
+      context: .
+      dockerfile: dev/postgres/Dockerfile
+      
