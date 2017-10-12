@@ -1,3 +1,4 @@
+import logging
 import os
 import shutil
 import subprocess
@@ -17,10 +18,17 @@ FILE_ALEMBIC_INI_EXAMPLE = FILE_ALEMBIC_INI + '.example'
 
 SQLALCHEMY_URL = 'sqlalchemy.url'
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
 
 def maybe_create_base_html():
     if not os.path.exists(FILE_BASE_HTML):
         shutil.copy(FILE_BASE_HTML_EXAMPLE, FILE_BASE_HTML)
+        logger.info(f'cp {FILE_BASE_HTML_EXAMPLE} {FILE_BASE_HTML}')
+    else:
+        logger.info(f'File {FILE_BASE_HTML} exists')
 
 
 def maybe_create_alembic_ini():
@@ -47,4 +55,4 @@ def init():
     maybe_create_base_html()
     maybe_create_alembic_ini()
     run_migrations()
-    create_admins()
+    # create_admins()
