@@ -1,4 +1,4 @@
-from celery import get_task_logger
+from celery.utils.log import get_task_logger
 import os
 import subprocess
 
@@ -54,7 +54,7 @@ def maybe_generate_new_key_pair(current_user):
     return identity_file
 
 
-@app.task('tasks.deploy_key.generate')
+@app.task(name='tasks.deploy_key.generate')
 def generate_deploy_key(user_id):
     identity_file = maybe_generate_new_key_pair(current_user)
     
