@@ -62,7 +62,7 @@ def generate_deploy_key(user_id):
     
     path = get_key_path(identity_file)
     
-    with open(public_key, 'r') as f:
+    with open(f'{path}.pub', 'r') as f:
         public_key = f.read()
 
     return public_key
