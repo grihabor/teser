@@ -4,6 +4,7 @@ import subprocess
 
 from celery_app import app
 from database import db_session
+from models import User
 from sqlalchemy.exc import SQLAlchemyError
 from utils import DIR_KEYS
 
@@ -56,6 +57,7 @@ def maybe_generate_new_key_pair(current_user):
 
 @app.task(name='tasks.deploy_key.generate')
 def generate_deploy_key(user_id):
+    current_user = User.query.get(user_id)
     identity_file = maybe_generate_new_key_pair(current_user)
     
     path = get_key_path(identity_file)
