@@ -19,7 +19,7 @@ def run_tests(repo_id):
     result = run_bash_script(
         FILE_TEST_SH,
         identity_file=repo.identity_file,
-        git_template=RepositoryLocation(path='/grihabor/compressor',
+        git_template=RepositoryLocation(path='/Ploshkin/compressor',
                                         user='git',
                                         host='gitlab.com'),
         git=git_obj
