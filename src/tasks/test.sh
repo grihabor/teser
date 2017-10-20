@@ -14,7 +14,7 @@ rm -rf src
 mv ../user_repo/src ./src
 
 docker build . -t img:{identity_file}
-docker run -v compressor_test_files:/project/test_files:ro img:{identity_file}
+docker run -v compressor_test_files:/project/test_files img:{identity_file}
 
 cd ..
 rm -rf template_repo user_repo
