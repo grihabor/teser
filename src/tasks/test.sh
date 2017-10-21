@@ -10,7 +10,7 @@ git clone {git.user}@{git.host}:{git.path} user_repo
 git clone {git_template.user}@{git_template.host}:{git_template.path} template_repo
 
 cd user_repo
-rm -rf test_files tests Dockerfile
+rm -rf tests Dockerfile
 mv ../template_repo/tests ./tests
 mv ../template_repo/Dockerfile ./Dockerfile
 
