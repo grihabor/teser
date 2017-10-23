@@ -1,6 +1,7 @@
 from celery.utils.log import get_task_logger
 import os
 import subprocess
+import uuid
 
 from celery_app import app
 from database import db_session

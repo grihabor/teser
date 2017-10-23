@@ -1,7 +1,7 @@
 from flask import request
 from flask_security import current_user
 
-from models import Repository
+from models import Repository, User
 from .exception import (
     MissingRepositoryId, InvalidRepositoryId, RepositoryNotFound,
     InvalidUserId, MissingUserId, RepositoryAccessDenied
@@ -25,6 +25,7 @@ def safe_get_repository(repo_id_arg, user_id_arg=None):
 
     if user_id_arg is None:
         user_id = current_user.id
+        user = current_user
     else:
         if user_id_arg not in request.args:
             raise MissingUserId(user_id_arg)
@@ -35,7 +36,9 @@ def safe_get_repository(repo_id_arg, user_id_arg=None):
         except ValueError:
             raise InvalidUserId('Failed to convert {} to {}'.format(user_id_str, int))
 
-    if repo.user_id != user_id:
+        user = User.get(user_id)
+
+    if repo.user_id != user.id and not user.has_role('admin'):
         raise RepositoryAccessDenied('User does not own the repository')
 
     return repo
