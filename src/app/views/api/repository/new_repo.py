@@ -1,20 +1,18 @@
 import logging
 
-from flask_security import login_required, current_user
 from flask import request, jsonify
+from flask_security import login_required, current_user
 from sqlalchemy.exc import SQLAlchemyError
 
 from database import db_session
 from models import Repository
-from utils import UnifiedResponse, process_details
 from tasks import clone_repository
-
+from utils import UnifiedResponse, process_details
 
 logger = logging.getLogger(__name__)
 
 
 def validate_repository(url, identity_file):
-
     result = clone_repository.delay(url, identity_file)
     unified_response = result.get()
 
