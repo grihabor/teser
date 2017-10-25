@@ -1,7 +1,7 @@
 import logging
 
 from flask import jsonify
-from flask_security import login_required, current_user, roles_required
+from flask_security import login_required, current_user
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import join
 
@@ -12,7 +12,7 @@ from utils import (
     UIError,
     UnifiedResponse
 )
-
+from .activation import import_repository_activate
 from .new_repo import import_repository_add
 from .list import import_repository_list, user_repositories
 
@@ -64,27 +64,7 @@ def active_repositories():
 def import_repository(app):
     import_repository_add(app)
     import_repository_list(app)
-
-    @app.route('/api/repository/activate')
-    @login_required
-    def activate_repository():
-        repo = safe_get_repository('id')  # type: Repository
-        try:
-            user = repo.user
-            user.active_repository_id = repo.id
-            db_session.commit()
-            result = UnifiedResponse(result='ok',
-                                       details='Changed user active repository')
-
-        except SQLAlchemyError:
-            db_session.rollback()
-            result = UnifiedResponse(result='fail',
-                                       details='Database error')
-
-        result.update(dict(
-            repositories=user_repositories(current_user)
-        ))
-        return jsonify(result)
+    import_repository_activate(app)
 
     @app.route('/api/repository/remove')
     @login_required
