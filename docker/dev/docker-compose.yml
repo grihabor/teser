@@ -13,14 +13,14 @@ services:
     depends_on:
       - postgres
     volumes:
-      - keys:/project/keys
+      - tesver_dev_keys:/project/keys
 
   postgres:
     extends:
       file: ../build.yml
       service: postgres
     volumes:
-      - pgdata:/var/lib/postgresql/data/pgdata
+      - tesver_dev_pgdata:/var/lib/postgresql/data/pgdata
 
   worker:
     extends:
@@ -33,7 +33,7 @@ services:
       - ./config.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - keys:/project/keys
+      - tesver_dev_keys:/project/keys
 
   rabbitmq:
     env_file:
@@ -43,5 +43,7 @@ services:
       - "5672"
 
 volumes:
-  pgdata:
-  keys:
+  tesver_dev_pgdata:
+    external: true
+  tesver_dev_keys:
+    external: true

@@ -2,14 +2,16 @@ version: "2"
 services:
   gunicorn:
     extends:
-      file: ./base.yml
+      file: ../build.yml
       service: gunicorn
-    environment:
-      - FLASK_DEBUG=0
     depends_on:
       - postgres
     volumes:
-      - keys:/project/keys
+      - tesver_stage_keys:/project/keys
+    env_file:
+      - ./config.env
+    ports:
+      - "5000:5000"
 
   worker:
     extends:
@@ -22,7 +24,7 @@ services:
       - ./config.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - keys:/project/keys
+      - tesver_stage_keys:/project/keys
       
   rabbitmq:
     extends: 
@@ -40,18 +42,11 @@ services:
     env_file:
       - ./config.env
     volumes:
-      - pgdata:/var/lib/postgresql/data/pgdata
-
-  nginx:
-    build:
-      context: .
-      dockerfile: ../services/nginx/Dockerfile
-    ports:
-      - "80:80"
-      - "443:443"
-    depends_on:
-      - gunicorn
+      - tesver_stage_pgdata:/var/lib/postgresql/data/pgdata
 
 volumes:
-  pgdata:
-  keys:
+  tesver_stage_pgdata:
+    external: true
+  tesver_stage_keys:
+    external: true
+
