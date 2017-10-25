@@ -1,13 +1,8 @@
 import logging
-import os
-import subprocess
-import uuid
 
 from flask import jsonify
 from flask_security import login_required, current_user
 
-from database import db_session
-from utils import DIR_KEYS
 from tasks import generate_deploy_key
 
 logger = logging.getLogger(__name__)
