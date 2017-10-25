@@ -17,4 +17,4 @@ ADD src ./src
 
 WORKDIR $PROJECT_ROOT/src/app
 
-CMD ["/bin/sh", "-c", "gunicorn --config ${PROJECT_ROOT}/gunicorn_config.py app:app"]
+CMD ["/bin/sh", "-c", "python3 -u ./run_startup.py && gunicorn --config ${PROJECT_ROOT}/gunicorn_config.py app:app"]
