@@ -12,9 +12,9 @@ EXPOSE $APP_PORT
 VOLUME $KEYS_PATH
 
 WORKDIR $PROJECT_ROOT
-ADD docker/test/gunicorn/gunicorn_config.py .
+ADD docker/services/gunicorn/gunicorn_config.py .
 ADD src ./src
 
 WORKDIR $PROJECT_ROOT/src/app
 
-CMD ["/bin/sh", "-c", "gunicorn --config ${PROJECT_ROOT}/gunicorn_config.py app:app"]
+CMD ["/bin/sh", "-c", "python3 -u ./run_startup.py && gunicorn --config ${PROJECT_ROOT}/gunicorn_config.py app:app"]

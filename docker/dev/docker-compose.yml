@@ -2,7 +2,7 @@ version: "2"
 services:
   flask:
     extends:
-      file: ./base.yml
+      file: ../build.yml
       service: flask
     env_file:
       - ./config.env
@@ -13,14 +13,14 @@ services:
     depends_on:
       - postgres
     volumes:
-      - keys:/project/keys
+      - tesver_dev_keys:/project/keys
 
   postgres:
     extends:
-      file: ./base.yml
+      file: ../build.yml
       service: postgres
     volumes:
-      - pgdata:/var/lib/postgresql/data/pgdata
+      - tesver_dev_pgdata:/var/lib/postgresql/data/pgdata
 
   worker:
     extends:
@@ -33,7 +33,7 @@ services:
       - ./config.env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - keys:/project/keys
+      - tesver_dev_keys:/project/keys
 
   rabbitmq:
     env_file:
@@ -41,9 +41,9 @@ services:
     image: library/rabbitmq:3-alpine
     ports:
       - "5672"
-    environment:
-      - RABBITMQ_VM_MEMORY_HIGH_WATERMARK=100mb
 
 volumes:
-  pgdata:
-  keys:
+  tesver_dev_pgdata:
+    external: true
+  tesver_dev_keys:
+    external: true

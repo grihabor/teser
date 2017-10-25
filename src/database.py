@@ -30,7 +30,7 @@ db_session = scoped_session(
                  bind=engine)
 )
 
-Base = declarative_base()
+Base = declarative_base(bind=engine)
 Base.query = db_session.query_property()
 
 # def init_db():

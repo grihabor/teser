@@ -1,6 +1,8 @@
 import os
 import logging
 from sqlalchemy.exc import SQLAlchemyError
+
+from database import db_session
 from datastore import user_datastore
 
 logger = logging.getLogger(__name__)
@@ -21,4 +23,6 @@ def create_admins():
                 user_datastore.add_role_to_user(admin, admin_role)
         user_datastore.commit()
     except SQLAlchemyError as e:
+        db_session.rollback()
         logger.warning(f'Failed to initialize admins: {e}')
+

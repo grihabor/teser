@@ -3,8 +3,11 @@ import os
 import shutil
 import subprocess
 import sys
+from time import sleep
 
-from database import POSTGRES_URL
+from sqlalchemy.exc import SQLAlchemyError
+
+from database import POSTGRES_URL, Base, db_session
 from utils import DIR_SRC
 from .admins import create_admins
 
@@ -51,8 +54,20 @@ def run_migrations():
                    stderr=subprocess.STDOUT)
 
 
-def init():
+def _init():
+    Base.metadata.create_all()
     maybe_create_base_html()
     maybe_create_alembic_ini()
     run_migrations()
-    # create_admins()
+
+
+def init():
+    while True:
+        try:
+            _init()
+            db_session.commit()
+            return
+        except SQLAlchemyError as e:
+            db_session.rollback()
+            logger.info(str(e))
+        sleep(.5)

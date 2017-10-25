@@ -10,10 +10,22 @@ services:
     image: tesver/worker:latest
     build:
       context: ..
-      dockerfile: docker/dev/worker/Dockerfile
+      dockerfile: docker/services/worker/Dockerfile
   
   postgres:
+    image: tesver/postgres:latest
     build: 
       context: .
-      dockerfile: dev/postgres/Dockerfile
+      dockerfile: services/postgres/Dockerfile
       
+  gunicorn:
+    image: tesver/gunicorn:latest
+    build:
+      context: ..
+      dockerfile: docker/services/gunicorn/Dockerfile
+
+  flask:
+    image: tesver/flask:latest
+    build:
+      context: ..
+      dockerfile: docker/services/flask/Dockerfile

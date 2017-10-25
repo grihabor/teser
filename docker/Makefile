@@ -1,17 +1,17 @@
 CMD=docker-compose
 
-all: up
+all: up_build
 
 pull:
 	$(CMD) pull
 
-build:
-	$(CMD) build
-
 up:
+	$(CMD) up
+
+up_build:
 	$(CMD) up --build
 
 down:
 	$(CMD) down
 
-.PHONY: prod run pull
+.PHONY: all pull up up_build down
