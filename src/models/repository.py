@@ -15,3 +15,9 @@ class Repository(Base):
     url = Column(String(2000), nullable=False)  # https://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers
     identity_file = Column(String(255), nullable=False)
 
+    def __iter__(self):
+        return list(dict(
+            url=self.url,
+            identity_file=self.identity_file,
+            id=self.id,
+        ).items())

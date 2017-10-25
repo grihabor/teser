@@ -1,23 +1,20 @@
-import json
 import logging
-import urllib
 
-from flask import request, jsonify
+from flask import jsonify
 from flask_security import login_required, current_user, roles_required
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import join
 
 from database import db_session
 from models import Repository, User
-from tasks import clone_repository
 from utils import (
     safe_get_repository,
-    process_details,
     UIError,
     UnifiedResponse
 )
 
-from .add import import_repository_add
+from .new_repo import import_repository_add
+from .list import import_repository_list, user_repositories
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -48,15 +45,7 @@ def remove_repo(repo: Repository):
     return result
 
 
-def repo_dict(repo):
-    return dict(url=repo.url,
-                identity_file=repo.identity_file,
-                id=repo.id)
 
-
-def user_repositories(user):
-    return [repo_dict(repo)
-            for repo in user.repositories]
 
 
 def active_repositories():
@@ -68,26 +57,14 @@ def active_repositories():
         User.active_repository_id == Repository.id
     ))
 
-    return [repo_dict(repo)
+    return [dict(repo)
             for repo in query.all()]
 
 
 def import_repository(app):
     import_repository_add(app)
-    @app.route('/api/repository/list')
-    @login_required
-    def repository_list():
-        return jsonify(dict(
-            repositories=user_repositories(current_user)
-        ))
-
-    @app.route('/api/repository/active/list')
-    @roles_required('admin')
-    def active_repository_list():
-        return jsonify(dict(
-            active_repositories=active_repositories()
-        ))
-
+    import_repository_list(app)
+    
     @app.route('/api/repository/activate')
     @login_required
     def activate_repository():
