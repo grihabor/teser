@@ -12,7 +12,7 @@ EXPOSE $APP_PORT
 VOLUME $KEYS_PATH
 
 WORKDIR $PROJECT_ROOT
-ADD docker/test/gunicorn/gunicorn_config.py .
+ADD docker/gunicorn/gunicorn_config.py .
 ADD src ./src
 
 WORKDIR $PROJECT_ROOT/src/app
