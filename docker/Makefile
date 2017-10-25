@@ -1,6 +1,6 @@
 CMD=docker-compose
 
-all: up
+all: up_build
 
 pull:
 	$(CMD) pull
