@@ -3,7 +3,6 @@ import logging
 from flask import jsonify
 from flask_security import login_required, current_user
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import join
 
 from database import db_session
 from models import Repository, User
@@ -14,7 +13,7 @@ from utils import (
 )
 from .activation import import_repository_activate
 from .new_repo import import_repository_add
-from .list import import_repository_list, user_repositories
+from .repo_list import import_repository_list, user_repositories
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -45,26 +44,11 @@ def remove_repo(repo: Repository):
     return result
 
 
-
-
-
-def active_repositories():
-    query = db_session.query(
-        Repository
-    ).select_from(join(
-        User,
-        Repository,
-        User.active_repository_id == Repository.id
-    ))
-
-    return [dict(repo)
-            for repo in query.all()]
-
-
 def import_repository(app):
     import_repository_add(app)
     import_repository_list(app)
     import_repository_activate(app)
+
 
     @app.route('/api/repository/remove')
     @login_required

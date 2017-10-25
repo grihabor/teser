@@ -4,7 +4,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from database import db_session
 from utils import safe_get_repository, UnifiedResponse
-from .list import user_repositories
+from .repo_list import user_repositories
 
 
 def import_repository_activate(app):
