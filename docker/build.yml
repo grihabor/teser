@@ -16,10 +16,10 @@ services:
     image: tesver/postgres:latest
     build: 
       context: .
-      dockerfile: postgres/Dockerfile
+      dockerfile: services/postgres/Dockerfile
       
   gunicorn:
     image: tesver/gunicorn:latest
     build:
       context: ..
-      dockerfile: docker/gunicorn/Dockerfile
+      dockerfile: services/gunicorn/Dockerfile
