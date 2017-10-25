@@ -2,7 +2,7 @@ version: "2"
 services:
   flask:
     extends:
-      file: ./base.yml
+      file: ../build.yml
       service: flask
     env_file:
       - ./config.env
@@ -17,7 +17,7 @@ services:
 
   postgres:
     extends:
-      file: ./base.yml
+      file: ../build.yml
       service: postgres
     volumes:
       - pgdata:/var/lib/postgresql/data/pgdata
@@ -41,8 +41,6 @@ services:
     image: library/rabbitmq:3-alpine
     ports:
       - "5672"
-    environment:
-      - RABBITMQ_VM_MEMORY_HIGH_WATERMARK=100mb
 
 volumes:
   pgdata:
