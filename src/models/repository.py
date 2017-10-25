@@ -16,7 +16,7 @@ class Repository(Base):
     identity_file = Column(String(255), nullable=False)
 
     def __iter__(self):
-        return list(dict(
+        return iter(dict(
             url=self.url,
             identity_file=self.identity_file,
             id=self.id,

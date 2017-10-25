@@ -64,7 +64,7 @@ def active_repositories():
 def import_repository(app):
     import_repository_add(app)
     import_repository_list(app)
-    
+
     @app.route('/api/repository/activate')
     @login_required
     def activate_repository():
