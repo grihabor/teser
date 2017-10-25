@@ -155,19 +155,18 @@ def import_repository(app):
             user = repo.user
             user.active_repository_id = repo.id
             db_session.commit()
-            response = UnifiedResponse(result='ok',
+            result = UnifiedResponse(result='ok',
                                        details='Changed user active repository')
 
         except SQLAlchemyError:
             db_session.rollback()
-            response = UnifiedResponse(result='fail',
+            result = UnifiedResponse(result='fail',
                                        details='Database error')
 
-        r = dict(response)
-        r.update(dict(
+        result.update(dict(
             repositories=user_repositories(current_user)
         ))
-        return jsonify(r)
+        return jsonify(result)
 
     @app.route('/api/repository/remove')
     @login_required
@@ -181,6 +180,7 @@ def import_repository(app):
                 details=str(e)
             )
 
-        return jsonify(dict(result).update(dict(
+        result.update(dict(
             repositories=user_repositories(current_user)
-        )))
+        ))
+        return jsonify(result)
