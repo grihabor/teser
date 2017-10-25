@@ -1,5 +1,7 @@
+import contextlib
 import importlib
 import os
+from contextlib import contextmanager
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -37,3 +39,13 @@ Base.query = db_session.query_property()
 # you will have to import them first before calling init_db()
 importlib.import_module('models')
 # Base.metadata.create_all(bind=engine)
+
+
+@contextlib.contextmanager
+def db_transaction():
+    try:
+        yield db_session
+        db_session.commit()
+    except:
+        db_session.rollback()
+        raise

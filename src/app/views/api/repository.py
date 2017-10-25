@@ -4,6 +4,7 @@ import urllib
 
 from flask import request, jsonify
 from flask_security import login_required, current_user, roles_required
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import join
 
 from database import db_session
@@ -76,19 +77,29 @@ def _add_repository(url):
     return d
 
 
-def remove_repo(repo):
+def maybe_remove_active_repo_ref(repo):
+    user = User.query.get(repo.user_id)
+    if user.active_repository_id == repo.id:
+        user.active_repository_id = None
+
+
+def remove_repo(repo: Repository):
     try:
+        maybe_remove_active_repo_ref(repo)
         db_session.delete(repo)
         db_session.commit()
-    except Exception as e:
-        logger.warning(e)
-        return UnifiedResponse(
+        result = UnifiedResponse(
+            result='ok',
+            details=''
+        )
+    except SQLAlchemyError:
+        db_session.rollback()
+        result = UnifiedResponse(
             result='fail',
             details='Database error'
         )
 
-    return UnifiedResponse(result='ok',
-                           details='')
+    return result
 
 
 def repo_dict(repo):
@@ -147,7 +158,8 @@ def import_repository(app):
             response = UnifiedResponse(result='ok',
                                        details='Changed user active repository')
 
-        except Exception:
+        except SQLAlchemyError:
+            db_session.rollback()
             response = UnifiedResponse(result='fail',
                                        details='Database error')
 
