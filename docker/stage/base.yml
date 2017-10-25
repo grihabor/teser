@@ -1,9 +1,3 @@
 version: "2"
 services:
-  gunicorn:
-    image: grihabor/testing-server:gunicorn
-    build: 
-      context: ../..
-      dockerfile: docker/test/gunicorn/Dockerfile
-    env_file:
-      - ./config.env
+

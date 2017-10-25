@@ -13,7 +13,13 @@ services:
       dockerfile: docker/dev/worker/Dockerfile
   
   postgres:
+    image: tesver/postgres:latest
     build: 
       context: .
-      dockerfile: dev/postgres/Dockerfile
+      dockerfile: postgres/Dockerfile
       
+  gunicorn:
+    image: tesver/gunicorn:latest
+    build:
+      context: ..
+      dockerfile: docker/gunicorn/Dockerfile

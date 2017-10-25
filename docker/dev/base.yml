@@ -3,14 +3,14 @@ services:
   flask:
     build: 
       context: ../..
-      dockerfile: docker/dev/web/Dockerfile
+      dockerfile: ../web/Dockerfile
     volumes:
       - "../../src:/project/src"
 
   postgres:
     build: 
       context: .
-      dockerfile: postgres/Dockerfile
+      dockerfile: ../postgres/Dockerfile
     ports:
       - "5432:5432"
     env_file:
