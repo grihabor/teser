@@ -1,12 +1,16 @@
 {% if security.registerable or security.recoverable or security.confirmable %}
     <h2>{{ _('Menu') }}</h2>
     <ul>
-        <li><a href="
+        {% set login_url = url_for_security('login') %}
+        {% if 'next' in request.args %}
+            {% set next_value = request.args.next|urlencode %}
+            {% set login_url = login_url + "?next=" + next_value %}
+        {% endif %}
 
-                {{ url_for_security('login') }}{% if 'next' in request.args %}?next={{ request.args.next|urlencode }}{% endif %}">{{ _('Login') }}</a>
-        </li>
+        <li><a href="{{ login_url }}">{{ _('Login') }}</a></li>
         {% if security.registerable %}
             <li><a href="
+
 
                     {{ url_for_security('register') }}{% if 'next' in request.args %}?next={{ request.args.next|urlencode }}{% endif %}">{{ _('Register') }}</a><br/>
             </li>
