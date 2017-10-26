@@ -1,6 +1,6 @@
 function Repository(props) {
     return (
-        <tr>
+        <tr className="active-repository">
             <td>{props.url}</td>
             <td>{props.identity_file}</td>
             <td>
@@ -12,7 +12,7 @@ function Repository(props) {
             </td>
             <td>
                 <input
-                    className="btn btn-secondary"
+                    className="btn btn-default"
                     type="button"
                     onClick={props.onActivate}
                     value="Activate"/>
@@ -42,7 +42,7 @@ function RepositoryTableBody(props) {
 
 function RepositoryTable(props) {
     return (
-        <table id="repo_table" className="table table-striped">
+        <table id="repo_table" className="table">
             <thead>
             <tr>
                 <th>URL</th>

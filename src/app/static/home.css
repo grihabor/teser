@@ -33,3 +33,7 @@ and (min-width: 600px) {
         grid-column-end: 3;
     }
 }
+
+.active-repository {
+    background-color: palegreen;
+}
