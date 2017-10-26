@@ -7,7 +7,7 @@
             </label>
         </div>
     {% else %}
-        <form>
+        <p>
             <div class="input-group">
                 <span class="input-group-addon">{{ field.label }}</span>
                 {{ field(class="form-control", **kwargs)|safe }}
@@ -20,10 +20,14 @@
                     {% endfor %}
                 </ul>
             {% endif %}
-        </form>
+        </p>
     {% endif %}
 {% endmacro %}
 
 {% macro render_field(field) %}
-    <p>{{ field(**kwargs)|safe }}</p>
+    {% if field.__class__.__name__ == 'SubmitField' %}
+        <p>{{ field(class='btn btn-default', **kwargs)|safe }}</p>
+    {% else %}
+        <p>{{ field(**kwargs)|safe }}</p>
+    {% endif %}
 {% endmacro %}
