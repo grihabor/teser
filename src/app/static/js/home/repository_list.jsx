@@ -1,16 +1,22 @@
 function Repository(props) {
+    let is_active_class = '';
+    if (props.is_active) {
+        is_active_class = "active-repository";
+    }
     return (
-        <tr>
+        <tr className={is_active_class}>
             <td>{props.url}</td>
             <td>{props.identity_file}</td>
             <td>
                 <input
+                    className="btn btn-danger"
                     type="button"
                     onClick={props.onRemove}
                     value="Remove"/>
             </td>
             <td>
                 <input
+                    className="btn btn-default"
                     type="button"
                     onClick={props.onActivate}
                     value="Activate"/>
@@ -27,6 +33,7 @@ function RepositoryTableBody(props) {
                 key={repo.id}
                 url={repo.url}
                 identity_file={repo.identity_file}
+                is_active={repo.is_active}
                 onRemove={function () {
                     props.onRemove(repo.id)
                 }}
@@ -40,7 +47,7 @@ function RepositoryTableBody(props) {
 
 function RepositoryTable(props) {
     return (
-        <table id="repo_table" className="table table-striped">
+        <table id="repo_table" className="table">
             <thead>
             <tr>
                 <th>URL</th>

@@ -8,6 +8,7 @@ from database import db_session
 from models import Repository
 from tasks import clone_repository
 from utils import UnifiedResponse, process_details
+from .repo_list import user_repositories
 
 logger = logging.getLogger(__name__)
 
@@ -56,15 +57,10 @@ def _add_repository(url):
             details=['Failed to validate the url:'] + process_details(validation.details)
         )
 
-    d = dict(response)
-    d.update(dict(
-        repositories=[dict(
-            id=repo.id,
-            url=repo.url,
-            identity_file=repo.identity_file
-        ) for repo in current_user.repositories]
+    response.update(dict(
+        repositories=user_repositories(current_user)
     ))
-    return d
+    return response
 
 
 def import_repository_add(app):
