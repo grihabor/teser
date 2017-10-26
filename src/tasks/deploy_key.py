@@ -38,8 +38,6 @@ def key_exists(identity_file):
     public_key = path + '.pub'
     return os.path.exists(path) and os.path.exists(public_key)
     
-    
-
 
 def maybe_generate_new_key_pair(current_user):
     identity_file = current_user.generated_identity_file

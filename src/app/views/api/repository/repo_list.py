@@ -6,8 +6,15 @@ from database import db_session
 from models import Repository, User
 
 
-def user_repositories(user):
-    return [dict(repo)
+def user_repositories(user: User):
+    active_repo_id = user.active_repository_id
+
+    def repo_to_response(repo):
+        info = dict(repo)
+        info['active'] = (repo.id == active_repo_id)
+        return info
+
+    return [repo_to_response(repo)
             for repo in user.repositories]
 
 
