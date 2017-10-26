@@ -5,12 +5,14 @@ function Repository(props) {
             <td>{props.identity_file}</td>
             <td>
                 <input
+                    className="btn btn-danger"
                     type="button"
                     onClick={props.onRemove}
                     value="Remove"/>
             </td>
             <td>
                 <input
+                    className="btn btn-secondary"
                     type="button"
                     onClick={props.onActivate}
                     value="Activate"/>

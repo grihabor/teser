@@ -8,7 +8,7 @@ from database import db_session
 from models import Repository
 from tasks import clone_repository
 from utils import UnifiedResponse, process_details
-from views.api.repository import user_repositories
+from .repo_list import user_repositories
 
 logger = logging.getLogger(__name__)
 
