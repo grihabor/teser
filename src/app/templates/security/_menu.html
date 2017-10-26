@@ -9,11 +9,12 @@
 
         <li><a href="{{ login_url }}">{{ _('Login') }}</a></li>
         {% if security.registerable %}
-            <li><a href="
-
-
-                    {{ url_for_security('register') }}{% if 'next' in request.args %}?next={{ request.args.next|urlencode }}{% endif %}">{{ _('Register') }}</a><br/>
-            </li>
+            {% set register_url = url_for_security('register') %}
+            {% if 'next' in request.args %}
+                {% set next_value = request.args.next|urlencode %}
+                {% set register_url = register_url + '?next=' + request.args.next|urlencode %}
+            {% endif %}
+            <li><a href="{{ register_url }}">{{ _('Register') }}</a></li>
         {% endif %}
         {% if security.recoverable %}
             <li><a href="{{ url_for_security('forgot_password') }}">{{ _('Forgot password') }}</a><br/></li>
