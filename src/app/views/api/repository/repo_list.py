@@ -11,7 +11,7 @@ def user_repositories(user: User):
 
     def repo_to_response(repo):
         info = dict(repo)
-        info['active'] = (repo.id == active_repo_id)
+        info['is_active'] = (repo.id == active_repo_id)
         return info
 
     return [repo_to_response(repo)

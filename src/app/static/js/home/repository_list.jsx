@@ -1,6 +1,10 @@
 function Repository(props) {
+    let is_active_class = '';
+    if (props.is_active) {
+        is_active_class = "active-repository";
+    }
     return (
-        <tr className="active-repository">
+        <tr className={is_active_class}>
             <td>{props.url}</td>
             <td>{props.identity_file}</td>
             <td>
@@ -29,6 +33,7 @@ function RepositoryTableBody(props) {
                 key={repo.id}
                 url={repo.url}
                 identity_file={repo.identity_file}
+                is_active={repo.is_active}
                 onRemove={function () {
                     props.onRemove(repo.id)
                 }}
