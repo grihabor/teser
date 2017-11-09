@@ -83,7 +83,7 @@ def _get_commit_hash(logs):
 def _save_logs(user_email, script_name, logs):
     commit_hash = _get_commit_hash(logs)
         
-    log_dir = os.path.join('/logs', user_email, script_name)
+    log_dir = os.path.join(os.environ['VOLUME_LOGS'], user_email, script_name)
     os.makedirs(log_dir, exist_ok=True)
     log_filename = f'{commit_hash}.log'
     log_path = os.path.join(log_dir, log_filename)
