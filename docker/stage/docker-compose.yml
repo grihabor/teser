@@ -49,4 +49,7 @@ volumes:
     external: true
   tesver_stage_keys:
     external: true
-
+  tesver_stage_logs:
+    external: true
+  tesver_stage_results:
+    external: true

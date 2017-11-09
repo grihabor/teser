@@ -47,3 +47,7 @@ volumes:
     external: true
   tesver_dev_keys:
     external: true
+  tesver_dev_logs:
+    external: true
+  tesver_dev_results:
+    external: true
