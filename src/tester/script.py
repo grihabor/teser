@@ -123,7 +123,7 @@ def run_bash_script(template_path, user_email, *, tempdir, **kwargs):
             with open(f.name) as fr:
                 output = fr.read()  # TODO Warning: maybe too large
     
-    script_name = os.path.split(script_name)[-1].split('.')[0]
+    script_name = os.path.split(template_path)[-1].split('.')[0]
     _save_logs(user_email, script_name, output)
         
         
