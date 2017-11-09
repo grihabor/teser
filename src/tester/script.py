@@ -75,6 +75,9 @@ def preprocess_script(f, **kwargs):
 
 
 def _get_commit_hash(logs):
+    for line in logs.split('\n'):
+        if line.startswith('Commit: '):
+            return line.split()[-1]
 
 
 def _save_logs(user_email, script_name, logs):
