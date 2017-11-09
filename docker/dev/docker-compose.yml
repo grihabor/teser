@@ -34,7 +34,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - tesver_dev_keys:/project/keys
-
+      - tesver_dev_logs:/project/logs
+      - tesver_dev_results:/project/results
+    
   rabbitmq:
     env_file:
       - ./config.env
