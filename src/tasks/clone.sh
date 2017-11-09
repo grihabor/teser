@@ -7,4 +7,7 @@ mkdir -p ~/.ssh/
 if ! grep -Fxq "$SERVER_KEY" ~/.ssh/known_hosts; then echo $SERVER_KEY >> ~/.ssh/known_hosts; fi
 
 git clone {git.user}@{git.host}:{git.path} user_repo
+cd user_repo
+echo "Commit: $(git rev-parse HEAD)"
+cd ..
 rm -rf user_repo
