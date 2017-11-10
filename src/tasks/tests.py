@@ -1,3 +1,4 @@
+import os
 from celery_app import app
 from models import Repository
 from tasks.repository import FILE_TEST_SH
