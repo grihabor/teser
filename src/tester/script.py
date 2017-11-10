@@ -111,7 +111,7 @@ def _save_results(user_email, identity_file, commit_hash):
     run_bash_script(
         FILE_STORE_RESULTS_SH, 
         user_email, 
-        identity_file=identity_file
+        identity_file=identity_file,
     )
     
 
@@ -147,7 +147,7 @@ def run_bash_script(template_path, user_email, *, tempdir, save_results=False, *
                 output = fr.read()  # TODO Warning: maybe too large
     
     script_name = os.path.split(template_path)[-1].split('.')[0]
-    commit_hash = _get_commit_hash(logs)
+    commit_hash = _get_commit_hash(output)
     _save_logs(user_email, script_name, identity_file, commit_hash, output)
     if save_results:
         _save_results(user_email, identity_file, commit_hash)

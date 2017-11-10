@@ -28,7 +28,7 @@ def clone_repository(url, identity_file, user_email):
         FILE_CLONE_SH,
         user_email,
         identity_file=identity_file,
-        git=repo_location
+        git=repo_location,
     )
 
     return result

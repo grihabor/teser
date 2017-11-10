@@ -30,6 +30,7 @@ def run_tests(repo_id):
         identity_file=repo.identity_file,
         git_template=template_location,
         git=git_obj,
+        save_results=True,
     )
 
     return dict(result)
