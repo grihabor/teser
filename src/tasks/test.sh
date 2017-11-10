@@ -10,6 +10,8 @@ git clone {git.user}@{git.host}:{git.path} user_repo
 git clone {git_template.user}@{git_template.host}:{git_template.path} template_repo
 
 cd user_repo
+echo "Commit: $(git rev-parse HEAD)"
+
 rm -rf tests Dockerfile
 mv ../template_repo/tests ./tests
 mv ../template_repo/Dockerfile ./Dockerfile

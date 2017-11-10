@@ -74,8 +74,26 @@ def preprocess_script(f, **kwargs):
     return '\n'.join(script_code)
 
 
+def _get_commit_hash(logs):
+    for line in logs.split('\n'):
+        if line.startswith('Commit: '):
+            return line.split()[-1]
+
+
+def _save_logs(user_email, script_name, logs):
+    commit_hash = _get_commit_hash(logs)
+        
+    log_dir = os.path.join(os.environ['VOLUME_LOGS'], user_email, script_name)
+    os.makedirs(log_dir, exist_ok=True)
+    log_filename = f'{commit_hash}.log'
+    log_path = os.path.join(log_dir, log_filename)
+    
+    with open(log_path, 'w') as f:
+        f.write(logs)
+        
+
 @inside_tempdir
-def run_bash_script(template_path, *, tempdir, **kwargs):
+def run_bash_script(template_path, user_email, *, tempdir, **kwargs):
     logger.info('Run script: {}'.format(template_path))
     identity_file_path = os.path.join(DIR_KEYS, kwargs['identity_file'])
 
@@ -93,7 +111,7 @@ def run_bash_script(template_path, *, tempdir, **kwargs):
         command = ['sh', f.name]
 
         logger.info('Command: {}'.format(' '.join(command)))
-
+        
         with tempfile.NamedTemporaryFile('w') as f:
             process = subprocess.Popen(command, cwd=tempdir, stdout=f.file, stderr=f.file)
             try:
@@ -104,8 +122,16 @@ def run_bash_script(template_path, *, tempdir, **kwargs):
 
             with open(f.name) as fr:
                 output = fr.read()  # TODO Warning: maybe too large
-
+    
+    script_name = os.path.split(template_path)[-1].split('.')[0]
+    _save_logs(user_email, script_name, output)
+        
+        
     return UnifiedResponse(
         result='ok' if (process.returncode == 0) else 'fail',
         details=output.split('\n')
     )
+
+
+
+

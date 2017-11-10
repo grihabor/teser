@@ -34,7 +34,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - tesver_dev_keys:/project/keys
-
+      - tesver_dev_logs:/project/logs
+      - tesver_dev_results:/project/results
+    
   rabbitmq:
     env_file:
       - ./config.env
@@ -46,4 +48,8 @@ volumes:
   tesver_dev_pgdata:
     external: true
   tesver_dev_keys:
+    external: true
+  tesver_dev_logs:
+    external: true
+  tesver_dev_results:
     external: true

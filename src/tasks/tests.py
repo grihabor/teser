@@ -9,6 +9,7 @@ from utils import parse_repo_url, RepositoryLocation
 @app.task(name='tasks.tests.run')
 def run_tests(repo_id):
     repo = Repository.query.get(repo_id)
+    
     git_obj = parse_repo_url(repo.url)
     if git_obj is None:
         return dict(
@@ -18,6 +19,7 @@ def run_tests(repo_id):
 
     result = run_bash_script(
         FILE_TEST_SH,
+        repo.user.email,
         identity_file=repo.identity_file,
         git_template=RepositoryLocation(path='/Ploshkin/compressor',
                                         user='git',

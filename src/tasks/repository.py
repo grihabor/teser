@@ -15,7 +15,7 @@ def missing(arg):
 
 
 @app.task(name='tasks.repository.clone')
-def clone_repository(url, identity_file):
+def clone_repository(url, identity_file, user_email):
     repo_location = parse_repo_url(url)
 
     if repo_location is None:
@@ -26,6 +26,7 @@ def clone_repository(url, identity_file):
 
     result = run_bash_script(
         FILE_CLONE_SH,
+        user_email,
         identity_file=identity_file,
         git=repo_location
     )

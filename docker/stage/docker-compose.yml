@@ -25,7 +25,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - tesver_stage_keys:/project/keys
-      
+      - tesver_stage_logs:/project/logs
+      - tesver_stage_results:/project/results
+    
   rabbitmq:
     extends: 
       file: ../build.yml
@@ -49,4 +51,7 @@ volumes:
     external: true
   tesver_stage_keys:
     external: true
-
+  tesver_stage_logs:
+    external: true
+  tesver_stage_results:
+    external: true

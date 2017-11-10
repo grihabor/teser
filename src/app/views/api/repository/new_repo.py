@@ -13,8 +13,8 @@ from .repo_list import user_repositories
 logger = logging.getLogger(__name__)
 
 
-def validate_repository(url, identity_file):
-    result = clone_repository.delay(url, identity_file)
+def validate_repository(url, identity_file, user_email):
+    result = clone_repository.delay(url, identity_file, user_email)
     unified_response = result.get()
 
     logger.info(unified_response)
@@ -30,7 +30,7 @@ def _add_repository(url):
             details="Current user doesn't have generated identity file"
         )
 
-    validation = validate_repository(url, identity_file)
+    validation = validate_repository(url, identity_file, current_user.email)
 
     if validation.result == 'ok':
         repo = Repository(user_id=current_user.id,

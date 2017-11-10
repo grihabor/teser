@@ -1,6 +1,6 @@
 ROOT=docker
 DEV=$(ROOT)/dev
-TEST=$(ROOT)/test
+STAGE=$(ROOT)/stage
 ALEMBIC=$(ROOT)/alembic
 
 CMD=docker-compose
@@ -11,16 +11,16 @@ all: dev-up
 dev-up:
 	cd $(DEV); $(CMD) $(UP_BUILD)
 
-test-up:
-	cd $(TEST); $(CMD) $(UP_BUILD)
+stage-up:
+	cd $(STAGE); $(CMD) $(UP_BUILD)
 
 dev-down:
 	cd $(DEV); $(CMD) down
 
-test-down:
-	cd $(TEST); $(CMD) down
+stage-down:
+	cd $(STAGE); $(CMD) down
 
-down: dev-down test-down
+down: dev-down stage-down
 
 alembic-dev:
 	cd $(ALEMBIC); make dev
@@ -31,4 +31,4 @@ alembic-test:
 startup:
 	cp config.env.example docker/dev/config.env
 
-.PHONY: dev-up test-up down dev-down test-down
+.PHONY: dev-up stage-up down dev-down stage-down
