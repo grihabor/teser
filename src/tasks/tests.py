@@ -16,6 +16,10 @@ def run_tests(repo_id):
             result='fail',
             details='Invalid repository'
         )
+        
+    results_dir = os.path.join(VOLUME_RESULTS, user_email, identity_file, commit_hash)
+    os.makedirs(results_dir, exist_ok=True)
+    results_path = os.path.join(results_dir, 'results.csv')
 
     result = run_bash_script(
         FILE_TEST_SH,
@@ -24,7 +28,8 @@ def run_tests(repo_id):
         git_template=RepositoryLocation(path='/Ploshkin/compressor',
                                         user='git',
                                         host='gitlab.com'),
-        git=git_obj
+        git=git_obj,
+        results_path=results_path
     )
 
     return dict(result)
