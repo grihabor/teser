@@ -18,10 +18,6 @@ mv ../template_repo/Dockerfile ./Dockerfile
 
 docker build . -t img:{identity_file}
 docker run --name {identity_file} -v compressor_test_files:/project/test_files img:{identity_file}
-docker cp {identity_file}:/project/tests/results.csv {results_path}
-
-docker container rm {identity_file}
-docker rmi img:{identity_file}
 
 cd ..
 rm -rf template_repo user_repo

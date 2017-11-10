@@ -18,15 +18,6 @@ def run_tests(repo_id):
             details='Invalid repository'
         )
         
-    results_dir = os.path.join(
-        os.environ['VOLUME_RESULTS'], 
-        user_email, 
-        identity_file, 
-        commit_hash,
-    )
-    os.makedirs(results_dir, exist_ok=True)
-    results_path = os.path.join(results_dir, 'results.csv')
-
     template_location = RepositoryLocation(
         path='Ploshkin/compressor.git',
         user='git',
@@ -39,7 +30,6 @@ def run_tests(repo_id):
         identity_file=repo.identity_file,
         git_template=template_location,
         git=git_obj,
-        results_path=results_path
     )
 
     return dict(result)

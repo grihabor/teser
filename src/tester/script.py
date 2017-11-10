@@ -9,6 +9,9 @@ from utils import DIR_KEYS, UnifiedResponse
 
 logger = logging.getLogger(__name__)
 
+DIR_TASKS = os.path.join(DIR_SRC, 'tasks')
+FILE_STORE_RESULTS_SH = os.path.join(DIR_TASKS, 'store_results.sh')
+
 
 def inside_tempdir(f):
     @functools.wraps(f)
@@ -80,10 +83,14 @@ def _get_commit_hash(logs):
             return line.split()[-1]
 
 
-def _save_logs(user_email, script_name, logs):
-    commit_hash = _get_commit_hash(logs)
-        
-    log_dir = os.path.join(os.environ['VOLUME_LOGS'], user_email, script_name)
+def _save_logs(user_email, script_name, identity_file, commit_hash, logs):
+    
+    log_dir = os.path.join(
+        os.environ['VOLUME_LOGS'],
+        user_email, 
+        script_name,
+        identity_file
+    )
     os.makedirs(log_dir, exist_ok=True)
     log_filename = f'{commit_hash}.log'
     log_path = os.path.join(log_dir, log_filename)
@@ -92,8 +99,24 @@ def _save_logs(user_email, script_name, logs):
         f.write(logs)
         
 
+def _save_results(user_email, identity_file, commit_hash):
+    results_dir = os.path.join(
+        os.environ['VOLUME_RESULTS'], 
+        user_email, 
+        identity_file, 
+        commit_hash,
+    )
+    os.makedirs(results_dir, exist_ok=True)
+    results_path = os.path.join(results_dir, 'results.csv')
+    run_bash_script(
+        FILE_STORE_RESULTS_SH, 
+        user_email, 
+        identity_file=identity_file
+    )
+    
+
 @inside_tempdir
-def run_bash_script(template_path, user_email, *, tempdir, **kwargs):
+def run_bash_script(template_path, user_email, *, tempdir, save_results=False, **kwargs):
     logger.info('Run script: {}'.format(template_path))
     identity_file_path = os.path.join(DIR_KEYS, kwargs['identity_file'])
 
@@ -124,9 +147,11 @@ def run_bash_script(template_path, user_email, *, tempdir, **kwargs):
                 output = fr.read()  # TODO Warning: maybe too large
     
     script_name = os.path.split(template_path)[-1].split('.')[0]
-    _save_logs(user_email, script_name, output)
-        
-        
+    commit_hash = _get_commit_hash(logs)
+    _save_logs(user_email, script_name, identity_file, commit_hash, output)
+    if save_results:
+        _save_results(user_email, identity_file, commit_hash)
+    
     return UnifiedResponse(
         result='ok' if (process.returncode == 0) else 'fail',
         details=output.split('\n')
