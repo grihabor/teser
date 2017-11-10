@@ -18,7 +18,12 @@ def run_tests(repo_id):
             details='Invalid repository'
         )
         
-    results_dir = os.path.join(VOLUME_RESULTS, user_email, identity_file, commit_hash)
+    results_dir = os.path.join(
+        os.environ['VOLUME_RESULTS'], 
+        user_email, 
+        identity_file, 
+        commit_hash,
+    )
     os.makedirs(results_dir, exist_ok=True)
     results_path = os.path.join(results_dir, 'results.csv')
 
