@@ -42,10 +42,18 @@ function RepositoryURL(props) {
     return (
         <div className={className}>
             <label className="control-label">URL</label>
-            <input className="form-control" id="url" name="url" required="" value={props.value} type="text"
-                   onChange={props.onChange}/>
+            <input
+                className="form-control"
+                id="url"
+                name="url"
+                required="" 
+                value={props.value}
+                type="text"
+                onChange={props.onChange}/>
             {error_block}
-            <p className="help-block">Example: user@gitlab.com:/user/project</p>
+            <p className="help-block">
+                Example: git@gitlab.com:Ploshkin/compressor.git
+            </p>
         </div>
     )
 }
