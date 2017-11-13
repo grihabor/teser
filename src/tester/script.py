@@ -116,16 +116,21 @@ def _save_results(user_email, identity_file, commit_hash):
     
 
 @inside_tempdir
-def run_bash_script(template_path, user_email, *, tempdir, save_results=False, **kwargs):
+def run_bash_script(template_path, user_email, *, tempdir, identity_file, git=None, save_results=False, **kwargs):
     logger.info('Run script: {}'.format(template_path))
-    identity_file_path = os.path.join(DIR_KEYS, kwargs['identity_file'])
+    kwargs['identity_file'] = identity_file
+    kwargs['git'] = git
+    identity_file_path = os.path.join(DIR_KEYS, identity_file)
 
     with open(template_path, 'r') as template, \
             tempfile.NamedTemporaryFile('w') as f:
+
+        repo_name = None if git is None else git.path.rsplit('/', 1)[-1]
+
         values = dict(
             identity_file_path=identity_file_path,
-            repository_name=kwargs['git'].path.rsplit('/', 1)[-1],
-            **kwargs
+            repository_name=repo_name,
+            **kwargs,
         )
         content = preprocess_script(template, **values)
         f.write(content)
