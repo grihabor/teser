@@ -112,6 +112,7 @@ def _save_results(user_email, identity_file, commit_hash):
         FILE_STORE_RESULTS_SH, 
         user_email, 
         identity_file=identity_file,
+        results_path=results_path,
     )
     
 
