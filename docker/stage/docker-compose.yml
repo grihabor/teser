@@ -1,6 +1,7 @@
 version: "2"
 services:
   gunicorn:
+    restart: on-failure
     extends:
       file: ../build.yml
       service: gunicorn
@@ -14,6 +15,7 @@ services:
       - "80:5000"
 
   worker:
+    restart: on-failure
     extends:
       file: ../build.yml
       service: worker
@@ -29,6 +31,7 @@ services:
       - tesver_stage_results:/project/results
     
   rabbitmq:
+    restart: on-failure
     extends: 
       file: ../build.yml
       service: rabbitmq
@@ -36,6 +39,7 @@ services:
       - ./config.env
     
   postgres:
+    restart: on-failure
     extends:
       file: ../build.yml
       service: postgres
