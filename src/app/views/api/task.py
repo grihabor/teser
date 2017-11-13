@@ -27,6 +27,8 @@ def import_task(app):
 
         task_result = run_tests.delay(repo.id)
         logger.info('Waiting for run_tests...')
+        return jsonify(result='ok', details='logs not implemented'), 501
+
         result = task_result.get()
         logger.info(f'Got: {result}')
         result['details'] = [
