@@ -119,16 +119,17 @@ def _save_results(user_email, identity_file, commit_hash, container_name):
     
 
 @inside_tempdir
-def run_bash_script(template_path, user_email, *, tempdir, identity_file, git=None, save_results=False, **kwargs):
+def run_bash_script(template_path, user_email, *, tempdir, identity_file, git=None, save_results=False, container_name=None, **kwargs):
     logger.info('Run script: {}'.format(template_path))
     kwargs['identity_file'] = identity_file
     kwargs['git'] = git
     identity_file_path = os.path.join(DIR_KEYS, identity_file)
-
-    container_name = '_'.join([
-        identity_file,
-        datetime.strftime(datetime.now(), DATETIME_FORMAT),
-    ])
+    
+    if not container_name:
+        container_name = '_'.join([
+            identity_file,
+            datetime.strftime(datetime.now(), DATETIME_FORMAT),
+        ])
 
     with open(template_path, 'r') as template, \
             tempfile.NamedTemporaryFile('w') as f:
