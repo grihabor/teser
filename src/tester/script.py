@@ -4,6 +4,7 @@ import tempfile
 import functools
 
 import logging
+from datetime import datetime
 
 from utils import DIR_KEYS, DIR_SRC, UnifiedResponse
 
@@ -11,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 DIR_TASKS = os.path.join(DIR_SRC, 'tasks')
 FILE_STORE_RESULTS_SH = os.path.join(DIR_TASKS, 'store_results.sh')
-
+DATETIME_FORMAT = '%d%b_%H_%M_%S'
 
 def inside_tempdir(f):
     @functools.wraps(f)
@@ -99,7 +100,7 @@ def _save_logs(user_email, script_name, identity_file, commit_hash, logs):
         f.write(logs)
         
 
-def _save_results(user_email, identity_file, commit_hash):
+def _save_results(user_email, identity_file, commit_hash, container_name):
     results_dir = os.path.join(
         os.environ['VOLUME_RESULTS'], 
         user_email, 
@@ -113,6 +114,7 @@ def _save_results(user_email, identity_file, commit_hash):
         user_email, 
         identity_file=identity_file,
         results_path=results_path,
+        container_name=container_name
     )
     
 
@@ -123,6 +125,11 @@ def run_bash_script(template_path, user_email, *, tempdir, identity_file, git=No
     kwargs['git'] = git
     identity_file_path = os.path.join(DIR_KEYS, identity_file)
 
+    container_name = '_'.join([
+        identity_file,
+        datetime.strftime(datetime.now(), DATETIME_FORMAT),
+    ])
+
     with open(template_path, 'r') as template, \
             tempfile.NamedTemporaryFile('w') as f:
 
@@ -131,6 +138,7 @@ def run_bash_script(template_path, user_email, *, tempdir, identity_file, git=No
         values = dict(
             identity_file_path=identity_file_path,
             repository_name=repo_name,
+            container_name=container_name,
             **kwargs,
         )
         content = preprocess_script(template, **values)
@@ -156,7 +164,7 @@ def run_bash_script(template_path, user_email, *, tempdir, identity_file, git=No
     commit_hash = _get_commit_hash(output)
     _save_logs(user_email, script_name, identity_file, commit_hash, output)
     if save_results:
-        _save_results(user_email, identity_file, commit_hash)
+        _save_results(user_email, identity_file, commit_hash, container_name)
     
     return UnifiedResponse(
         result='ok' if (process.returncode == 0) else 'fail',
